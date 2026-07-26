@@ -117,17 +117,9 @@ bool HelloWorld::init()
         this->addChild(sprite, 0);
     }
 
-    // add background music
+    // Ìí¼Ó±³¾°ÒôÀÖ
     SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");
-    // SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(1.0);
-    /*auto playBGM = [=]()->void {
-        SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", false);
-        this->scheduleOnce([this](float dt) {
-            SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-            playBGM();
-        }, 19.5f, "loop_bgm");
-    };
-    playBGM();*/
+    playBGM();
     return true;
 }
 
@@ -143,4 +135,12 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
     SimpleAudioEngine::getInstance()->end();
+}
+
+void HelloWorld::playBGM() {
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", false);
+    this->scheduleOnce([this](float dt) {
+        SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+        this->playBGM();
+    }, 37.0f, "loop_bgm");
 }
