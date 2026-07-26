@@ -1,0 +1,717 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|win32">
+      <Configuration>Debug</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|win32">
+      <Configuration>Release</Configuration>
+      <Platform>win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{76F2D148-84B4-323D-B464-52AFE850EB59}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>win32</Platform>
+    <ProjectName>MyGame</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">E:\MyCocos2d-xProjects\MyGame\build\bin\MyGame\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">MyGame.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">MyGame</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">E:\MyCocos2d-xProjects\MyGame\build\bin\MyGame\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|win32'">MyGame.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|win32'">MyGame</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/Box2D/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/chipmunk/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/freetype2/include/win32/freetype2" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/jpeg/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/uv/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/webp/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/bullet/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/bullet/include/bullet" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/tiff/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/websockets/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/curl/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/png/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/sqlite3/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/icon/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/glfw3/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MinimalRebuild>
+      </MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\include\win32\freetype2;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include\bullet;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\include\OGLES;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\include\win32\freetype2;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include\bullet;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\include\OGLES;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: uv.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/uv/prebuilt/win32/uv.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libssl-1_1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libcrypto-1_1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: websockets.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/websockets/prebuilt/win32/websockets.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libcurl.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/curl/prebuilt/win32/libcurl.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: sqlite3.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/sqlite3/libraries/win32/sqlite3.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/sqlite3.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: glew32.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: iconv.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libmpg123.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libogg.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libvorbis.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libvorbisfile.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: OpenAL32.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: zlib1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: CloseNormal.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/CloseNormal.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/CloseNormal.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: CloseSelected.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/CloseSelected.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/CloseSelected.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: HelloWorld.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/HelloWorld.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/HelloWorld.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: fonts/Marker Felt.ttf ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "E:/MyCocos2d-xProjects/MyGame/Resources/fonts/Marker Felt.ttf" "E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/fonts/Marker Felt.ttf"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: fonts/arial.ttf ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/fonts/arial.ttf E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/fonts/arial.ttf
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: res/.gitkeep ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/res/.gitkeep E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/Resources/res/.gitkeep
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Debug\cocos2d.lib;lib\Debug\external.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\prebuilt\win32\debug\libbox2d.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\prebuilt\win32\debug-lib\libchipmunk.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Debug\ext_recast.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\prebuilt\win32\libwebp.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\prebuilt\win32\debug\libbullet.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\prebuilt\win32\libtiff.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\prebuilt\win32\websockets.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\prebuilt\win32\uv_a.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\prebuilt\win32\libssl.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;lib\Debug\ext_tinyxml2.lib;lib\Debug\ext_xxhash.lib;lib\Debug\ext_xxtea.lib;lib\Debug\ext_clipper.lib;lib\Debug\ext_edtaa3func.lib;lib\Debug\ext_convertUTF.lib;lib\Debug\ext_poly2tri.lib;lib\Debug\ext_md5.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\prebuilt\win32\libcurl.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\prebuilt\win32\libpng.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\libraries\win32\sqlite3.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Debug\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyCocos2d-xProjects/MyGame/build/Debug/MyGame.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Debug/MyGame.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/Box2D/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/chipmunk/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/freetype2/include/win32/freetype2" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/jpeg/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/uv/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/webp/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/bullet/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/bullet/include/bullet" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/tiff/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/websockets/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/curl/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/png/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/sqlite3/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/icon/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/glfw3/include/win32" /external:I "E:/MyCocos2d-xProjects/MyGame/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MinimalRebuild>
+      </MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode>
+      </SupportJustMyCode>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\include\win32\freetype2;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include\bullet;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\include\OGLES;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyCocos2d-xProjects\MyGame\Classes;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\audio\include;E:\MyCocos2d-xProjects\MyGame\cocos2d;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos;E:\MyCocos2d-xProjects\MyGame\cocos2d\extensions;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\base;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\editor-support;E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\platform\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\recast\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tinyxml2\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxhash\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\xxtea\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\clipper\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\edtaa3func\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\ConvertUTF\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\poly2tri\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\md5\..;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\unzip\.;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\include\win32\freetype2;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\include\bullet;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\include\OGLES;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\include;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\include\win32;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>
+      </Message>
+      <Command>setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: uv.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/uv/prebuilt/win32/uv.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libssl-1_1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libcrypto-1_1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: websockets.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/websockets/prebuilt/win32/websockets.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libcurl.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/curl/prebuilt/win32/libcurl.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: sqlite3.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/sqlite3/libraries/win32/sqlite3.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/sqlite3.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: glew32.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: iconv.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libmpg123.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libogg.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libvorbis.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: libvorbisfile.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: OpenAL32.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy dll into target file dir: zlib1.dll ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: CloseNormal.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/CloseNormal.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/CloseNormal.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: CloseSelected.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/CloseSelected.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/CloseSelected.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: HelloWorld.png ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/HelloWorld.png E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/HelloWorld.png
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: fonts/Marker Felt.ttf ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different "E:/MyCocos2d-xProjects/MyGame/Resources/fonts/Marker Felt.ttf" "E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/fonts/Marker Felt.ttf"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: fonts/arial.ttf ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/fonts/arial.ttf E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/fonts/arial.ttf
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -E echo "copy file into Resources: res/.gitkeep ..."
+if %errorlevel% neq 0 goto :cmEnd
+"C:\Program Files\CMake\bin\cmake.exe" -E copy_if_different E:/MyCocos2d-xProjects/MyGame/Resources/res/.gitkeep E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/Resources/res/.gitkeep
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Release\cocos2d.lib;lib\Release\external.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Release\ext_recast.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\webp\prebuilt\win32\libwebp.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\tiff\prebuilt\win32\libtiff.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\websockets\prebuilt\win32\websockets.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\uv\prebuilt\win32\uv_a.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\prebuilt\win32\libssl.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;lib\Release\ext_tinyxml2.lib;lib\Release\ext_xxhash.lib;lib\Release\ext_xxtea.lib;lib\Release\ext_clipper.lib;lib\Release\ext_edtaa3func.lib;lib\Release\ext_convertUTF.lib;lib\Release\ext_poly2tri.lib;lib\Release\ext_md5.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\curl\prebuilt\win32\libcurl.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\png\prebuilt\win32\libpng.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\sqlite3\libraries\win32\sqlite3.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;E:\MyCocos2d-xProjects\MyGame\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Release\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyCocos2d-xProjects/MyGame/build/Release/MyGame.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyCocos2d-xProjects/MyGame/build/bin/MyGame/Release/MyGame.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\MyCocos2d-xProjects\MyGame\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">Building Custom Rule E:/MyCocos2d-xProjects/MyGame/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/MyCocos2d-xProjects/MyGame -BE:/MyCocos2d-xProjects/MyGame/build --check-stamp-file E:/MyCocos2d-xProjects/MyGame/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\WindowsPaths.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeCCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeCXXCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeRCCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeSystem.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosBuildSet.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosConfigDefine.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|win32'">Building Custom Rule E:/MyCocos2d-xProjects/MyGame/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SE:/MyCocos2d-xProjects/MyGame -BE:/MyCocos2d-xProjects/MyGame/build --check-stamp-file E:/MyCocos2d-xProjects/MyGame/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineCompilerSupport.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseArguments.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TIClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCXXLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeCommonLinkerInformation.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeDetermineLinkerId.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeInspectCLinker.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\CMakeInspectCXXLinker.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Linker\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.31\Modules\Platform\WindowsPaths.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeCCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeCXXCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeRCCompiler.cmake;E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\3.31.12\CMakeSystem.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosBuildSet.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosConfigDefine.cmake;E:\MyCocos2d-xProjects\MyGame\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|win32'">E:\MyCocos2d-xProjects\MyGame\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Classes\AppDelegate.h" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Classes\HelloWorldScene.h" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\proj.win32\main.h" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\proj.win32\resource.h" />
+    <ClCompile Include="E:\MyCocos2d-xProjects\MyGame\Classes\AppDelegate.cpp" />
+    <ClCompile Include="E:\MyCocos2d-xProjects\MyGame\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="E:\MyCocos2d-xProjects\MyGame\proj.win32\main.cpp" />
+    <ResourceCompile Include="E:\MyCocos2d-xProjects\MyGame\proj.win32\game.rc" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Resources\CloseNormal.png" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Resources\CloseSelected.png" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Resources\fonts\Marker Felt.ttf" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Resources\fonts\arial.ttf" />
+    <ClInclude Include="E:\MyCocos2d-xProjects\MyGame\Resources\res\.gitkeep" />
+    <ClCompile Include="E:\MyCocos2d-xProjects\MyGame\cocos2d\cocos\precheader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\ZERO_CHECK.vcxproj">
+      <Project>{E7A0B42C-B732-37BD-8116-2E366750A1C1}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\cocos\core\cocos2d.vcxproj">
+      <Project>{5C56408B-5DF8-3DD4-98BD-EC6D4076CA95}</Project>
+      <Name>cocos2d</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\clipper\ext_clipper.vcxproj">
+      <Project>{359301E7-0E8D-3ACF-9F21-A7C0FE85F93C}</Project>
+      <Name>ext_clipper</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\ConvertUTF\ext_convertUTF.vcxproj">
+      <Project>{9750DBFE-92B0-3166-85F2-F4C1FDC72CE3}</Project>
+      <Name>ext_convertUTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\edtaa3func\ext_edtaa3func.vcxproj">
+      <Project>{A1F01AED-9789-33A3-A7AB-E1D57C61AC52}</Project>
+      <Name>ext_edtaa3func</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\md5\ext_md5.vcxproj">
+      <Project>{5A8222A5-A6E8-3DDD-ABFD-EA3A9146EE78}</Project>
+      <Name>ext_md5</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\poly2tri\ext_poly2tri.vcxproj">
+      <Project>{9947D124-1C4A-3DDA-BACF-89E77F6AC97B}</Project>
+      <Name>ext_poly2tri</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\recast\ext_recast.vcxproj">
+      <Project>{EC0B772D-666C-3764-9CA7-18E3636FF144}</Project>
+      <Name>ext_recast</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\tinyxml2\ext_tinyxml2.vcxproj">
+      <Project>{332C5519-8154-34A5-88EE-A708A194ECB6}</Project>
+      <Name>ext_tinyxml2</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\unzip\ext_unzip.vcxproj">
+      <Project>{A5B4D46C-13B6-3EAC-B6E9-1624EE2535A2}</Project>
+      <Name>ext_unzip</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\xxhash\ext_xxhash.vcxproj">
+      <Project>{8516B12A-B501-3C0D-A99A-33A4D0AF9559}</Project>
+      <Name>ext_xxhash</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\xxtea\ext_xxtea.vcxproj">
+      <Project>{31903B27-777D-3BE7-B1EF-558D3E18C955}</Project>
+      <Name>ext_xxtea</Name>
+    </ProjectReference>
+    <ProjectReference Include="E:\MyCocos2d-xProjects\MyGame\build\engine\external\external.vcxproj">
+      <Project>{E7F817F0-2029-3CC0-83B5-5AAE567244C1}</Project>
+      <Name>external</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Resources\HelloWorld.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
