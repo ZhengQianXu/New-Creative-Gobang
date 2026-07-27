@@ -1,27 +1,3 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
@@ -103,7 +79,7 @@ bool HelloWorld::init()
     }
 
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
+    /*auto sprite = Sprite::create("HelloWorld.png");
     if (sprite == nullptr)
     {
         problemLoading("'HelloWorld.png'");
@@ -112,14 +88,38 @@ bool HelloWorld::init()
     {
         // position the sprite on the center of the screen
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
-    }
+    }*/
 
     // Ìí¼Ó±³¾°ÒôÀÖ
-    SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");
-    playBGM();
+    SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");    //Ô¤¼ÓÔØ±³¾°ÒôÀÖ
+    playBGM();                                                              //²¥·Å±³¾°ÒôÀÖ
+
+	// Ìí¼ÓÄ¾ÎÆÉ«±³¾°
+    auto bgLayer = LayerColor::create(Color4B(181, 136, 99, 255));
+    this->addChild(bgLayer, -1);    //·ÅÔÚ×îµ×²ã
+
+    // Ìí¼ÓÆåÅÌÍ¼Æ¬
+    auto board = Sprite::create("board.png");
+    if (board) {
+		//»ñÈ¡ÆåÅÌÍ¼Æ¬µÄ¿í¸ß
+		float boardWidth = board->getContentSize().width;
+		float boardHeight = board->getContentSize().height;
+		//¸ù¾ÝÆÁÄ»¿í¶ÈºÍÆåÅÌÍ¼Æ¬¿í¶È¼ÆËã²¢ÉèÖÃËõ·Å±ÈÀý
+        float scaleX = visibleSize.width / boardWidth;
+        float scaleY = scaleX;
+        board->setScale(scaleX, scaleY);
+		//ÉèÖÃÆåÅÌÍ¼Æ¬Î»ÖÃÎªÆÁÄ»ÏÂ·½ÖÐÐÄ
+		float posX = origin.x + visibleSize.width / 2;
+        float posY = origin.y + boardHeight * scaleY / 2;
+        board->setPosition(Vec2(posX, posY));
+		//Ìí¼ÓÆåÅÌÍ¼Æ¬µ½³¡¾°ÖÐ
+        this->addChild(board, 0);
+    }
+    else
+		problemLoading("'board.png'");
+
     return true;
 }
 
@@ -142,5 +142,5 @@ void HelloWorld::playBGM() {
     this->scheduleOnce([this](float dt) {
         SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         this->playBGM();
-    }, 37.0f, "loop_bgm");
+    }, 36.5f, "loop_bgm");
 }
