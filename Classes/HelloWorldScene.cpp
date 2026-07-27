@@ -94,7 +94,16 @@ bool HelloWorld::init()
 
     // 添加背景音乐
     SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");    //预加载背景音乐
-    playBGM();                                                              //播放背景音乐
+
+    // 添加背景音乐控制按钮
+    bgmBtn = MenuItemImage::create("bgm_btn.png", "bgm_btn.png", CC_CALLBACK_1(HelloWorld::toggleBGM, this));
+    bgmBtn->setScale(0.3f, 0.3f);
+    bgmBtn->setPosition(Vec2(22, 22));
+	auto me = Menu::create(bgmBtn, nullptr);    //创建菜单并添加按钮
+	me->setPosition(Vec2::ZERO);                //设置菜单位置为(0,0)
+    this->addChild(me, 1);
+    playBGM();                                  //播放背景音乐
+	startRotate();                              //让按钮旋转
 
 	// 添加木纹色背景
     auto bgLayer = LayerColor::create(Color4B(181, 136, 99, 255));
@@ -123,7 +132,6 @@ bool HelloWorld::init()
     return true;
 }
 
-
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
@@ -139,8 +147,38 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::playBGM() {
 	SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", false);
+	//循环播放背景音乐，设置延迟时间为36.5秒后再次播放，即重复播放前36.5秒
     this->scheduleOnce([this](float dt) {
         SimpleAudioEngine::getInstance()->stopBackgroundMusic();
         this->playBGM();
     }, 36.5f, "loop_bgm");
+}
+
+void HelloWorld::toggleBGM(Ref* pSender) {
+	//如果背景音乐正在播放，则停止旋转按钮并暂停背景音乐；否则，开始旋转按钮并恢复背景音乐
+    if (isBgmOn) {
+        stopRotate();
+        SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+        isBgmOn = false;
+    }
+    else {
+        startRotate();
+		SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+        isBgmOn = true;
+    }
+}
+
+void HelloWorld::startRotate() {
+    //创建旋转动作（2秒转一圈）并重复执行
+    auto rotate = RotateBy::create(3.0f, 360.0f);
+    rotateAction = RepeatForever::create(rotate);
+    bgmBtn->runAction(rotateAction);
+}
+
+void HelloWorld::stopRotate() {
+	//停止旋转按钮的旋转动作
+    if (rotateAction) {
+        bgmBtn->stopAction(rotateAction);
+        rotateAction = nullptr;
+    }
 }
