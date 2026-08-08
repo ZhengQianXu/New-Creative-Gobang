@@ -102,7 +102,7 @@ bool HelloWorld::init()
 	auto me = Menu::create(bgmBtn, nullptr);    //创建菜单并添加按钮
 	me->setPosition(Vec2::ZERO);                //设置菜单位置为(0,0)
     this->addChild(me, 1);
-    playBGM();                                  //播放背景音乐
+    SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);     //播放背景音乐
 	startRotate();                              //让按钮旋转
 
 	// 添加木纹色背景
@@ -129,6 +129,90 @@ bool HelloWorld::init()
     else
 		problemLoading("'board.png'");
 
+    //添加黑方棋子,按“这谁绷得住”次序添加，黑底白字，显示在棋盘左上方
+    auto black_zhe = Sprite::create("black_zhe.png");
+    if (black_zhe) {
+        black_zhe->setScale(50.0 / black_zhe->getContentSize().width, 50.0 / black_zhe->getContentSize().height);
+        black_zhe->setPosition(origin.x + 25.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(black_zhe, 0);
+    }
+    else
+        problemLoading("black_zhe.png");
+    auto black_shui = Sprite::create("black_shui.png");
+    if (black_shui) {
+        black_shui->setScale(50.0 / black_shui->getContentSize().width, 50.0 / black_shui->getContentSize().height);
+        black_shui->setPosition(origin.x + 75.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(black_shui, 0);
+    }
+    else
+        problemLoading("black_shui.png");
+    auto black_beng = Sprite::create("black_beng.png");
+    if (black_beng) {
+        black_beng->setScale(50.0 / black_beng->getContentSize().width, 50.0 / black_beng->getContentSize().height);
+        black_beng->setPosition(origin.x + 125.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(black_beng, 0);
+    }
+    else
+        problemLoading("black_beng.png");
+    auto black_de = Sprite::create("black_de.png");
+    if (black_de) {
+        black_de->setScale(50.0 / black_de->getContentSize().width, 50.0 / black_de->getContentSize().height);
+        black_de->setPosition(origin.x + 175.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(black_de, 0);
+    }
+    else
+        problemLoading("black_de.png");
+    auto black_zhu = Sprite::create("black_zhu.png");
+    if (black_zhu) {
+        black_zhu->setScale(50.0 / black_zhu->getContentSize().width, 50.0 / black_zhu->getContentSize().height);
+        black_zhu->setPosition(origin.x + 225.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(black_zhu, 0);
+    }
+    else
+        problemLoading("black_zhu.png");
+
+    //添加白方棋子,按“这谁绷得住”次序添加，白底黑字，显示在棋盘右上方
+    auto white_zhe = Sprite::create("white_zhe.png");
+    if (white_zhe) {
+        white_zhe->setScale(50.0 / white_zhe->getContentSize().width, 50.0 / white_zhe->getContentSize().height);
+        white_zhe->setPosition(origin.x + visibleSize.width - 225.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(white_zhe, 0);
+    }
+    else
+        problemLoading("white_zhe.png");
+    auto white_shui = Sprite::create("white_shui.png");
+    if (white_shui) {
+        white_shui->setScale(50.0 / white_shui->getContentSize().width, 50.0 / white_shui->getContentSize().height);
+        white_shui->setPosition(origin.x + visibleSize.width - 175.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(white_shui, 0);
+    }
+    else
+        problemLoading("white_shui.png");
+    auto white_beng = Sprite::create("white_beng.png");
+    if (white_beng) {
+        white_beng->setScale(50.0 / white_beng->getContentSize().width, 50.0 / white_beng->getContentSize().height);
+        white_beng->setPosition(origin.x + visibleSize.width - 125.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(white_beng, 0);
+    }
+    else
+        problemLoading("white_beng.png");
+    auto white_de = Sprite::create("white_de.png");
+    if (white_de) {
+        white_de->setScale(50.0 / white_de->getContentSize().width, 50.0 / white_de->getContentSize().height);
+        white_de->setPosition(origin.x + visibleSize.width - 75.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(white_de, 0);
+    }
+    else
+        problemLoading("white_de.png");
+    auto white_zhu = Sprite::create("white_zhu.png");
+    if (white_zhu) {
+        white_zhu->setScale(50.0 / white_zhu->getContentSize().width, 50.0 / white_zhu->getContentSize().height);
+        white_zhu->setPosition(origin.x + visibleSize.width - 25.0, origin.y + visibleSize.width + 25.0);
+        this->addChild(white_zhu, 0);
+    }
+    else
+        problemLoading("white_zhu.png");
+
     return true;
 }
 
@@ -143,15 +227,6 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
     SimpleAudioEngine::getInstance()->end();
-}
-
-void HelloWorld::playBGM() {
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", false);
-	//循环播放背景音乐，设置延迟时间为36.5秒后再次播放，即重复播放前36.5秒
-    this->scheduleOnce([this](float dt) {
-        SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-        this->playBGM();
-    }, 36.5f, "loop_bgm");
 }
 
 void HelloWorld::toggleBGM(Ref* pSender) {

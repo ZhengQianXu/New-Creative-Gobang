@@ -16,9 +16,6 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
-	//≤•∑≈±≥æ∞“Ù¿÷
-    void playBGM();
-
 	//∏ƒ±‰±≥æ∞“Ù¿÷≤•∑≈◊¥Ã¨
     void toggleBGM(Ref* pSender);
 
