@@ -121,7 +121,8 @@ void AppDelegate::applicationWillEnterForeground() {
 #if USE_AUDIO_ENGINE
     AudioEngine::resumeAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
-    SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+    if(HelloWorld::isBgmPlay())
+        SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
 }
