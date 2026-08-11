@@ -2,6 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include <chrono>
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -40,10 +41,20 @@ public:
     //棋子选中处理函数
     void onSelectChess(cocos2d::Sprite* chessSprite, const std::string& chessName);
 
-    //
-    //void onPlaceChess();
+    //棋子放置处理函数
+    bool onPlaceChess(cocos2d::Vec2 touchPos);
+
+    //开始游戏处理函数
+    void onStartGame(Ref* pSender);
+
+    /*  每帧更新函数（由 scheduleUpdate() 触发）
+        @param dt 两帧之间的时间间隔（单位：秒），通常约为 1/60 秒  */
+    void update(float dt);
 
 private:
+    cocos2d::Size visibleSize;                              //窗口大小
+    cocos2d::Vec2 origin;                                   //坐标原点
+
 	cocos2d::MenuItemImage* bgmBtn = nullptr;               //背景音乐控制按钮
 	cocos2d::Action* rotateAction = nullptr;                //旋转动作
 	static bool isBgmOn;                                    //背景音乐播放状态
@@ -53,7 +64,15 @@ private:
     std::string selectedChessName = "";                     //选中棋子名字
     cocos2d::Sprite* selectedPlacePoint = nullptr;
     std::vector<std::vector<cocos2d::Sprite*>> placePoints; //棋盘所有可放置点数组
-    std::vector<std::vector<bool>> canPlace;                 //当前棋盘可放置点
+    std::vector<std::vector<bool>> canPlace;                //当前棋盘可放置点
+
+    bool isTimerRunning = false;                            //计时器是否正在运行
+    float roundTime = 20.0f;                                //一个回合时间
+    float surplusTime = 21.0f;                              //回合剩余时间
+    bool isBlackRound = true;                               //是否是黑方回合
+    cocos2d::Label* timer = nullptr;                        //计时器显示标签
+    cocos2d::Sprite* blackRoundArrow = nullptr;             //指向黑方的箭头
+    cocos2d::Sprite* whiteRoundArrow = nullptr;             //指向白方的箭头
 };
 
 #endif // __HELLOWORLD_SCENE_H__

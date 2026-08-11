@@ -28,8 +28,8 @@ bool HelloWorld::init()
         return false;
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    visibleSize = Director::getInstance()->getVisibleSize();
+    origin = Director::getInstance()->getVisibleOrigin();
 
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
@@ -96,7 +96,7 @@ bool HelloWorld::init()
     // 添加背景音乐控制按钮
     bgmBtn = MenuItemImage::create("bgm_btn.png", "bgm_btn.png", CC_CALLBACK_1(HelloWorld::toggleBGM, this));
     bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);  //设置大小为44px * 44px
-    bgmBtn->setPosition(Vec2(22, 22));          //位置放在左下角
+    bgmBtn->setPosition(Vec2(22.0f, 22.0f));          //位置放在左下角
 	auto me = Menu::create(bgmBtn, nullptr);    //创建菜单并添加按钮
 	me->setPosition(Vec2::ZERO);                //设置菜单位置为(0,0)
     this->addChild(me, 1);
@@ -262,12 +262,46 @@ bool HelloWorld::init()
     else
         problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
     
+    //添加点击事件处理
     auto listener = EventListenerTouchOneByOne::create();                       //创建点击事件监听器
     listener->setSwallowTouches(false);                                         //不吞掉点击事件，让其他监听器也能处理该事件
     listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);     //点击开始回调函数
     listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);     //点击结束回调函数
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //将监听器注册到事件分发器
-    
+
+    auto curRound = Label::create(u8"当前回合", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
+    if (curRound) {
+        curRound->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 35.0f);
+        curRound->setTextColor(Color4B::BLACK);
+        this->addChild(curRound, 0);
+    }
+    else
+        problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
+    auto blackRound = Label::create(u8"黑方", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
+    if (blackRound) {
+        blackRound->setPosition(origin.x + 125.0f, origin.y + visibleSize.height - 35.0f);
+        blackRound->setTextColor(Color4B::BLACK);
+        this->addChild(blackRound, 0);
+    }
+    else
+        problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
+    auto whiteRound = Label::create(u8"白方", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
+    if (whiteRound) {
+        whiteRound->setPosition(origin.x + visibleSize.width - 125.0f, origin.y + visibleSize.height - 35.0f);
+        whiteRound->setTextColor(Color4B::WHITE);
+        this->addChild(whiteRound, 0);
+    }
+    else
+        problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
+
+    //创建开始游戏按钮
+    auto startGame = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
+    startGame->setScale(250.0f / startGame->getContentSize().width, 70.0f / startGame->getContentSize().height);
+    startGame->setPosition(Vec2::ZERO);
+    auto startMenu = Menu::create(startGame, nullptr);                                              //创建菜单存放按钮
+    startMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f); //位置在棋盘正上方
+    this->addChild(startMenu, 0);
+
     return true;
 }
 
@@ -323,32 +357,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
             return true;                                        //消费掉这个点击事件
         }
     if (!selectedChessName.empty())                             //如果有棋子被选中
-        for (int row = 0; row < 19; row++)
-            for (int col = 0; col < 19; col++)
-                //如果当前点可放置
-                if (canPlace[row][col] && placePoints[row][col]->getBoundingBox().containsPoint(touchPos)) {
-                    if (selectedPlacePoint) {                                           //如果已存在选中放置点
-                        if (selectedPlacePoint == placePoints[row][col]) {              //检查是否是当前放置点
-                            auto chess = Sprite::create(selectedChessName + ".png");    //由选中棋子名字生成对应棋子
-                            if (chess) {
-                                chess->setPosition(selectedPlacePoint->getPosition());  //棋子位置与放置点一致
-                                chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
-                                this->addChild(chess, 1);
-                                selectedPlacePoint->setVisible(false);                  //放置点隐藏
-                                selectedPlacePoint = nullptr;                           //置空，防止野指针
-                                canPlace[row][col] = false;                             //当前点已有棋子，表示不可放置
-                            }
-                            else
-                                problemLoading("chess.png");
-                            return true;           
-                        }
-                        else
-                            selectedPlacePoint->setVisible(false);                      //如果选中点不是当前点，将之前点隐藏
-                    }
-                    selectedPlacePoint = placePoints[row][col];                         //更新选中点
-                    selectedPlacePoint->setVisible(true);                               //显示选中点
-                    return true;
-                }
+        return onPlaceChess(touchPos);
     return false;
 }
 
@@ -382,7 +391,7 @@ void HelloWorld::onInitBoardPlacePoint() {
             auto pp = Sprite::create("placePoint.png");
             if (pp) {
                 //从左下角到右上角计算可放置点位置
-                pp->setPosition(75.0f + col * 50.0f, 75.0f + row * 50.0f);
+                pp->setPosition(origin.x + 75.0f + col * 50.0f, origin.y + 75.0f + row * 50.0f);
                 pp->setScale(35.0f / pp->getContentSize().width, 35.0f / pp->getContentSize().height);
                 pp->setOpacity(200);
                 pp->setVisible(false);          //全部放置点隐藏
@@ -392,4 +401,105 @@ void HelloWorld::onInitBoardPlacePoint() {
             else
                 problemLoading("placePoint.png");
         }
+}
+
+bool HelloWorld::onPlaceChess(Vec2 touchPos) {
+    for (int row = 0; row < 19; row++)
+        for (int col = 0; col < 19; col++)
+            //如果当前点可放置
+            if (canPlace[row][col] && placePoints[row][col]->getBoundingBox().containsPoint(touchPos)) {
+                if (selectedPlacePoint) {                                           //如果已存在选中放置点
+                    if (selectedPlacePoint == placePoints[row][col]) {              //检查是否是当前放置点
+                        auto chess = Sprite::create(selectedChessName + ".png");    //由选中棋子名字生成对应棋子
+                        if (chess) {
+                            chess->setPosition(selectedPlacePoint->getPosition());  //棋子位置与放置点一致
+                            chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
+                            this->addChild(chess, 1);
+                            selectedPlacePoint->setVisible(false);                  //放置点隐藏
+                            selectedPlacePoint = nullptr;                           //置空，防止野指针
+                            canPlace[row][col] = false;                             //当前点已有棋子，表示不可放置
+                        }
+                        else
+                            problemLoading("chess.png");
+                        return true;
+                    }
+                    else
+                        selectedPlacePoint->setVisible(false);                      //如果选中点不是当前点，将之前点隐藏
+                }
+                selectedPlacePoint = placePoints[row][col];                         //更新选中点
+                selectedPlacePoint->setVisible(true);                               //显示选中点
+                return true;
+            }
+    return false;
+}
+
+void HelloWorld::onStartGame(Ref* pSender){
+    Node* btn = dynamic_cast<Node*>(pSender);   //动态转换为节点类型，为了调用隐藏函数
+    if (btn)
+        btn->setVisible(false);                 //按钮隐藏，代表已开始游戏
+
+    if (!timer) {
+        timer = Label::create("20", "fonts/arial.ttf", 50);                                                 //创建计时器
+        if (timer) {
+            timer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 120.0f);   //放在“当前回合”下面
+            timer->setTextColor(Color4B::BLACK);
+            this->addChild(timer, 0);
+        }
+        else
+            problemLoading("'fonts/arial.ttf'");
+    }
+    if (!blackRoundArrow) {
+        blackRoundArrow = Sprite::create("blackRound.png");     //创建指向黑方的箭头
+        if (blackRoundArrow) {
+            blackRoundArrow->setScale(80.0f / blackRoundArrow->getContentSize().width, 25.0f / blackRoundArrow->getContentSize().height);
+            //放在“当前回合”左边
+            blackRoundArrow->setPosition(origin.x + visibleSize.width / 2 - 200.0f, origin.y + visibleSize.height - 35.0f);
+            this->addChild(blackRoundArrow, 0);
+            blackRoundArrow->setVisible(false);                 //先隐藏
+        }
+        else
+            problemLoading("blackRound.png");
+    }
+    if (!whiteRoundArrow) {
+        whiteRoundArrow = Sprite::create("whiteRound.png");     //创建指向白方的箭头
+        if (whiteRoundArrow) {
+            whiteRoundArrow->setScale(80.0f / whiteRoundArrow->getContentSize().width, 25.0f / whiteRoundArrow->getContentSize().height);
+            whiteRoundArrow->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + visibleSize.height - 35.0f);
+            this->addChild(whiteRoundArrow, 0);
+            whiteRoundArrow->setVisible(false);
+        }
+        else
+            problemLoading("whiteRound.png");
+    }
+    
+    isTimerRunning = true;      //表示正在计时
+
+    this->scheduleUpdate();     //启动帧循环，每帧自动调用 update(float dt)
+}
+
+void HelloWorld::update(float dt) {
+    if (!isTimerRunning)
+        return;
+    surplusTime -= dt;                              //更新当前回合剩余时间
+    if (surplusTime <= 0) {
+        surplusTime = 21.0f;                        //回合结束，开始下一回合
+        isBlackRound = !isBlackRound;               //回合交换
+        if (isBlackRound)
+            timer->setTextColor(Color4B::BLACK);    //黑方时计时器是黑色的
+        else
+            timer->setTextColor(Color4B::WHITE);    //白方时白色
+    }
+    else if (surplusTime < 6)
+        timer->setTextColor(Color4B::RED);          //倒计时剩5秒时呈红色
+    int seconds = (int)std::floor(surplusTime);     //向下取整倒计时，可以确保看得到0
+    timer->setString(std::to_string(seconds));      //实时显示在计时器标签上
+    
+    if (isBlackRound) {                             //如果黑方回合
+        blackRoundArrow->setVisible(true);          //指向黑方的箭头显示
+        whiteRoundArrow->setVisible(false);         //指向白方的箭头隐藏
+    }
+    else {                                          //反之
+        whiteRoundArrow->setVisible(true);
+        blackRoundArrow->setVisible(false);
+    }
 }
