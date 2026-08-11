@@ -95,8 +95,8 @@ bool HelloWorld::init()
 
     // 添加背景音乐控制按钮
     bgmBtn = MenuItemImage::create("bgm_btn.png", "bgm_btn.png", CC_CALLBACK_1(HelloWorld::toggleBGM, this));
-    bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);
-    bgmBtn->setPosition(Vec2(22, 22));
+    bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);  //设置大小为44px * 44px
+    bgmBtn->setPosition(Vec2(22, 22));          //位置放在左下角
 	auto me = Menu::create(bgmBtn, nullptr);    //创建菜单并添加按钮
 	me->setPosition(Vec2::ZERO);                //设置菜单位置为(0,0)
     this->addChild(me, 1);
@@ -114,8 +114,8 @@ bool HelloWorld::init()
 		float boardWidth = board->getContentSize().width;
 		float boardHeight = board->getContentSize().height;
 		//根据屏幕宽度和棋盘图片宽度计算并设置缩放比例
-        float scaleX = visibleSize.width / boardWidth;
-        float scaleY = scaleX;
+        float scaleX = visibleSize.width / boardWidth;      //宽度占满
+        float scaleY = scaleX;                              //长宽一致
         board->setScale(scaleX, scaleY);
 		//设置棋盘图片位置为屏幕下方中心
 		float posX = origin.x + visibleSize.width / 2;
@@ -128,18 +128,20 @@ bool HelloWorld::init()
 		problemLoading("'board.png'");
 
     //添加黑方棋子,按“这谁绷得住”次序添加，黑底白字，显示在棋盘左上方
-    // 创建黑方棋子 "这"
+    //创建黑方棋子 "这"
     auto black_zhe = Sprite::create("black_zhe.png");
     if (black_zhe) {
+        //设置大小50px * 50px
         black_zhe->setScale(50.0f / black_zhe->getContentSize().width, 50.0f / black_zhe->getContentSize().height);
+        //位置在棋盘左上方第一个
         black_zhe->setPosition(origin.x + 25.0f, origin.y + visibleSize.width + 25.0f);
         this->addChild(black_zhe, 0);
-        black_zhe->setName("black_zhe");
-        chessSprites.push_back(black_zhe);
+        black_zhe->setName("black_zhe");        //设置精灵名字
+        chessSprites.push_back(black_zhe);      //加入棋子数组里
     }
     else
         problemLoading("black_zhe.png");
-	// 创建黑方棋子 "谁"
+	//创建黑方棋子 "谁"
     auto black_shui = Sprite::create("black_shui.png");
     if (black_shui) {
         black_shui->setScale(50.0f / black_shui->getContentSize().width, 50.0f / black_shui->getContentSize().height);
@@ -150,7 +152,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("black_shui.png");
-	// 创建黑方棋子 "绷"
+	//创建黑方棋子 "绷"
     auto black_beng = Sprite::create("black_beng.png");
     if (black_beng) {
         black_beng->setScale(50.0f / black_beng->getContentSize().width, 50.0f / black_beng->getContentSize().height);
@@ -161,7 +163,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("black_beng.png");
-	// 创建黑方棋子 "得"
+	//创建黑方棋子 "得"
     auto black_de = Sprite::create("black_de.png");
     if (black_de) {
         black_de->setScale(50.0f / black_de->getContentSize().width, 50.0f / black_de->getContentSize().height);
@@ -172,7 +174,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("black_de.png");
-    // 创建黑方棋子 "住"
+    //创建黑方棋子 "住"
     auto black_zhu = Sprite::create("black_zhu.png");
     if (black_zhu) {
         black_zhu->setScale(50.0f / black_zhu->getContentSize().width, 50.0f / black_zhu->getContentSize().height);
@@ -185,10 +187,11 @@ bool HelloWorld::init()
         problemLoading("black_zhu.png");
 
     //添加白方棋子,按“这谁绷得住”次序添加，白底黑字，显示在棋盘右上方
-	// 创建白方棋子 "这"
+	//创建白方棋子 "这"
     auto white_zhe = Sprite::create("white_zhe.png");
     if (white_zhe) {
         white_zhe->setScale(50.0f / white_zhe->getContentSize().width, 50.0f / white_zhe->getContentSize().height);
+        //位置为棋盘右上方靠左第一个
         white_zhe->setPosition(origin.x + visibleSize.width - 225.0f, origin.y + visibleSize.width + 25.0f);
         this->addChild(white_zhe, 0);
         white_zhe->setName("white_zhe");
@@ -196,7 +199,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("white_zhe.png");
-	// 创建白方棋子 "谁"
+	//创建白方棋子 "谁"
     auto white_shui = Sprite::create("white_shui.png");
     if (white_shui) {
         white_shui->setScale(50.0f / white_shui->getContentSize().width, 50.0f / white_shui->getContentSize().height);
@@ -207,7 +210,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("white_shui.png");
-	// 创建白方棋子 "绷"
+	//创建白方棋子 "绷"
     auto white_beng = Sprite::create("white_beng.png");
     if (white_beng) {
         white_beng->setScale(50.0f / white_beng->getContentSize().width, 50.0f / white_beng->getContentSize().height);
@@ -218,7 +221,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("white_beng.png");
-	// 创建白方棋子 "得"
+	//创建白方棋子 "得"
     auto white_de = Sprite::create("white_de.png");
     if (white_de) {
         white_de->setScale(50.0f / white_de->getContentSize().width, 50.0f / white_de->getContentSize().height);
@@ -229,7 +232,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("white_de.png");
-	// 创建白方棋子 "住"
+	//创建白方棋子 "住"
     auto white_zhu = Sprite::create("white_zhu.png");
     if (white_zhu) {
         white_zhu->setScale(50.0f / white_zhu->getContentSize().width, 50.0f / white_zhu->getContentSize().height);
@@ -244,8 +247,8 @@ bool HelloWorld::init()
     //添加棋子选择提示
 	auto blackTipLabel = Label::createWithTTF(u8"黑方在上面选择棋子", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (blackTipLabel) {
-        blackTipLabel->setPosition(origin.x + 125.0f, origin.y + visibleSize.width - 25.0f);
-		blackTipLabel->setTextColor(Color4B::BLACK);
+        blackTipLabel->setPosition(origin.x + 125.0f, origin.y + visibleSize.width - 25.0f);    //位置在5个黑棋正下方
+		blackTipLabel->setTextColor(Color4B::BLACK);                                            //字体为黑色
         this->addChild(blackTipLabel, 1);
     }
     else
@@ -259,11 +262,11 @@ bool HelloWorld::init()
     else
         problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
     
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(false);
-    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
-    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+    auto listener = EventListenerTouchOneByOne::create();                       //创建点击事件监听器
+    listener->setSwallowTouches(false);                                         //不吞掉点击事件，让其他监听器也能处理该事件
+    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);     //点击开始回调函数
+    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);     //点击结束回调函数
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //将监听器注册到事件分发器
     
     return true;
 }
@@ -296,7 +299,7 @@ void HelloWorld::toggleBGM(Ref* pSender) {
 }
 
 void HelloWorld::startRotate() {
-    //创建旋转动作（2秒转一圈）并重复执行
+    //创建旋转动作（3秒转一圈）并重复执行
     auto rotate = RotateBy::create(3.0f, 360.0f);
     rotateAction = RepeatForever::create(rotate);
     bgmBtn->runAction(rotateAction);
@@ -311,53 +314,82 @@ void HelloWorld::stopRotate() {
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
-    Vec2 touchPos = touch->getLocation();
-    for (auto& chess : chessSprites) {
-        if (chess->getBoundingBox().containsPoint(touchPos)) {
-            onSelectChess(chess, chess->getName());
-            onShowBoardPlacePoint();
-            return true;
+    Vec2 touchPos = touch->getLocation();                       //获取点击的位置
+    for (auto& chess : chessSprites)
+        if (chess->getBoundingBox().containsPoint(touchPos)) {  //判断是否有棋子被点击了
+            if(selectedChessName.empty())                       //如果第一次选中棋子
+                onInitBoardPlacePoint();                        //初始化棋盘放置点
+            onSelectChess(chess, chess->getName());             //调用选中棋子函数
+            return true;                                        //消费掉这个点击事件
         }
-    }
+    if (!selectedChessName.empty())                             //如果有棋子被选中
+        for (int row = 0; row < 19; row++)
+            for (int col = 0; col < 19; col++)
+                //如果当前点可放置
+                if (canPlace[row][col] && placePoints[row][col]->getBoundingBox().containsPoint(touchPos)) {
+                    if (selectedPlacePoint) {                                           //如果已存在选中放置点
+                        if (selectedPlacePoint == placePoints[row][col]) {              //检查是否是当前放置点
+                            auto chess = Sprite::create(selectedChessName + ".png");    //由选中棋子名字生成对应棋子
+                            if (chess) {
+                                chess->setPosition(selectedPlacePoint->getPosition());  //棋子位置与放置点一致
+                                chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
+                                this->addChild(chess, 1);
+                                selectedPlacePoint->setVisible(false);                  //放置点隐藏
+                                selectedPlacePoint = nullptr;                           //置空，防止野指针
+                                canPlace[row][col] = false;                             //当前点已有棋子，表示不可放置
+                            }
+                            else
+                                problemLoading("chess.png");
+                            return true;           
+                        }
+                        else
+                            selectedPlacePoint->setVisible(false);                      //如果选中点不是当前点，将之前点隐藏
+                    }
+                    selectedPlacePoint = placePoints[row][col];                         //更新选中点
+                    selectedPlacePoint->setVisible(true);                               //显示选中点
+                    return true;
+                }
     return false;
 }
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event) {
-
+    
 }
 
 void HelloWorld::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
-    selectedChess = chessName;
+    selectedChessName = chessName;                                          //保存当前被选中棋子的名字
     if (selectedHighlight) {
-        selectedHighlight->removeFromParent();
-        selectedHighlight = nullptr;
+        selectedHighlight->removeFromParent();                              //移除之前的高亮效果
+        selectedHighlight = nullptr;                                        //置空，防止野指针
     }
-    selectedHighlight = Sprite::create("highlight.png");
+    selectedHighlight = Sprite::create("highlight.png");                    //创建高亮效果
     if (selectedHighlight) {
-        selectedHighlight->setPosition(chessSprite->getPosition());
+        selectedHighlight->setPosition(chessSprite->getPosition());         //和棋子相同位置
         float ScaleX = 70.0f / selectedHighlight->getContentSize().width;
         float ScaleY = 70.0f / selectedHighlight->getContentSize().height;
-        selectedHighlight->setScale(ScaleX, ScaleY);
-        this->addChild(selectedHighlight, 1);
+        selectedHighlight->setScale(ScaleX, ScaleY);                        //设置大小为70px * 70px
+        this->addChild(selectedHighlight, 0);
     }
     else
         problemLoading("highlight.png");
 }
 
-void HelloWorld::onShowBoardPlacePoint() {
-    std::vector<std::vector<Vec2>> Pos(19, std::vector<Vec2>(19));
-    for (int row = 0; row < 19; row++)
-        for (int col = 0; col < 19; col++)
-            Pos[row][col] = Vec2(75.0f + col * 50.0f, 75.0f + row * 50.0f);
+void HelloWorld::onInitBoardPlacePoint() {
+    placePoints.assign(19, std::vector<Sprite*>(19, nullptr));
+    canPlace.assign(19, std::vector<bool>(19, true));       //一开始棋盘上无棋子，所有点均可放置
     for (int row = 0; row < 19; row++)
         for (int col = 0; col < 19; col++) {
-            Sprite* PlacePoint = Sprite::create("boardPoint.png");
-            if (PlacePoint) {
-                PlacePoint->setScale(20.0f / PlacePoint->getContentSize().width, 20.0f / PlacePoint->getContentSize().height);
-                PlacePoint->setPosition(Pos[row][col]);
-                this->addChild(PlacePoint, 1);
+            auto pp = Sprite::create("placePoint.png");
+            if (pp) {
+                //从左下角到右上角计算可放置点位置
+                pp->setPosition(75.0f + col * 50.0f, 75.0f + row * 50.0f);
+                pp->setScale(35.0f / pp->getContentSize().width, 35.0f / pp->getContentSize().height);
+                pp->setOpacity(200);
+                pp->setVisible(false);          //全部放置点隐藏
+                this->addChild(pp, 1);
+                placePoints[row][col] = pp;     //保存在数组里
             }
             else
-                problemLoading("boardPoint.png");
+                problemLoading("placePoint.png");
         }
 }
