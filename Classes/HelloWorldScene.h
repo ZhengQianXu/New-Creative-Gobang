@@ -4,6 +4,20 @@
 #include "cocos2d.h"
 #include <chrono>
 
+struct Direction {
+    int x;
+    int y;
+};
+
+constexpr Direction Up = { 1, 0 };
+constexpr Direction LeftUp = { 1,-1 };
+constexpr Direction Left = { 0, -1 };
+constexpr Direction LeftDown = { -1, -1 };
+constexpr Direction Down = { -1,0 };
+constexpr Direction RightDown = { -1,1 };
+constexpr Direction Right = { 0,1 };
+constexpr Direction RightUp = { 1,1 };
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
@@ -54,7 +68,9 @@ public:
         @param dt 两帧之间的时间间隔（单位：秒），通常约为 1/60 秒  */
     void update(float dt);
 
-    bool isVcitory(size_t row, size_t col);
+    bool isVictory(int row, int col);
+
+    bool dfsBoardChesses(int curLayer, int row, int col, Direction dir, std::unordered_map<std::string, int> needChesses);
 
 private:
     cocos2d::Size visibleSize;                              //窗口大小

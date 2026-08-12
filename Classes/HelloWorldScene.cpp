@@ -463,8 +463,8 @@ void HelloWorld::onInitBoardPlacePoint() {
 }
 
 bool HelloWorld::onPlaceChess(Vec2 touchPos) {
-    for (size_t row = 0; row < 19; row++)
-        for (size_t col = 0; col < 19; col++)
+    for (int row = 0; row < 19; row++)
+        for (int col = 0; col < 19; col++)
             //如果当前点可放置
             if (canPlace[row][col] && placePoints[row][col]->getBoundingBox().containsPoint(touchPos)) {
                 if (selectedPlacePoint) {                                           //如果已存在选中放置点
@@ -473,6 +473,7 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
                         if (chess) {
                             chess->setPosition(selectedPlacePoint->getPosition());  //棋子位置与放置点一致
                             chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
+                            chess->setName(selectedChessName);
                             this->addChild(chess, 1);
                             boardChesses[row][col] = chess;
                             selectedPlacePoint->setVisible(false);                  //放置点隐藏
@@ -482,6 +483,17 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
                             if(isEffectOn)
                                 SimpleAudioEngine::getInstance()->playEffect(("music/" + selectedChessName.substr(6) + ".mp3").c_str());
                             curChessSum++;                                          //当前棋盘上棋子总数加1
+                            if (isVictory(row, col)) {
+                                auto victoryAnimation = Sprite::create("victory.jpg");
+                                if (victoryAnimation) {
+                                    victoryAnimation->setScale(316.0f / victoryAnimation->getContentSize().width, 360.5f / victoryAnimation->getContentSize().height);
+                                    victoryAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+                                    this->addChild(victoryAnimation, 2);
+                                }
+                                else
+                                    problemLoading("'victory.jpg'");
+                                SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");
+                            }
                             roundSurplusTime = 0;                                   //回合时间清零，即切换回合
                         }
                         else
@@ -588,6 +600,52 @@ void HelloWorld::update(float dt) {
     timer->setString(std::to_string(seconds));      //实时显示在计时器标签上
 }
 
-bool HelloWorld::isVcitory(size_t row, size_t col) {
+bool HelloWorld::isVictory(int row, int col) {
+    std::unordered_map<std::string, int> needChesses;
+    if (isBlackRound) {
+        needChesses["black_zhe"] = 1;
+        needChesses["black_shui"] = 1;
+        needChesses["black_beng"] = 1;
+        needChesses["black_de"] = 1;
+        needChesses["black_zhu"] = 1;
+    }
+    else {
+        needChesses["white_zhe"] = 1;
+        needChesses["white_shui"] = 1;
+        needChesses["white_beng"] = 1;
+        needChesses["white_de"] = 1;
+        needChesses["white_zhu"] = 1;
+    }
+
+    if (dfsBoardChesses(1, row, col, Up, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, LeftUp, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, Left, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, LeftDown, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, Down, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, RightDown, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, Right, needChesses))
+        return true;
+    else if (dfsBoardChesses(1, row, col, RightUp, needChesses))
+        return true;
     return false;
+}
+
+bool HelloWorld::dfsBoardChesses(int curLayer, int row, int col, Direction dir, std::unordered_map<std::string, int> needChesses){
+    if (curLayer == 6)
+        return true;
+    if (row < 0 || row > 18 || col < 0 || col > 18 || !boardChesses[row][col])
+        return false;
+    std::string curChessName = boardChesses[row][col]->getName();
+    if (needChesses.find(curChessName) == needChesses.end())
+        return false;
+    else if (needChesses[curChessName] == 0)
+        return false;
+    needChesses[curChessName]--;
+    return dfsBoardChesses(curLayer + 1, row + dir.x, col + dir.y, dir, needChesses);
 }
