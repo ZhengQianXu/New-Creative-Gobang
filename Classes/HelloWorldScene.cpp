@@ -348,16 +348,16 @@ void HelloWorld::stopRotate() {
 }
 
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
+    if (!isGamePlaying)
+        return false;                                           //没在游戏中就不响应点击
     Vec2 touchPos = touch->getLocation();                       //获取点击的位置
     for (auto& chess : chessSprites)
         if (chess->getBoundingBox().containsPoint(touchPos)) {  //判断是否有棋子被点击了
-            if(selectedChessName.empty())                       //如果第一次选中棋子
-                onInitBoardPlacePoint();                        //初始化棋盘放置点
             onSelectChess(chess, chess->getName());             //调用选中棋子函数
             return true;                                        //消费掉这个点击事件
         }
     if (!selectedChessName.empty())                             //如果有棋子被选中
-        return onPlaceChess(touchPos);
+        return onPlaceChess(touchPos);                          //进行落子处理
     return false;
 }
 
@@ -366,6 +366,9 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event) {
 }
 
 void HelloWorld::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
+    //黑方回合时不可选择白方棋子，白方回合时不可选择黑方棋子
+    if ((isBlackRound && chessName.substr(0, 5) == "white") || (!isBlackRound && chessName.substr(0, 5) == "black"))
+        return;
     selectedChessName = chessName;                                          //保存当前被选中棋子的名字
     if (selectedHighlight) {
         selectedHighlight->removeFromParent();                              //移除之前的高亮效果
@@ -418,6 +421,8 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
                             selectedPlacePoint->setVisible(false);                  //放置点隐藏
                             selectedPlacePoint = nullptr;                           //置空，防止野指针
                             canPlace[row][col] = false;                             //当前点已有棋子，表示不可放置
+                            curChessSum++;                                          //当前棋盘上棋子总数加1
+                            roundSurplusTime = 0;                                   //回合时间清零，即切换回合
                         }
                         else
                             problemLoading("chess.png");
@@ -472,34 +477,53 @@ void HelloWorld::onStartGame(Ref* pSender){
             problemLoading("whiteRound.png");
     }
     
-    isTimerRunning = true;      //表示正在计时
+    isGamePlaying = true;                           //表示正在游戏中
 
-    this->scheduleUpdate();     //启动帧循环，每帧自动调用 update(float dt)
+    this->scheduleUpdate();                         //启动帧循环，每帧自动调用 update(float dt)
+
+    if (selectedChessName.empty())                  
+        onInitBoardPlacePoint();                    //第一回合开始时初始化棋盘放置点
+    blackRoundArrow->setVisible(true);              //默认第一回合是黑方，指向黑方的箭头显示
+    onSelectChess(chessSprites[0], "black_zhe");    //自动选中第一个黑棋
 }
 
 void HelloWorld::update(float dt) {
-    if (!isTimerRunning)
-        return;
-    surplusTime -= dt;                              //更新当前回合剩余时间
-    if (surplusTime <= 0) {
-        surplusTime = 21.0f;                        //回合结束，开始下一回合
-        isBlackRound = !isBlackRound;               //回合交换
-        if (isBlackRound)
-            timer->setTextColor(Color4B::BLACK);    //黑方时计时器是黑色的
-        else
-            timer->setTextColor(Color4B::WHITE);    //白方时白色
-    }
-    else if (surplusTime < 6)
-        timer->setTextColor(Color4B::RED);          //倒计时剩5秒时呈红色
-    int seconds = (int)std::floor(surplusTime);     //向下取整倒计时，可以确保看得到0
-    timer->setString(std::to_string(seconds));      //实时显示在计时器标签上
+    if (!isGamePlaying)
+        return;                                     //不在游戏中不处理更新逻辑
     
-    if (isBlackRound) {                             //如果黑方回合
-        blackRoundArrow->setVisible(true);          //指向黑方的箭头显示
-        whiteRoundArrow->setVisible(false);         //指向白方的箭头隐藏
+    roundSurplusTime -= dt;                         //更新当前回合剩余时间
+    if (roundSurplusTime <= 0) {                    //回合时间到
+        if (lastChessSum == curChessSum) {          //如果玩家未落子
+            if (selectedPlacePoint)                 //如果有选中放置点，自动落子
+                onPlaceChess(selectedPlacePoint->getPosition());           
+            else
+                for(int row = 0; row < 19 && lastChessSum == curChessSum; row++)//lastChessSum == curChessSum保证只落一个子
+                    for (int col = 0; col < 19; col++)
+                        if (canPlace[row][col]) {                               //没有选中放置点，找到第一个可放置点，帮忙落子
+                            onPlaceChess(placePoints[row][col]->getPosition()); //第一步是先选放置点
+                            onPlaceChess(placePoints[row][col]->getPosition()); //第二步才正式落子
+                            break;                                              //直接退出，保证只落一个子
+                        }           
+        }
+        lastChessSum = curChessSum;                 //更新棋盘旧棋子总数
+        roundSurplusTime = 5.9f;                    //回合结束，开始下一回合
+        isBlackRound = !isBlackRound;               //回合交换       
+        if (isBlackRound) {                         //如果黑方回合
+            timer->setTextColor(Color4B::BLACK);    //黑方时计时器是黑色的
+            blackRoundArrow->setVisible(true);      //指向黑方的箭头显示
+            whiteRoundArrow->setVisible(false);     //指向白方的箭头隐藏
+            onSelectChess(chessSprites[0], "black_zhe");
+        }
+        else {                                      //反之
+            timer->setTextColor(Color4B::WHITE);    //白方时白色
+            whiteRoundArrow->setVisible(true);
+            blackRoundArrow->setVisible(false);
+            onSelectChess(chessSprites[5], "white_zhe");
+        }
     }
-    else {                                          //反之
-        whiteRoundArrow->setVisible(true);
-        blackRoundArrow->setVisible(false);
-    }
+    else if (roundSurplusTime < 6)
+        timer->setTextColor(Color4B::RED);          //倒计时剩5秒时呈红色
+    
+    int seconds = (int)std::floor(roundSurplusTime);//向下取整倒计时，可以确保看得到0
+    timer->setString(std::to_string(seconds));      //实时显示在计时器标签上
 }

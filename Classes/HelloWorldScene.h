@@ -62,17 +62,18 @@ private:
     std::vector<cocos2d::Sprite*> chessSprites;             //棋子数组
     cocos2d::Sprite* selectedHighlight = nullptr;           //选中高亮效果
     std::string selectedChessName = "";                     //选中棋子名字
-    cocos2d::Sprite* selectedPlacePoint = nullptr;
+    cocos2d::Sprite* selectedPlacePoint = nullptr;          //选中放置点
     std::vector<std::vector<cocos2d::Sprite*>> placePoints; //棋盘所有可放置点数组
     std::vector<std::vector<bool>> canPlace;                //当前棋盘可放置点
 
-    bool isTimerRunning = false;                            //计时器是否正在运行
-    float roundTime = 20.0f;                                //一个回合时间
-    float surplusTime = 21.0f;                              //回合剩余时间
+    bool isGamePlaying = false;                             //是否正在游戏中
+    float roundSurplusTime = 5.9f;                          //回合剩余时间，这里划定一个回合时间为20秒左右
     bool isBlackRound = true;                               //是否是黑方回合
     cocos2d::Label* timer = nullptr;                        //计时器显示标签
     cocos2d::Sprite* blackRoundArrow = nullptr;             //指向黑方的箭头
     cocos2d::Sprite* whiteRoundArrow = nullptr;             //指向白方的箭头
+    int lastChessSum = 0;                                   //上一回合棋盘上棋子总数
+    int curChessSum = 0;                                    //当前回合棋盘上棋子总数
 };
 
 #endif // __HELLOWORLD_SCENE_H__
