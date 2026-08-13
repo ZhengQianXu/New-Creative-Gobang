@@ -355,24 +355,54 @@ bool HelloWorld::init()
     else
         problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
-    //创建开始游戏按钮
-    if (!startGameBtn) {
-        startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
-        if (startGameBtn) {
-            startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
-            startGameBtn->setPosition(Vec2::ZERO);
-        }
-        else
-            problemLoading("'startGame.png or startGame_pressed.png'");
-        //创建存放开始游戏按钮的菜单，位置在棋盘正上方
-        auto startGameMenu = Menu::create(startGameBtn, nullptr);                                               
-        if (startGameMenu) {
-            startGameMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f); 
-            this->addChild(startGameMenu, 0);
-        }
-        else
-            problemLoading("'startGameBtn'");
+    //创建开始游戏按钮   
+    startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
+    if (startGameBtn) {
+        startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
+        startGameBtn->setPosition(Vec2::ZERO);
     }
+    else
+        problemLoading("'startGame.png or startGame_pressed.png'");
+    //创建存放开始游戏按钮的菜单，位置在棋盘正上方
+    auto startGameMenu = Menu::create(startGameBtn, nullptr);                                               
+    if (startGameMenu) {
+        startGameMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f); 
+        this->addChild(startGameMenu, 0);
+    }
+    else
+        problemLoading("'startGameBtn'");
+
+    //创建规则按钮
+    auto ruleBtn = MenuItemImage::create("rule.png", "rule.png", CC_CALLBACK_1(HelloWorld::onRuleShow, this));
+    if (ruleBtn)
+        ruleBtn->setPosition(Vec2::ZERO);
+    else
+        problemLoading("'rule.png'");
+    //创建存放规则按钮的菜单，位置在屏幕左上方
+    auto ruleMenu = Menu::create(ruleBtn, nullptr);
+    if (ruleMenu) {
+        ruleMenu->setPosition(origin.x + 25.0f, origin.y + visibleSize.height - 140.0f);
+        this->addChild(ruleMenu, 0);
+    }
+    else
+        problemLoading("'ruleBtn'");
+
+    //创建反馈按钮
+    auto suggestBtn = MenuItemImage::create("suggest.png", "suggest.png", CC_CALLBACK_1(HelloWorld::onSuggestShow, this));
+    if (suggestBtn) {
+        suggestBtn->setScale(96.5f / suggestBtn->getContentSize().width, 33.0f / suggestBtn->getContentSize().height);
+        suggestBtn->setPosition(Vec2::ZERO);
+    }
+    else
+        problemLoading("'suggest.png'");
+    //创建存放反馈按钮的菜单，位置在屏幕右上方
+    auto suggestMenu = Menu::create(suggestBtn, nullptr);
+    if (suggestMenu) {
+        suggestMenu->setPosition(origin.x + visibleSize.width - 48.25f, origin.y + visibleSize.height - 140.0f);  // 棋盘上方右侧
+        this->addChild(suggestMenu, 0);
+    }
+    else
+        problemLoading("'suggestBtn'");
 
     return true;
 }
@@ -747,4 +777,105 @@ void HelloWorld::cleanBoard(Ref* pSender) {
     victoryAnimation->setVisible(false);                        //隐藏获胜动画
     gameOverBtn->setVisible(false);                             //隐藏结束游戏按钮
     startGameBtn->setVisible(true);                             //显示开始游戏按钮，为下一次游戏做准备
+}
+
+void HelloWorld::onRuleShow(Ref* pSender) {
+    std::string title = u8"游戏规则";
+    std::string content =
+        u8"黑方和白方各有5个棋子，分别写着：\n"
+        "这、谁、绷、得、住\n"
+        "双方轮流落子，每次只能落一个棋子。\n"
+        "连成 \"这谁绷得住\" 5个不同字的一方获胜！\n"
+        "可以不按顺序，回合限时20秒，超时自动落子。";
+
+    createPopup(title, content);
+}
+
+void HelloWorld::onSuggestShow(Ref* pSender){
+    std::string title = u8"建议反馈";
+    std::string content =
+        u8"作者：ZhengQianXu\n"
+        "邮箱：2059984809@qq.com\n"
+        "Github：https://github.com/ZhengQianXu\n"
+        "如有任何建议或问题，欢迎联系作者！\n"
+        "感谢您的支持！";
+
+    createPopup(title, content);
+}
+
+void HelloWorld::closePopup(Ref* pSender){
+    if (popup) {
+        popup->removeFromParent();
+        popup = nullptr;
+    }
+    if (popupMask) {
+        popupMask->removeFromParent();
+        popupMask = nullptr;
+    }
+}
+
+void HelloWorld::createPopup(const std::string& title, const std::string& content) {
+    //创建半透明遮罩层，遮罩层会覆盖整个屏幕，让主场景变暗
+    auto mask = LayerColor::create(Color4B(0, 0, 0, 150));
+    mask->setContentSize(visibleSize);                                      //铺满屏幕
+    mask->setPosition(origin);                                              //从屏幕左下角开始
+    this->addChild(mask, 10);
+    popupMask = mask;                                                       //保存指针，方便关闭时移除
+
+    //遮罩层拦截所有触摸事件，防止玩家在弹窗打开时点击到主场景的按钮或棋子
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);                                      //吞掉事件，不传递到主场景
+    listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
+        return true;                                                        //拦截所有触摸，消费掉事件
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, mask);
+
+    //创建弹窗主体（白色背景）
+    popup = ui::Layout::create();
+    popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //纯色背景
+    popup->setBackGroundColor(Color3B::WHITE);                              //白色背景
+    popup->setBackGroundColorOpacity(255);                                  //不透明
+    popup->setContentSize(Size(600, 300));                                  //弹窗宽600，高300
+    //位置：屏幕中心偏移半个弹窗大小（因为锚点在左下角）
+    popup->setPosition(Vec2(origin.x + visibleSize.width / 2 - 300.0f, origin.y + visibleSize.height / 2 - 200.0f));
+    popup->setAnchorPoint(Vec2::ZERO);                                      //锚点在左下角
+    popup->setTouchEnabled(true);                                           //允许弹窗接收触摸，防止点击穿透
+    popup->setCascadeOpacityEnabled(true);                                  //子节点继承父节点透明度
+    mask->addChild(popup, 1);                                               //添加到遮罩层之上
+
+    //创建标题文字
+    auto titleLabel = Label::create(title, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 32);
+    if (titleLabel) {
+        titleLabel->setTextColor(Color4B::BLACK);
+        titleLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height - 40.0f);//标题在弹窗顶部居中
+        popup->addChild(titleLabel);
+    }
+    else
+        problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+
+    //创建内容文字
+    auto contentLabel = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
+    if (contentLabel) {
+        contentLabel->setTextColor(Color4B::BLACK);
+        contentLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height / 2 - 20.0f);
+        contentLabel->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
+        popup->addChild(contentLabel);
+    }
+    else
+        problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+
+    //创建关闭按钮
+    auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(HelloWorld::closePopup, this));
+    if (closeBtn)
+        closeBtn->setPosition(Vec2::ZERO);
+    else
+        problemLoading("'CloseNormal.png or CloseSelected.png'");
+    //创建存放关闭按钮的菜单，位置在弹窗右上角
+    auto closeMenu = Menu::create(closeBtn, nullptr);
+    if (closeMenu) {        
+        closeMenu->setPosition(popup->getContentSize().width - 30, popup->getContentSize().height - 30);
+        popup->addChild(closeMenu, 1);
+    }
+    else
+        problemLoading("closeBtn");
 }

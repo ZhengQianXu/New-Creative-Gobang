@@ -2,7 +2,7 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include <chrono>
+#include "ui/CocosGUI.h"
 
 //定义方向类型
 struct Direction {
@@ -77,6 +77,18 @@ public:
     //清空棋盘
     void cleanBoard(cocos2d::Ref* pSender);
 
+    //规则内容显示
+    void onRuleShow(cocos2d::Ref* pSender);
+
+    //反馈途径显示
+    void onSuggestShow(cocos2d::Ref* pSender);
+
+    //关闭弹窗
+    void closePopup(cocos2d::Ref* pSender);
+    
+    //创建弹窗
+    void createPopup(const std::string& title, const std::string& content);
+
 private:
     cocos2d::Size visibleSize;                              //窗口大小
     cocos2d::Vec2 origin;                                   //坐标原点
@@ -108,6 +120,9 @@ private:
     cocos2d::Label* victoryTip = nullptr;                   //获胜方提示
     cocos2d::Sprite* victoryAnimation = nullptr;            //获胜动画展示
     cocos2d::MenuItemImage* gameOverBtn = nullptr;          //游戏结束按钮
+
+    cocos2d::LayerColor* popupMask = nullptr;               //遮罩层
+    cocos2d::ui::Layout* popup = nullptr;                   //弹窗
 };
 
 #endif // __HELLOWORLD_SCENE_H__
