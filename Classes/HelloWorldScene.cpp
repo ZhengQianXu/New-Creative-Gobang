@@ -92,7 +92,6 @@ bool HelloWorld::init()
 
     //预加载背景音乐和落子、输赢音效
     SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
-    SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(0.3f);
     SimpleAudioEngine::getInstance()->preloadEffect("music/zhe.mp3");
     SimpleAudioEngine::getInstance()->preloadEffect("music/shui.mp3");
     SimpleAudioEngine::getInstance()->preloadEffect("music/beng.mp3");
@@ -109,25 +108,27 @@ bool HelloWorld::init()
     }
     else
         problemLoading("'music/bgm.mp3'");
-	auto bgmMenu = Menu::create(bgmBtn, nullptr);       //创建菜单并添加按钮
+	
+    auto bgmMenu = Menu::create(bgmBtn, nullptr);       //创建菜单并添加按钮
     if (bgmMenu) {
         bgmMenu->setPosition(Vec2::ZERO);               //设置菜单位置为(0,0)
         this->addChild(bgmMenu, 1);
     }
     else
         problemLoading("'bgmBtn'");
+    
     //添加背景音乐按钮提示
     auto bgmBtnTip = Label::create(u8"<-点击即可开关背景音乐", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (bgmBtnTip) {
-        bgmBtnTip->setPosition(origin.x + 200.0f, origin.y + 22.0f);
+        bgmBtnTip->setPosition(origin.x + 200.0f, origin.y + 22.0f);                //放在背景音乐按钮右边
         bgmBtnTip->setTextColor(Color4B::BLACK);
         this->addChild(bgmBtnTip, 1);
     }
     else
         problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);       //播放背景音乐
-	startRotate();                                                                      //让按钮旋转
+    SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //播放背景音乐
+	startRotate();                                                                  //让按钮旋转
 
     //添加落子音效控制按钮
     auto effectBtn = MenuItemImage::create("effect_btn.png", "effect_btn.png", CC_CALLBACK_1(HelloWorld::toggleEffect, this));
@@ -137,17 +138,19 @@ bool HelloWorld::init()
     }
     else
         problemLoading("'effect_btn.png'");
+    
     auto effectMenu = Menu::create(effectBtn, nullptr);
     if (effectMenu) {
-        effectMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + 22.0f);    //位置在底部中间
+        effectMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + 22.0f);//位置在底部中间
         this->addChild(effectMenu, 1);
     }
     else
         problemLoading("'effectBtn'");
+    
     //添加落子音效按钮提示
     auto effectBtnTip = Label::create(u8"<-点击即可开关落子音效按钮", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (effectBtnTip) {
-        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + 22.0f);
+        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + 22.0f);     //放在音效按钮右边
         effectBtnTip->setTextColor(Color4B::BLACK);
         this->addChild(effectBtnTip, 1);
     }
@@ -161,17 +164,10 @@ bool HelloWorld::init()
     //添加棋盘图片
     auto board = Sprite::create("board.png");
     if (board) {
-		//获取棋盘图片的宽高
-		float boardWidth = board->getContentSize().width;
-		float boardHeight = board->getContentSize().height;
-		//根据屏幕宽度和棋盘图片宽度计算并设置缩放比例
-        float scaleX = visibleSize.width / boardWidth;      //宽度占满
-        float scaleY = scaleX;                              //长宽一致
-        board->setScale(scaleX, scaleY);
+        //设置棋盘占满屏宽，长宽一致
+        board->setScale(visibleSize.width / board->getContentSize().width, visibleSize.width / board->getContentSize().height);
 		//设置棋盘图片位置为屏幕下方中心
-		float posX = origin.x + visibleSize.width / 2;
-        float posY = origin.y + boardHeight * scaleY / 2;
-        board->setPosition(Vec2(posX, posY));
+        board->setPosition(origin.x + visibleSize.width / 2, origin.x + visibleSize.width / 2);
 		//添加棋盘图片到场景中
         this->addChild(board, 0);
     }
@@ -192,7 +188,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("black_zhe.png");
-	//创建黑方棋子 "谁"
+	
+    //创建黑方棋子 "谁"
     auto black_shui = Sprite::create("chess/black_shui.png");
     if (black_shui) {
         black_shui->setScale(50.0f / black_shui->getContentSize().width, 50.0f / black_shui->getContentSize().height);
@@ -203,7 +200,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/black_shui.png");
-	//创建黑方棋子 "绷"
+	
+    //创建黑方棋子 "绷"
     auto black_beng = Sprite::create("chess/black_beng.png");
     if (black_beng) {
         black_beng->setScale(50.0f / black_beng->getContentSize().width, 50.0f / black_beng->getContentSize().height);
@@ -214,7 +212,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/black_beng.png");
-	//创建黑方棋子 "得"
+	
+    //创建黑方棋子 "得"
     auto black_de = Sprite::create("chess/black_de.png");
     if (black_de) {
         black_de->setScale(50.0f / black_de->getContentSize().width, 50.0f / black_de->getContentSize().height);
@@ -225,6 +224,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/black_de.png");
+    
     //创建黑方棋子 "住"
     auto black_zhu = Sprite::create("chess/black_zhu.png");
     if (black_zhu) {
@@ -236,7 +236,7 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/black_zhu.png");
-
+ 
     //添加白方棋子,按“这谁绷得住”次序添加，白底黑字，显示在棋盘右上方
 	//创建白方棋子 "这"
     auto white_zhe = Sprite::create("chess/white_zhe.png");
@@ -250,7 +250,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/white_zhe.png");
-	//创建白方棋子 "谁"
+	
+    //创建白方棋子 "谁"
     auto white_shui = Sprite::create("chess/white_shui.png");
     if (white_shui) {
         white_shui->setScale(50.0f / white_shui->getContentSize().width, 50.0f / white_shui->getContentSize().height);
@@ -261,7 +262,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/white_shui.png");
-	//创建白方棋子 "绷"
+	
+    //创建白方棋子 "绷"
     auto white_beng = Sprite::create("chess/white_beng.png");
     if (white_beng) {
         white_beng->setScale(50.0f / white_beng->getContentSize().width, 50.0f / white_beng->getContentSize().height);
@@ -272,7 +274,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/white_beng.png");
-	//创建白方棋子 "得"
+	
+    //创建白方棋子 "得"
     auto white_de = Sprite::create("chess/white_de.png");
     if (white_de) {
         white_de->setScale(50.0f / white_de->getContentSize().width, 50.0f / white_de->getContentSize().height);
@@ -283,7 +286,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("chess/white_de.png");
-	//创建白方棋子 "住"
+	
+    //创建白方棋子 "住"
     auto white_zhu = Sprite::create("chess/white_zhu.png");
     if (white_zhu) {
         white_zhu->setScale(50.0f / white_zhu->getContentSize().width, 50.0f / white_zhu->getContentSize().height);
@@ -295,7 +299,7 @@ bool HelloWorld::init()
     else
         problemLoading("chess/white_zhu.png");
 
-    //添加棋子选择提示
+    //添加黑方棋子选择提示
 	auto blackTipLabel = Label::createWithTTF(u8"黑方在上面选择棋子", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (blackTipLabel) {
         blackTipLabel->setPosition(origin.x + 125.0f, origin.y + visibleSize.width - 25.0f);    //位置在5个黑棋正下方
@@ -304,6 +308,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+    
+    //添加白方棋子选择提示，位置在5个白棋正下方
     auto whiteTipLabel = Label::createWithTTF(u8"白方在上面选择棋子", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (whiteTipLabel) {
         whiteTipLabel->setPosition(origin.x + visibleSize.width - 125.0f, origin.y + visibleSize.width - 25.0f);
@@ -317,9 +323,9 @@ bool HelloWorld::init()
     auto listener = EventListenerTouchOneByOne::create();                       //创建点击事件监听器
     listener->setSwallowTouches(false);                                         //不吞掉点击事件，让其他监听器也能处理该事件
     listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);     //点击开始回调函数
-    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);     //点击结束回调函数
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //将监听器注册到事件分发器
 
+    //添加“当前回合”标签，位置在顶部中间
     auto curRound = Label::create(u8"当前回合", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
     if (curRound) {
         curRound->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 35.0f);
@@ -328,6 +334,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
+    
+    //添加“黑方”标签，位置在顶部左边
     auto blackRound = Label::create(u8"黑方", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
     if (blackRound) {
         blackRound->setPosition(origin.x + 125.0f, origin.y + visibleSize.height - 35.0f);
@@ -336,6 +344,8 @@ bool HelloWorld::init()
     }
     else
         problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
+    
+    //添加“白方”标签，位置在顶部右边
     auto whiteRound = Label::create(u8"白方", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
     if (whiteRound) {
         whiteRound->setPosition(origin.x + visibleSize.width - 125.0f, origin.y + visibleSize.height - 35.0f);
@@ -346,12 +356,23 @@ bool HelloWorld::init()
         problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
     //创建开始游戏按钮
-    auto startGame = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
-    startGame->setScale(250.0f / startGame->getContentSize().width, 70.0f / startGame->getContentSize().height);
-    startGame->setPosition(Vec2::ZERO);
-    auto startMenu = Menu::create(startGame, nullptr);                                              //创建菜单存放按钮
-    startMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f); //位置在棋盘正上方
-    this->addChild(startMenu, 0);
+    if (!startGameBtn) {
+        startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
+        if (startGameBtn) {
+            startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
+            startGameBtn->setPosition(Vec2::ZERO);
+        }
+        else
+            problemLoading("'startGame.png or startGame_pressed.png'");
+        //创建存放开始游戏按钮的菜单，位置在棋盘正上方
+        auto startGameMenu = Menu::create(startGameBtn, nullptr);                                               
+        if (startGameMenu) {
+            startGameMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f); 
+            this->addChild(startGameMenu, 0);
+        }
+        else
+            problemLoading("'startGameBtn'");
+    }
 
     return true;
 }
@@ -411,13 +432,9 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
             onSelectChess(chess, chess->getName());             //调用选中棋子函数
             return true;                                        //消费掉这个点击事件
         }
-    if (!selectedChessName.empty())                             //如果有棋子被选中
+    if (!selectedChessName.empty())                             //如果有棋子被选中，而点击的位置不是棋子，可能在棋盘上
         return onPlaceChess(touchPos);                          //进行落子处理
     return false;
-}
-
-void HelloWorld::onTouchEnded(Touch* touch, Event* event) {
-    
 }
 
 void HelloWorld::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
@@ -475,7 +492,7 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
                             chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
                             chess->setName(selectedChessName);
                             this->addChild(chess, 1);
-                            boardChesses[row][col] = chess;
+                            boardChesses[row][col] = chess;                         //存放在棋盘棋子数组里
                             selectedPlacePoint->setVisible(false);                  //放置点隐藏
                             selectedPlacePoint = nullptr;                           //置空，防止野指针
                             canPlace[row][col] = false;                             //当前点已有棋子，表示不可放置
@@ -483,17 +500,8 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
                             if(isEffectOn)
                                 SimpleAudioEngine::getInstance()->playEffect(("music/" + selectedChessName.substr(6) + ".mp3").c_str());
                             curChessSum++;                                          //当前棋盘上棋子总数加1
-                            if (isVictory(row, col)) {
-                                auto victoryAnimation = Sprite::create("victory.jpg");
-                                if (victoryAnimation) {
-                                    victoryAnimation->setScale(316.0f / victoryAnimation->getContentSize().width, 360.5f / victoryAnimation->getContentSize().height);
-                                    victoryAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
-                                    this->addChild(victoryAnimation, 2);
-                                }
-                                else
-                                    problemLoading("'victory.jpg'");
-                                SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");
-                            }
+                            if (isVictory(row, col))
+                                gameOver();                                         //如果获胜，调用游戏结束函数
                             roundSurplusTime = 0;                                   //回合时间清零，即切换回合
                         }
                         else
@@ -511,14 +519,13 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
 }
 
 void HelloWorld::onStartGame(Ref* pSender){
-    Node* btn = dynamic_cast<Node*>(pSender);   //动态转换为节点类型，为了调用隐藏函数
-    if (btn)
-        btn->setVisible(false);                 //按钮隐藏，代表已开始游戏
+    startGameBtn->setVisible(false);                 //按钮隐藏，代表已开始游戏
 
     if (!timer) {
-        timer = Label::create("20", "fonts/arial.ttf", 50);                                                 //创建计时器
+        //创建计时器标签，放在“当前回合”标签下面
+        timer = Label::create("20", "fonts/arial.ttf", 50);                                                 
         if (timer) {
-            timer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 120.0f);   //放在“当前回合”下面
+            timer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 120.0f);   
             timer->setTextColor(Color4B::BLACK);
             this->addChild(timer, 0);
         }
@@ -526,36 +533,39 @@ void HelloWorld::onStartGame(Ref* pSender){
             problemLoading("'fonts/arial.ttf'");
     }
     if (!blackRoundArrow) {
-        blackRoundArrow = Sprite::create("blackRound.png");     //创建指向黑方的箭头
+        //创建指向黑方的箭头，放在“当前回合”标签左边
+        blackRoundArrow = Sprite::create("blackRound.png");     
         if (blackRoundArrow) {
-            blackRoundArrow->setScale(80.0f / blackRoundArrow->getContentSize().width, 25.0f / blackRoundArrow->getContentSize().height);
-            //放在“当前回合”左边
+            blackRoundArrow->setScale(80.0f / blackRoundArrow->getContentSize().width, 25.0f / blackRoundArrow->getContentSize().height);            
             blackRoundArrow->setPosition(origin.x + visibleSize.width / 2 - 200.0f, origin.y + visibleSize.height - 35.0f);
-            this->addChild(blackRoundArrow, 0);
-            blackRoundArrow->setVisible(false);                 //先隐藏
+            this->addChild(blackRoundArrow, 0);            
         }
         else
             problemLoading("blackRound.png");
     }
     if (!whiteRoundArrow) {
-        whiteRoundArrow = Sprite::create("whiteRound.png");     //创建指向白方的箭头
+        //创建指向白方的箭头，放在“当前回合”标签右边
+        whiteRoundArrow = Sprite::create("whiteRound.png");     
         if (whiteRoundArrow) {
             whiteRoundArrow->setScale(80.0f / whiteRoundArrow->getContentSize().width, 25.0f / whiteRoundArrow->getContentSize().height);
             whiteRoundArrow->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + visibleSize.height - 35.0f);
             this->addChild(whiteRoundArrow, 0);
-            whiteRoundArrow->setVisible(false);
         }
         else
             problemLoading("whiteRound.png");
     }
     
     isGamePlaying = true;                           //表示正在游戏中
+    roundSurplusTime = 20.9f;                       //回合时间20秒左右
+    isBlackRound = true;                            //默认第一回合是黑方
+    blackRoundArrow->setVisible(true);
+    whiteRoundArrow->setVisible(false);             //指向白方的箭头先隐藏
+    timer->setVisible(true);                        //显示计时器
 
     this->scheduleUpdate();                         //启动帧循环，每帧自动调用 update(float dt)
 
-    if (selectedChessName.empty())                  
+    if (placePoints.empty())                        
         onInitBoardPlacePoint();                    //第一回合开始时初始化棋盘放置点
-    blackRoundArrow->setVisible(true);              //默认第一回合是黑方，指向黑方的箭头显示
     onSelectChess(chessSprites[0], "black_zhe");    //自动选中第一个黑棋
 }
 
@@ -577,32 +587,33 @@ void HelloWorld::update(float dt) {
                             break;                                              //直接退出，保证只落一个子
                         }           
         }
-        lastChessSum = curChessSum;                 //更新棋盘旧棋子总数
-        roundSurplusTime = 20.9f;                   //回合结束，开始下一回合
-        isBlackRound = !isBlackRound;               //回合交换       
-        if (isBlackRound) {                         //如果黑方回合
-            timer->setTextColor(Color4B::BLACK);    //黑方时计时器是黑色的
-            blackRoundArrow->setVisible(true);      //指向黑方的箭头显示
-            whiteRoundArrow->setVisible(false);     //指向白方的箭头隐藏
-            onSelectChess(chessSprites[0], "black_zhe");
+        lastChessSum = curChessSum;                     //更新棋盘旧棋子总数
+        roundSurplusTime = 20.9f;                       //回合结束，开始下一回合
+        isBlackRound = !isBlackRound;                   //回合交换       
+        if (isBlackRound) {                             //如果黑方回合
+            timer->setTextColor(Color4B::BLACK);        //黑方回合计时器是黑色的
+            blackRoundArrow->setVisible(true);          //指向黑方的箭头显示
+            whiteRoundArrow->setVisible(false);         //指向白方的箭头隐藏
+            onSelectChess(chessSprites[0], "black_zhe");//自动选中第一个黑方棋子
         }
-        else {                                      //反之
-            timer->setTextColor(Color4B::WHITE);    //白方时白色
+        else {                                          //反之
+            timer->setTextColor(Color4B::WHITE);
             whiteRoundArrow->setVisible(true);
             blackRoundArrow->setVisible(false);
-            onSelectChess(chessSprites[5], "white_zhe");
+            onSelectChess(chessSprites[5], "white_zhe");//自动选中第一个白方棋子
         }
     }
     else if (roundSurplusTime < 6)
-        timer->setTextColor(Color4B::RED);          //倒计时剩5秒时呈红色
+        timer->setTextColor(Color4B::RED);              //倒计时剩5秒时呈红色
     
-    int seconds = (int)std::floor(roundSurplusTime);//倒计时向下取整，可以确保看得到0
-    timer->setString(std::to_string(seconds));      //实时显示在计时器标签上
+    int seconds = (int)std::floor(roundSurplusTime);    //倒计时向下取整，可以确保看得到0
+    timer->setString(std::to_string(seconds));          //实时显示在计时器标签上
 }
 
 bool HelloWorld::isVictory(int row, int col) {
-    std::unordered_map<std::string, int> needChesses;
+    std::unordered_map<std::string, int> needChesses;   //用来判断连成线的5个棋子是否同颜色不同字
     if (isBlackRound) {
+        //表示在黑方回合时，需要“这谁绷得住”5种黑棋各一个
         needChesses["black_zhe"] = 1;
         needChesses["black_shui"] = 1;
         needChesses["black_beng"] = 1;
@@ -610,6 +621,7 @@ bool HelloWorld::isVictory(int row, int col) {
         needChesses["black_zhu"] = 1;
     }
     else {
+        //表示在白方回合时，需要“这谁绷得住”5种白棋各一个
         needChesses["white_zhe"] = 1;
         needChesses["white_shui"] = 1;
         needChesses["white_beng"] = 1;
@@ -617,35 +629,122 @@ bool HelloWorld::isVictory(int row, int col) {
         needChesses["white_zhu"] = 1;
     }
 
-    if (dfsBoardChesses(1, row, col, Up, needChesses))
+    //一共有4条线需要判断，分别是竖、斜、横、反斜，而一条线又分两个方向，只要有一条线能连成5子，即为获胜
+    if (searchBoardChesses(row, col, Up, Down, needChesses))
         return true;
-    else if (dfsBoardChesses(1, row, col, LeftUp, needChesses))
+    else if (searchBoardChesses(row, col, LeftUp, RightDown, needChesses))
         return true;
-    else if (dfsBoardChesses(1, row, col, Left, needChesses))
+    else if (searchBoardChesses(row, col, Left, Right, needChesses))
         return true;
-    else if (dfsBoardChesses(1, row, col, LeftDown, needChesses))
-        return true;
-    else if (dfsBoardChesses(1, row, col, Down, needChesses))
-        return true;
-    else if (dfsBoardChesses(1, row, col, RightDown, needChesses))
-        return true;
-    else if (dfsBoardChesses(1, row, col, Right, needChesses))
-        return true;
-    else if (dfsBoardChesses(1, row, col, RightUp, needChesses))
+    else if (searchBoardChesses(row, col, LeftDown, RightUp, needChesses))
         return true;
     return false;
 }
 
-bool HelloWorld::dfsBoardChesses(int curLayer, int row, int col, Direction dir, std::unordered_map<std::string, int> needChesses){
-    if (curLayer == 6)
-        return true;
-    if (row < 0 || row > 18 || col < 0 || col > 18 || !boardChesses[row][col])
-        return false;
-    std::string curChessName = boardChesses[row][col]->getName();
-    if (needChesses.find(curChessName) == needChesses.end())
-        return false;
-    else if (needChesses[curChessName] == 0)
-        return false;
-    needChesses[curChessName]--;
-    return dfsBoardChesses(curLayer + 1, row + dir.x, col + dir.y, dir, needChesses);
+bool HelloWorld::searchBoardChesses(int row, int col, Direction dir_1, Direction dir_2, std::unordered_map<std::string, int> needChesses){        
+    int r = row, c = col;                                           //先保存落子点坐标，判断第一个方向
+    while (r >= 0 && r < 19 && c >= 0 && c < 19 && boardChesses[r][c]) {
+        std::string curChessName = boardChesses[r][c]->getName();
+        if (needChesses.find(curChessName) == needChesses.end())    //如果遇到另一方的棋子，直接退出判断
+            break;
+        else if (needChesses[curChessName] == 0)                    //如果该棋子类型已有一个，退出判断
+            break;
+        needChesses[curChessName]--;                                //减1为0，代表该棋子类型已找到一个
+        r += dir_1.x; c += dir_1.y;                                 //更新坐标
+    }
+    row += dir_2.x; col += dir_2.y;                                 //从落子点另一个方向走一步，开始另一个方向的判断
+    while (row >= 0 && row < 19 && col >= 0 && col < 19 && boardChesses[row][col]) {
+        std::string curChessName = boardChesses[row][col]->getName();
+        if (needChesses.find(curChessName) == needChesses.end())
+            break;
+        else if (needChesses[curChessName] == 0)
+            break;
+        needChesses[curChessName]--;
+        row += dir_2.x; col += dir_2.y;
+    }
+    for (auto& n : needChesses)
+        if (n.second == 1)
+            return false;           //只要发现有一个棋子不在，就没获胜
+    return true;
+}
+
+void HelloWorld::gameOver(){
+    if (!victoryTip) {
+        //创建获胜方提示，位置在获胜动画上面
+        victoryTip = Label::create("", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
+        if (victoryTip) {
+            victoryTip->setTextColor(Color4B::YELLOW);
+            victoryTip->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 250.0f);
+            this->addChild(victoryTip, 2);
+        }
+        else
+            problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+    }
+    //根据获胜方的不同，提示文本也不同
+    if (isBlackRound)
+        victoryTip->setString(u8"黑方获胜!");
+    else
+        victoryTip->setString(u8"白方获胜!");
+    
+    if (!victoryAnimation) {
+        //创建获胜动画，位置在屏幕正中间
+        victoryAnimation = Sprite::create("victory.jpg");
+        if (victoryAnimation) {
+            victoryAnimation->setScale(316.0f / victoryAnimation->getContentSize().width, 360.5f / victoryAnimation->getContentSize().height);
+            victoryAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+            this->addChild(victoryAnimation, 2);
+        }
+        else
+            problemLoading("'victory.jpg'");
+    }
+    if(isEffectOn)
+        SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");  //播放获胜音效
+
+    if (!gameOverBtn) {
+        //创建游戏结束按钮
+        gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(HelloWorld::cleanBoard, this));
+        if (gameOverBtn) {
+            gameOverBtn->setScale(250.0f / gameOverBtn->getContentSize().width, 80.0f / gameOverBtn->getContentSize().height);
+            gameOverBtn->setPosition(Vec2::ZERO);
+        }
+        else
+            problemLoading("'gameOver.png or gameOver_pressed.png'");
+        //创建存放游戏结束按钮的菜单，位置在获胜动画下方
+        auto gameOverMenu = Menu::create(gameOverBtn, nullptr);
+        if (gameOverMenu) {
+            gameOverMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 280.0f);
+            this->addChild(gameOverMenu, 2);
+        }
+        else
+            problemLoading("'gameOverBtn'");
+    }
+        
+    isGamePlaying = false;                      //游戏结束
+    timer->setVisible(false);                   //计时器隐藏
+    blackRoundArrow->setVisible(false);         //黑方箭头隐藏
+    whiteRoundArrow->setVisible(false);         //白方箭头隐藏
+    if (selectedHighlight) {
+        selectedHighlight->removeFromParent();  //高亮移除
+        selectedHighlight = nullptr;
+    }
+    selectedChessName = "";                     //选中棋子名字重置
+    selectedPlacePoint = nullptr;               //选中放置点重置
+    victoryTip->setVisible(true);
+    victoryAnimation->setVisible(true);         //显示获胜动画
+    gameOverBtn->setVisible(true);              //显示结束游戏按钮
+}
+
+void HelloWorld::cleanBoard(Ref* pSender) {
+    lastChessSum = 0; curChessSum = 0;                          //棋盘上棋子总数清零
+    for(int row = 0; row < 19; row++)
+        for (int col = 0; col < 19; col++)
+            if (boardChesses[row][col]) {
+                boardChesses[row][col]->removeFromParent();     //删除所有保存的棋子
+                boardChesses[row][col] = nullptr;
+                canPlace[row][col] = true;                      //恢复可放置的状态
+            }
+    victoryTip->setVisible(false);
+    victoryAnimation->setVisible(false);                        //隐藏获胜动画
+    gameOverBtn->setVisible(false);                             //隐藏结束游戏按钮
+    startGameBtn->setVisible(true);                             //显示开始游戏按钮，为下一次游戏做准备
 }

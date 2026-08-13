@@ -110,7 +110,8 @@ void AppDelegate::applicationDidEnterBackground() {
     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
     SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-    SimpleAudioEngine::getInstance()->pauseAllEffects();
+    //SimpleAudioEngine::getInstance()->pauseAllEffects();
+    SimpleAudioEngine::getInstance()->stopAllEffects();
 #endif
 }
 
@@ -123,6 +124,6 @@ void AppDelegate::applicationWillEnterForeground() {
 #elif USE_SIMPLE_AUDIO_ENGINE
     if(HelloWorld::isBgmPlay())
         SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-    SimpleAudioEngine::getInstance()->resumeAllEffects();
+    // SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
 }
