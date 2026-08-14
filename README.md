@@ -27,10 +27,10 @@
 ## 🖼️ 游戏截图
 
 <p align="center">
-  <img src="./Resources/screenshots/mainInterface.png" width="210" height="284"/>
-  <img src="./Resources/screenshots/gameInterface_1.png" width="210" height="284"/>
-  <img src="./Resources/screenshots/gameInterface_2.png" width="210" height="284"/>
-  <img src="./Resources/screenshots/gameOverInterface.png" width="210" height="284"/>
+  <img src="./Resources/screenshots/mainInterface.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/gameInterface_1.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/gameInterface_2.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/gameOverInterface.png" width="420" height="568"/>
 </p>
 
 ---
