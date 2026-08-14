@@ -35,8 +35,8 @@
 ### 1. 克隆项目到本地
 
 ```bash
-git clone https://github.com/ZhengQianXu/Gobang.git
-cd Gobang
+git clone https://github.com/ZhengQianXu/New-Creative-Gobang-Based-on-Cocos2d-x.git
+cd New-Creative-Gobang-Based-on-Cocos2d-x
 ```
 
 ### 2. 下载 Cocos2d-x 引擎
