@@ -26,7 +26,10 @@
 
 ## 🖼️ 游戏截图
 
-（运行游戏后截图，放到这里）
+<img width="1050" height="1418" alt="image" src="https://github.com/user-attachments/assets/20af457a-f3d1-4ffa-82e2-fb2c820c251b" />
+<img width="1050" height="1368" alt="image" src="https://github.com/user-attachments/assets/6d9801e6-7c5a-4745-b42e-bec5278e1803" />
+<img width="1050" height="1418" alt="image" src="https://github.com/user-attachments/assets/17c4e8b6-7b93-4252-bcfd-79adb947407e" />
+<img width="1050" height="1418" alt="image" src="https://github.com/user-attachments/assets/d1ab39f3-53dc-40fe-81be-45cda286a503" />
 
 ---
 
