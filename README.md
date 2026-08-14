@@ -44,54 +44,17 @@ git clone https://github.com/ZhengQianXu/New-Creative-Gobang.git
 cd New-Creative-Gobang
 ```
 
-### 2. 下载 Cocos2d-x 引擎
+### 2. 安装 CMake（可选）
 
-本游戏依赖 **Cocos2d-x 3.17.2**，请先下载引擎：
+CMake 用于生成 Visual Studio 项目文件
 
-```bash
-# 方法一：通过 Git 下载
-git clone https://github.com/cocos2d/cocos2d-x.git
-cd cocos2d-x
-git checkout cocos2d-x-3.17.2
+- **下载地址**：[https://cmake.org/download/](https://cmake.org/download/)
+- **推荐版本**：3.19 或更高版本
+- **安装选项**：安装时请选择 **"Add CMake to the system PATH for all users"**，这样命令行才能识别 `cmake` 命令
 
-# 方法二：直接下载 ZIP
-# 访问 https://github.com/cocos2d/cocos2d-x/tags
-# 找到 cocos2d-x-3.17.2 并下载 Source code (zip)
-```
-
-### 3. 放置引擎
-
-将引擎放到项目目录下，确保目录结构如下：
-
-```
-E:/
-├── 你的项目目录/
-│   └── New-Creative-Gobang/        # 游戏项目
-└── cocos2d-x-3.17.2/               # 引擎目录（与你的项目目录同级）
-```
-
-### 4. 配置 Python 环境
-
-Cocos2d-x 需要 **Python 2.7** 来运行构建脚本。如果你的电脑默认 Python 版本不是 2.7，可以：
+### 3. 生成 VS 项目（如果不装cmake，跳过这一步）
 
 ```bash
-# 进入引擎目录，运行 setup.py
-cd cocos2d-x-3.17.2
-C:\Python27\python.exe setup.py
-```
-
-或创建一个 `cocos.bat` 文件，内容为：
-
-```bat
-@echo off
-C:\Python27\python.exe E:\Cocos2d-x\cocos2d-x-3.17.2\tools\cocos2d-console\bin\cocos.py %*
-# 请注意，这里需要根据实际文件地址
-```
-
-### 5. 生成 VS 项目
-
-```bash
-cd MyGame
 mkdir build
 cd build
 cmake .. -G "Visual Studio 17 2022" -A win32
@@ -105,9 +68,15 @@ cmake .. -G "Visual Studio 17 2022" -A win32
 | VS 2019 | `-G "Visual Studio 16 2019" -A win32` |
 | VS 2017 | `-G "Visual Studio 15 2017" -A win32` |
 
-### 6. 打开项目并运行
+### 4. 打开项目并运行
 
+如果装了cmake，并完成了第3步（生成 VS 项目）
 ```bash
+start MyGame.sln
+```
+如果没装
+```bash
+cd proj.win32
 start MyGame.sln
 ```
 
@@ -116,7 +85,7 @@ start MyGame.sln
 1. 在右侧 **解决方案资源管理器** 中，右键 `MyGame` 项目
 2. 选择 **设为启动项目**
 3. 顶部工具栏选择 **Win32** 平台
-4. 按 `F5` 或点击 **本地 Windows 调试器** 运行
+4. 按 `Ctrl + F5` 或点击 **开始执行（不调试）** 运行
 
 游戏启动后，点击 **开始游戏** 即可对局。
 
@@ -127,9 +96,10 @@ start MyGame.sln
 | 工具 | 版本 |
 | :--- | :--- |
 | 游戏引擎 | Cocos2d-x 3.17.2 |
-| 编译器 | Visual Studio 2019 / 2022 |
+| 编译器 | Visual Studio 2022 |
 | 构建工具 | CMake 3.19+ |
 | 脚本语言 | Python 2.7 |
+| 系统平台 | Windows 11 |
 
 ---
 
