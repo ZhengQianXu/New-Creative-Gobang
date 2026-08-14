@@ -35,8 +35,8 @@
 ### 1. 克隆项目到本地
 
 ```bash
-git clone https://github.com/ZhengQianXu/New-Creative-Gobang-Based-on-Cocos2d-x.git
-cd New-Creative-Gobang-Based-on-Cocos2d-x
+git clone https://github.com/ZhengQianXu/New-Creative-Gobang.git
+cd New-Creative-Gobang
 ```
 
 ### 2. 下载 Cocos2d-x 引擎
@@ -50,7 +50,7 @@ cd cocos2d-x
 git checkout cocos2d-x-3.17.2
 
 # 方法二：直接下载 ZIP
-# 访问 https://github.com/cocos2d/cocos2d-x/releases
+# 访问 https://github.com/cocos2d/cocos2d-x/tags
 # 找到 cocos2d-x-3.17.2 并下载 Source code (zip)
 ```
 
@@ -59,12 +59,10 @@ git checkout cocos2d-x-3.17.2
 将引擎放到项目目录下，确保目录结构如下：
 
 ```
-你的项目目录/
-├── MyGame/                # 本游戏项目
-│   ├── Classes/
-│   ├── Resources/
-│   └── CMakeLists.txt
-└── cocos2d-x-3.17.2/      # 引擎目录（与 MyGame 同级）
+E:/
+├── 你的项目目录/
+│   └── New-Creative-Gobang/        # 游戏项目
+└── cocos2d-x-3.17.2/               # 引擎目录（与你的项目目录同级）
 ```
 
 ### 4. 配置 Python 环境
@@ -82,12 +80,13 @@ C:\Python27\python.exe setup.py
 ```bat
 @echo off
 C:\Python27\python.exe E:\Cocos2d-x\cocos2d-x-3.17.2\tools\cocos2d-console\bin\cocos.py %*
+# 请注意，这里需要根据实际文件地址
 ```
 
 ### 5. 生成 VS 项目
 
 ```bash
-cd Gobang
+cd MyGame
 mkdir build
 cd build
 cmake .. -G "Visual Studio 17 2022" -A win32
@@ -104,12 +103,12 @@ cmake .. -G "Visual Studio 17 2022" -A win32
 ### 6. 打开项目并运行
 
 ```bash
-start Gobang.sln
+start MyGame.sln
 ```
 
 在 Visual Studio 中：
 
-1. 在右侧 **解决方案资源管理器** 中，右键 `Gobang` 项目
+1. 在右侧 **解决方案资源管理器** 中，右键 `MyGame` 项目
 2. 选择 **设为启动项目**
 3. 顶部工具栏选择 **Win32** 平台
 4. 按 `F5` 或点击 **本地 Windows 调试器** 运行
@@ -169,3 +168,11 @@ MyGame/
 - GitHub：https://github.com/ZhengQianXu
 
 如果你有任何建议或问题，欢迎提 Issue 或直接联系作者！
+
+---
+
+## 致谢
+
+本游戏使用 Cocos2d-x 引擎开发
+Copyright (c) 2010-2017 Cocos2d-x.org
+https://www.cocos2d-x.org
