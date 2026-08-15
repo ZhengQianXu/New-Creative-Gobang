@@ -35,6 +35,20 @@
 
 ---
 
+### 温馨提示！
+
+本仓库包含引擎源码及作者本人所添资源和所写源码，故体积偏大
+
+如若本地已有cocos2d-x引擎，可通过cocos new新项目，然后将仓库里Resources文件夹及Classes里项目源码复制到自己项目即可
+
+如若想下载引擎，可通过以下命令克隆官方引擎仓库
+```bash
+git clone https://github.com/cocos2d/cocos2d-x.git
+```
+或者访问官方网站下载[https://www.cocos.com/cocos2dx-download](https://www.cocos.com/cocos2dx-download)
+
+**如若不想额外下载引擎，按后面指引即可**
+
 ## 📥 下载与运行
 
 ### 1. 克隆项目到本地
