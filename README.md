@@ -146,7 +146,7 @@ MyGame/
 
 ## 📄 开源许可证
 
-本项目采用 **MIT License** 开源协议，你可以自由使用、修改、分发本项目的代码，但需保留版权声明。详情请见 [LICENSE](LICENSE) 文件。
+本项目采用 **MIT License** 开源协议，详情请见 [MIT License](https://opensource.org/license/MIT) 文件。
 
 ---
 
