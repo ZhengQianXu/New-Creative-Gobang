@@ -56,18 +56,6 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 
-	//改变背景音乐播放状态
-    void toggleBGM(cocos2d::Ref* pSender);
-
-	//获取背景音乐播放状态
-    static bool isBgmPlay() { return isBgmOn; }
-
-	//开始旋转按钮
-    void startRotate();
-    
-	//停止旋转按钮
-	void stopRotate();
-
     //改变音效开关状态
     void toggleEffect(cocos2d::Ref* pSender);
 
@@ -101,25 +89,10 @@ public:
     //清空棋盘
     void cleanBoard(cocos2d::Ref* pSender);
 
-    //规则内容显示
-    void onRuleShow(cocos2d::Ref* pSender);
-
-    //反馈途径显示
-    void onSuggestShow(cocos2d::Ref* pSender);
-
-    //关闭弹窗
-    void closePopup(cocos2d::Ref* pSender);
-    
-    //创建弹窗
-    void createPopup(const std::string& title, const std::string& content);
-
 private:
     cocos2d::Size visibleSize;                              //窗口大小
     cocos2d::Vec2 origin;                                   //坐标原点
 
-	cocos2d::MenuItemImage* bgmBtn = nullptr;               //背景音乐控制按钮
-	cocos2d::Action* rotateAction = nullptr;                //旋转动作
-	static bool isBgmOn;                                    //背景音乐播放状态
     bool isEffectOn = true;                                 //音效开关状态
 
     std::vector<cocos2d::Sprite*> chessSprites;             //棋子数组
@@ -144,9 +117,6 @@ private:
     cocos2d::Label* victoryTip = nullptr;                   //获胜方提示
     cocos2d::Sprite* victoryAnimation = nullptr;            //获胜动画展示
     cocos2d::MenuItemImage* gameOverBtn = nullptr;          //游戏结束按钮
-
-    cocos2d::LayerColor* popupMask = nullptr;               //遮罩层
-    cocos2d::ui::Layout* popup = nullptr;                   //弹窗
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -24,12 +24,10 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "MusicControl.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
-
-//背景音乐默认播放
-bool HelloWorld::isBgmOn = true;
 
 Scene* HelloWorld::createScene()
 {
@@ -82,6 +80,16 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
+    //给关闭按钮加个提示，文字位置在按钮左边
+    auto returnTip = Label::create(u8"点击返回主界面->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    if (returnTip) {
+        returnTip->setPosition(origin.x + visibleSize.width - 130.0f, origin.y + 22.0f);
+        returnTip->setTextColor(Color4B::BLACK);
+        this->addChild(returnTip, 1);
+    }
+    else
+        problemLoading("“fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf”");
+
     // 3. add your codes below...
 
     // add a label shows "Hello World"
@@ -114,45 +122,19 @@ bool HelloWorld::init()
         this->addChild(sprite, 0);
     }*/
 
-    //预加载背景音乐和落子、输赢音效
-    SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/zhe.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/shui.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/beng.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/de.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/zhu.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/victory.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/defeat.mp3");
+    //预加载落子和输赢音效
+    auto audio = SimpleAudioEngine::getInstance();
+    audio->preloadEffect("music/zhe.mp3");
+    audio->preloadEffect("music/shui.mp3");
+    audio->preloadEffect("music/beng.mp3");
+    audio->preloadEffect("music/de.mp3");
+    audio->preloadEffect("music/zhu.mp3");
+    audio->preloadEffect("music/victory.mp3");
+    audio->preloadEffect("music/defeat.mp3");
 
-    //添加背景音乐控制按钮
-    bgmBtn = MenuItemImage::create("bgm_btn.png", "bgm_btn.png", CC_CALLBACK_1(HelloWorld::toggleBGM, this));
-    if (bgmBtn) {
-        bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);  //设置大小为44px * 44px
-        bgmBtn->setPosition(Vec2(22.0f, 22.0f));        //位置放在左下角
-    }
-    else
-        problemLoading("'music/bgm.mp3'");
-	
-    auto bgmMenu = Menu::create(bgmBtn, nullptr);       //创建菜单并添加按钮
-    if (bgmMenu) {
-        bgmMenu->setPosition(Vec2::ZERO);               //设置菜单位置为(0,0)
-        this->addChild(bgmMenu, 1);
-    }
-    else
-        problemLoading("'bgmBtn'");
-    
-    //添加背景音乐按钮提示
-    auto bgmBtnTip = Label::create(u8"<-点击即可开关背景音乐", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
-    if (bgmBtnTip) {
-        bgmBtnTip->setPosition(origin.x + 200.0f, origin.y + 22.0f);                //放在背景音乐按钮右边
-        bgmBtnTip->setTextColor(Color4B::BLACK);
-        this->addChild(bgmBtnTip, 1);
-    }
-    else
-        problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
-
-    SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //播放背景音乐
-	startRotate();                                                                  //让按钮旋转
+    //添加背景音乐和控制按钮
+    MusicControl* mc = MusicControl::create();
+    this->addChild(mc, 1);
 
     //添加落子音效控制按钮
     auto effectBtn = MenuItemImage::create("effect_btn.png", "effect_btn.png", CC_CALLBACK_1(HelloWorld::toggleEffect, this));
@@ -162,19 +144,19 @@ bool HelloWorld::init()
     }
     else
         problemLoading("'effect_btn.png'");
-    
+    //添加存放音效按钮的菜单
     auto effectMenu = Menu::create(effectBtn, nullptr);
     if (effectMenu) {
-        effectMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + 22.0f);//位置在底部中间
+        effectMenu->setPosition(origin.x + visibleSize.width / 2 - 70.0f, origin.y + 22.0f);    //位置在底部中间靠左
         this->addChild(effectMenu, 1);
     }
     else
         problemLoading("'effectBtn'");
     
     //添加落子音效按钮提示
-    auto effectBtnTip = Label::create(u8"<-点击即可开关落子音效按钮", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    auto effectBtnTip = Label::create(u8"<-点击开关落子音效", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (effectBtnTip) {
-        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + 22.0f);     //放在音效按钮右边
+        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 70.0f, origin.y + 22.0f); //放在音效按钮右边
         effectBtnTip->setTextColor(Color4B::BLACK);
         this->addChild(effectBtnTip, 1);
     }
@@ -396,81 +378,12 @@ bool HelloWorld::init()
     else
         problemLoading("'startGameBtn'");
 
-    //创建规则按钮
-    auto ruleBtn = MenuItemImage::create("rule.png", "rule.png", CC_CALLBACK_1(HelloWorld::onRuleShow, this));
-    if (ruleBtn)
-        ruleBtn->setPosition(Vec2::ZERO);
-    else
-        problemLoading("'rule.png'");
-    //创建存放规则按钮的菜单，位置在屏幕左上方
-    auto ruleMenu = Menu::create(ruleBtn, nullptr);
-    if (ruleMenu) {
-        ruleMenu->setPosition(origin.x + 25.0f, origin.y + visibleSize.height - 140.0f);
-        this->addChild(ruleMenu, 0);
-    }
-    else
-        problemLoading("'ruleBtn'");
-
-    //创建反馈按钮
-    auto suggestBtn = MenuItemImage::create("suggest.png", "suggest.png", CC_CALLBACK_1(HelloWorld::onSuggestShow, this));
-    if (suggestBtn) {
-        suggestBtn->setScale(96.5f / suggestBtn->getContentSize().width, 33.0f / suggestBtn->getContentSize().height);
-        suggestBtn->setPosition(Vec2::ZERO);
-    }
-    else
-        problemLoading("'suggest.png'");
-    //创建存放反馈按钮的菜单，位置在屏幕右上方
-    auto suggestMenu = Menu::create(suggestBtn, nullptr);
-    if (suggestMenu) {
-        suggestMenu->setPosition(origin.x + visibleSize.width - 48.25f, origin.y + visibleSize.height - 140.0f);  // 棋盘上方右侧
-        this->addChild(suggestMenu, 0);
-    }
-    else
-        problemLoading("'suggestBtn'");
-
     return true;
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
-{
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
-    SimpleAudioEngine::getInstance()->end();
-}
-
-void HelloWorld::toggleBGM(Ref* pSender) {
-	//如果背景音乐正在播放，则停止旋转按钮并暂停背景音乐；否则，开始旋转按钮并恢复背景音乐
-    if (isBgmOn) {
-        stopRotate();
-        SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
-        isBgmOn = false;
-    }
-    else {
-        startRotate();
-		SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
-        isBgmOn = true;
-    }
-}
-
-void HelloWorld::startRotate() {
-    //创建旋转动作（3秒转一圈）并重复执行
-    auto rotate = RotateBy::create(3.0f, 360.0f);
-    rotateAction = RepeatForever::create(rotate);
-    bgmBtn->runAction(rotateAction);
-}
-
-void HelloWorld::stopRotate() {
-	//停止旋转按钮的旋转动作
-    if (rotateAction) {
-        bgmBtn->stopAction(rotateAction);
-        rotateAction = nullptr;
-    }
+{    
+    Director::getInstance()->popScene();    //返回上一个场景，即主界面
 }
 
 void HelloWorld::toggleEffect(Ref* pSender) {
@@ -801,105 +714,4 @@ void HelloWorld::cleanBoard(Ref* pSender) {
     victoryAnimation->setVisible(false);                        //隐藏获胜动画
     gameOverBtn->setVisible(false);                             //隐藏结束游戏按钮
     startGameBtn->setVisible(true);                             //显示开始游戏按钮，为下一次游戏做准备
-}
-
-void HelloWorld::onRuleShow(Ref* pSender) {
-    std::string title = u8"游戏规则";
-    std::string content =
-        u8"黑方和白方各有5个棋子，分别写着：\n"
-        "这、谁、绷、得、住\n"
-        "双方轮流落子，每次只能落一个棋子。\n"
-        "连成 \"这谁绷得住\" 5个不同字的一方获胜！\n"
-        "可以不按顺序，回合限时20秒，超时自动落子。";
-
-    createPopup(title, content);
-}
-
-void HelloWorld::onSuggestShow(Ref* pSender){
-    std::string title = u8"建议反馈";
-    std::string content =
-        u8"作者：ZhengQianXu\n"
-        "邮箱：2059984809@qq.com\n"
-        "Github：https://github.com/ZhengQianXu\n"
-        "如有任何建议或问题，欢迎联系作者！\n"
-        "感谢您的支持！";
-
-    createPopup(title, content);
-}
-
-void HelloWorld::closePopup(Ref* pSender){
-    if (popup) {
-        popup->removeFromParent();
-        popup = nullptr;
-    }
-    if (popupMask) {
-        popupMask->removeFromParent();
-        popupMask = nullptr;
-    }
-}
-
-void HelloWorld::createPopup(const std::string& title, const std::string& content) {
-    //创建半透明遮罩层，遮罩层会覆盖整个屏幕，让主场景变暗
-    auto mask = LayerColor::create(Color4B(0, 0, 0, 150));
-    mask->setContentSize(visibleSize);                                      //铺满屏幕
-    mask->setPosition(origin);                                              //从屏幕左下角开始
-    this->addChild(mask, 10);
-    popupMask = mask;                                                       //保存指针，方便关闭时移除
-
-    //遮罩层拦截所有触摸事件，防止玩家在弹窗打开时点击到主场景的按钮或棋子
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);                                      //吞掉事件，不传递到主场景
-    listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-        return true;                                                        //拦截所有触摸，消费掉事件
-    };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, mask);
-
-    //创建弹窗主体（白色背景）
-    popup = ui::Layout::create();
-    popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //纯色背景
-    popup->setBackGroundColor(Color3B::WHITE);                              //白色背景
-    popup->setBackGroundColorOpacity(255);                                  //不透明
-    popup->setContentSize(Size(600, 300));                                  //弹窗宽600，高300
-    //位置：屏幕中心偏移半个弹窗大小（因为锚点在左下角）
-    popup->setPosition(Vec2(origin.x + visibleSize.width / 2 - 300.0f, origin.y + visibleSize.height / 2 - 200.0f));
-    popup->setAnchorPoint(Vec2::ZERO);                                      //锚点在左下角
-    popup->setTouchEnabled(true);                                           //允许弹窗接收触摸，防止点击穿透
-    popup->setCascadeOpacityEnabled(true);                                  //子节点继承父节点透明度
-    mask->addChild(popup, 1);                                               //添加到遮罩层之上
-
-    //创建标题文字
-    auto titleLabel = Label::create(title, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 32);
-    if (titleLabel) {
-        titleLabel->setTextColor(Color4B::BLACK);
-        titleLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height - 40.0f);//标题在弹窗顶部居中
-        popup->addChild(titleLabel);
-    }
-    else
-        problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
-
-    //创建内容文字
-    auto contentLabel = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
-    if (contentLabel) {
-        contentLabel->setTextColor(Color4B::BLACK);
-        contentLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height / 2 - 20.0f);
-        contentLabel->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
-        popup->addChild(contentLabel);
-    }
-    else
-        problemLoading("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
-
-    //创建关闭按钮
-    auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(HelloWorld::closePopup, this));
-    if (closeBtn)
-        closeBtn->setPosition(Vec2::ZERO);
-    else
-        problemLoading("'CloseNormal.png or CloseSelected.png'");
-    //创建存放关闭按钮的菜单，位置在弹窗右上角
-    auto closeMenu = Menu::create(closeBtn, nullptr);
-    if (closeMenu) {        
-        closeMenu->setPosition(popup->getContentSize().width - 30, popup->getContentSize().height - 30);
-        popup->addChild(closeMenu, 1);
-    }
-    else
-        problemLoading("closeBtn");
 }

@@ -24,6 +24,8 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "StartScene.h"
+#include "MusicControl.h"
 
 // #define USE_AUDIO_ENGINE 1
 #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -118,7 +120,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = StartScene::createScene();
+    //auto scene = HelloWorld::createScene();
 
     // run
     director->runWithScene(scene);
@@ -146,7 +149,7 @@ void AppDelegate::applicationWillEnterForeground() {
 #if USE_AUDIO_ENGINE
     AudioEngine::resumeAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
-    if(HelloWorld::isBgmPlay())
+    if(MusicControl::isBgmPlay())
         SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     // SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
