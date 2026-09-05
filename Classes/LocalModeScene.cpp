@@ -305,7 +305,8 @@ bool LocalMode::init()
 }
 
 void LocalMode::returnStartScene(Ref* pSender)
-{    
+{   
+    
     Director::getInstance()->popScene();    //返回上一个场景，即主界面
 }
 

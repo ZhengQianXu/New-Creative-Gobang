@@ -63,8 +63,7 @@ bool MusicControl::init() {
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
     SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //播放背景音乐
-    startRotate();                                                                  //让按钮旋转
-
+    
     return true;
 }
 
@@ -95,4 +94,11 @@ void MusicControl::stopRotate() {
         bgmBtn->stopAction(rotateAction);
         rotateAction = nullptr;
     }
+}
+
+void MusicControl::onEnter(){
+    Node::onEnter();
+
+    isBgmOn = !isBgmOn;     //先转变状态，因为接下来还要转变一次，相当于不变
+    toggleBGM(bgmBtn);      //调用此函数用来更新背景音乐状态
 }

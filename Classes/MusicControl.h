@@ -23,6 +23,9 @@ public:
     //停止旋转按钮
     void stopRotate();
 
+    //当该组件显示时调用
+    virtual void onEnter() override;
+
 private:
     cocos2d::MenuItemImage* bgmBtn = nullptr;       //背景音乐控制按钮
     cocos2d::Action* rotateAction = nullptr;        //旋转动作
