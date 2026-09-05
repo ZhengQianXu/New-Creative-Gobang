@@ -1,7 +1,8 @@
 #include "StartScene.h"
 #include "MusicControl.h"
 #include "SimpleAudioEngine.h"
-#include "HelloWorldScene.h"
+#include "LocalModeScene.h"
+#include "OnlineModeScene.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -31,6 +32,7 @@ bool StartScene::init() {
         ruleBtn->setPosition(Vec2::ZERO);
     else
         cocos2d::log("'rule.png'");
+    
     //创建存放规则按钮的菜单，位置在屏幕左上方
     auto ruleMenu = Menu::create(ruleBtn, nullptr);
     if (ruleMenu) {
@@ -48,6 +50,7 @@ bool StartScene::init() {
     }
     else
         cocos2d::log("'suggest.png'");
+    
     //创建存放反馈按钮的菜单，位置在屏幕右上方
     auto suggestMenu = Menu::create(suggestBtn, nullptr);
     if (suggestMenu) {
@@ -77,8 +80,8 @@ bool StartScene::init() {
     else
         cocos2d::log("'victory.jpg'");
 
-    auto listener = EventListenerTouchOneByOne::create();   //创建点击监听
-    listener->setSwallowTouches(false);                     //不吞掉点击事件
+    auto listener = EventListenerTouchOneByOne::create();                       //创建点击监听
+    listener->setSwallowTouches(false);                                         //不吞掉点击事件
     listener->onTouchBegan = [=](Touch* touch, Event* event) -> bool {
         auto touchPos = touch->getLocation();
         if (Animation->getBoundingBox().containsPoint(touchPos)) {
@@ -95,6 +98,7 @@ bool StartScene::init() {
         localModeBtn->setPosition(Vec2::ZERO);        
     else
         cocos2d::log("“localMode.png or localMode_pressed.png”");
+    
     //创建存放本地对战模式按钮的菜单，位置在动画下方
     auto localModeMenu = Menu::create(localModeBtn, nullptr);
     if (localModeMenu) {
@@ -110,6 +114,7 @@ bool StartScene::init() {
         onlineModeBtn->setPosition(Vec2::ZERO);        
     else
         cocos2d::log("“onlineMode.png or onlineMode_pressed.png”");
+    
     //创建存放双人联机模式按钮的菜单，位置在本地对战模式按钮下方
     auto onlineModeMenu = Menu::create(onlineModeBtn, nullptr);
     if (onlineModeMenu) {
@@ -120,21 +125,23 @@ bool StartScene::init() {
         cocos2d::log("“onlineModeBtn”");
 
     //添加关闭游戏按钮
-    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closeStartScene, this));
-    if (closeItem) {
-        closeItem->setPosition(Vec2::ZERO);
-        closeItem->setScale(44.0f / closeItem->getContentSize().width, 44.0f / closeItem->getContentSize().height);
+    auto closeGameBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closeStartScene, this));
+    if (closeGameBtn) {
+        closeGameBtn->setPosition(Vec2::ZERO);
+        closeGameBtn->setScale(44.0f / closeGameBtn->getContentSize().width, 44.0f / closeGameBtn->getContentSize().height);
     }
     else
         cocos2d::log("“CloseNormal.png or CloseSelected.png”");
+    
     //创建存放关闭游戏按钮的菜单，位置在屏幕右下角
-    auto menu = Menu::create(closeItem, nullptr);
-    if (menu) {
-        menu->setPosition(origin.x + visibleSize.width - 22.0f, origin.y + 22.0f);
-        this->addChild(menu, 1);
+    auto closeGameMenu = Menu::create(closeGameBtn, nullptr);
+    if (closeGameMenu) {
+        closeGameMenu->setPosition(origin.x + visibleSize.width - 22.0f, origin.y + 22.0f);
+        this->addChild(closeGameMenu, 1);
     }
     else
         cocos2d::log("“closeItem”");
+    
     //创建关闭游戏提示，位置在按钮左边
     auto closeTip = Label::create(u8"点击即可退出游戏->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (closeTip) {
@@ -250,11 +257,11 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
 }
 
 void StartScene::createLocalMode(Ref* pSender) {
-    Director::getInstance()->pushScene(HelloWorld::createScene());  //将本地对战场景压栈
+    Director::getInstance()->pushScene(LocalMode::createScene());  //将本地对战场景压栈
 }
 
 void StartScene::createOnlineMode(Ref* pSender) {
-
+    Director::getInstance()->pushScene(OnlineMode::createScene());
 }
 
 void StartScene::closeStartScene(Ref* pSender)

@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 
-
 class MusicControl : public cocos2d::Node {
 public:
     //³õÊ¼»¯º¯Êý

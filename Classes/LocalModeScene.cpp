@@ -1,84 +1,47 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
- http://www.cocos2d-x.org
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
-#include "HelloWorldScene.h"
+#include "LocalModeScene.h"
 #include "SimpleAudioEngine.h"
 #include "MusicControl.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
-Scene* HelloWorld::createScene()
+Scene* LocalMode::createScene()
 {
-    return HelloWorld::create();
+    return LocalMode::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
+//输出文件错误信息
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool LocalMode::init()
 {
-    // 1. super init first
-    if ( !Scene::init() )
-    {
+    if (!Scene::init())
         return false;
-    }
 
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
-
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+    
+    //添加返回主界面的按钮
+    auto returnStartBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(LocalMode::returnStartScene, this));
+    if (returnStartBtn){
+        returnStartBtn->setPosition(Vec2::ZERO);
+        returnStartBtn->setScale(44.0f / returnStartBtn->getContentSize().width, 44.0f / returnStartBtn->getContentSize().height);
     }
     else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
+        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+    
+    //创建存放返回按钮的菜单，位置在右下角
+    auto returnStartMenu = Menu::create(returnStartBtn, NULL);
+    if (returnStartMenu) {
+        returnStartMenu->setPosition(origin.x + visibleSize.width - 22.0f, origin.y + 22.0f);
+        this->addChild(returnStartMenu, 1);
     }
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    else
+        problemLoading("“returnStartBtn”");
 
     //给关闭按钮加个提示，文字位置在按钮左边
     auto returnTip = Label::create(u8"点击返回主界面->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
@@ -88,62 +51,21 @@ bool HelloWorld::init()
         this->addChild(returnTip, 1);
     }
     else
-        problemLoading("“fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf”");
-
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    /*auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
-
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }*/
-
-    // add "HelloWorld" splash screen"
-    /*auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }*/
-
-    //预加载落子和输赢音效
-    auto audio = SimpleAudioEngine::getInstance();
-    audio->preloadEffect("music/zhe.mp3");
-    audio->preloadEffect("music/shui.mp3");
-    audio->preloadEffect("music/beng.mp3");
-    audio->preloadEffect("music/de.mp3");
-    audio->preloadEffect("music/zhu.mp3");
-    audio->preloadEffect("music/victory.mp3");
-    audio->preloadEffect("music/defeat.mp3");
+        problemLoading("“fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf”");       
 
     //添加背景音乐和控制按钮
     MusicControl* mc = MusicControl::create();
     this->addChild(mc, 1);
 
     //添加落子音效控制按钮
-    auto effectBtn = MenuItemImage::create("effect_btn.png", "effect_btn.png", CC_CALLBACK_1(HelloWorld::toggleEffect, this));
+    auto effectBtn = MenuItemImage::create("effect_btn.png", "effect_btn.png", CC_CALLBACK_1(LocalMode::toggleEffect, this));
     if (effectBtn) {
         effectBtn->setScale(44.0f / effectBtn->getContentSize().width, 44.0f / effectBtn->getContentSize().height);
         effectBtn->setPosition(Vec2::ZERO);
     }
     else
         problemLoading("'effect_btn.png'");
+    
     //添加存放音效按钮的菜单
     auto effectMenu = Menu::create(effectBtn, nullptr);
     if (effectMenu) {
@@ -328,7 +250,7 @@ bool HelloWorld::init()
     //添加点击事件处理
     auto listener = EventListenerTouchOneByOne::create();                       //创建点击事件监听器
     listener->setSwallowTouches(false);                                         //不吞掉点击事件，让其他监听器也能处理该事件
-    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);     //点击开始回调函数
+    listener->onTouchBegan = CC_CALLBACK_2(LocalMode::onTouchBegan, this);      //点击开始回调函数
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //将监听器注册到事件分发器
 
     //添加“当前回合”标签，位置在顶部中间
@@ -362,13 +284,14 @@ bool HelloWorld::init()
         problemLoading("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
     //创建开始游戏按钮   
-    startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(HelloWorld::onStartGame, this));
+    startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(LocalMode::onStartGame, this));
     if (startGameBtn) {
         startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
         startGameBtn->setPosition(Vec2::ZERO);
     }
     else
         problemLoading("'startGame.png or startGame_pressed.png'");
+    
     //创建存放开始游戏按钮的菜单，位置在棋盘正上方
     auto startGameMenu = Menu::create(startGameBtn, nullptr);                                               
     if (startGameMenu) {
@@ -381,16 +304,16 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void LocalMode::returnStartScene(Ref* pSender)
 {    
     Director::getInstance()->popScene();    //返回上一个场景，即主界面
 }
 
-void HelloWorld::toggleEffect(Ref* pSender) {
+void LocalMode::toggleEffect(Ref* pSender) {
     isEffectOn = !isEffectOn;       //切换音效开关状态
 }
 
-bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
+bool LocalMode::onTouchBegan(Touch* touch, Event* event) {
     if (!isGamePlaying)
         return false;                                           //没在游戏中就不响应点击
     Vec2 touchPos = touch->getLocation();                       //获取点击的位置
@@ -404,7 +327,7 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event) {
     return false;
 }
 
-void HelloWorld::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
+void LocalMode::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
     //黑方回合时不可选择白方棋子，白方回合时不可选择黑方棋子
     if ((isBlackRound && chessName.substr(0, 5) == "white") || (!isBlackRound && chessName.substr(0, 5) == "black"))
         return;
@@ -425,7 +348,7 @@ void HelloWorld::onSelectChess(Sprite* chessSprite, const std::string& chessName
         problemLoading("highlight.png");
 }
 
-void HelloWorld::onInitBoardPlacePoint() {
+void LocalMode::onInitBoardPlacePoint() {
     placePoints.assign(19, std::vector<Sprite*>(19, nullptr));
     canPlace.assign(19, std::vector<bool>(19, true));       //一开始棋盘上无棋子，所有点均可放置
     boardChesses.assign(19, std::vector<Sprite*>(19, nullptr));
@@ -446,7 +369,7 @@ void HelloWorld::onInitBoardPlacePoint() {
         }
 }
 
-bool HelloWorld::onPlaceChess(Vec2 touchPos) {
+bool LocalMode::onPlaceChess(Vec2 touchPos) {
     for (int row = 0; row < 19; row++)
         for (int col = 0; col < 19; col++)
             //如果当前点可放置
@@ -485,7 +408,7 @@ bool HelloWorld::onPlaceChess(Vec2 touchPos) {
     return false;
 }
 
-void HelloWorld::onStartGame(Ref* pSender){
+void LocalMode::onStartGame(Ref* pSender){
     startGameBtn->setVisible(false);                 //按钮隐藏，代表已开始游戏
 
     if (!timer) {
@@ -536,7 +459,7 @@ void HelloWorld::onStartGame(Ref* pSender){
     onSelectChess(chessSprites[0], "black_zhe");    //自动选中第一个黑棋
 }
 
-void HelloWorld::update(float dt) {
+void LocalMode::update(float dt) {
     if (!isGamePlaying)
         return;                                     //不在游戏中不处理更新逻辑
     
@@ -577,7 +500,7 @@ void HelloWorld::update(float dt) {
     timer->setString(std::to_string(seconds));          //实时显示在计时器标签上
 }
 
-bool HelloWorld::isVictory(int row, int col) {
+bool LocalMode::isVictory(int row, int col) {
     std::unordered_map<std::string, int> needChesses;   //用来判断连成线的5个棋子是否同颜色不同字
     if (isBlackRound) {
         //表示在黑方回合时，需要“这谁绷得住”5种黑棋各一个
@@ -608,7 +531,7 @@ bool HelloWorld::isVictory(int row, int col) {
     return false;
 }
 
-bool HelloWorld::searchBoardChesses(int row, int col, Direction dir_1, Direction dir_2, std::unordered_map<std::string, int> needChesses){        
+bool LocalMode::searchBoardChesses(int row, int col, Direction dir_1, Direction dir_2, std::unordered_map<std::string, int> needChesses){
     int r = row, c = col;                                           //先保存落子点坐标，判断第一个方向
     while (r >= 0 && r < 19 && c >= 0 && c < 19 && boardChesses[r][c]) {
         std::string curChessName = boardChesses[r][c]->getName();
@@ -635,7 +558,7 @@ bool HelloWorld::searchBoardChesses(int row, int col, Direction dir_1, Direction
     return true;
 }
 
-void HelloWorld::gameOver(){
+void LocalMode::gameOver(){
     if (!victoryTip) {
         //创建获胜方提示，位置在获胜动画上面
         victoryTip = Label::create("", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
@@ -669,7 +592,7 @@ void HelloWorld::gameOver(){
 
     if (!gameOverBtn) {
         //创建游戏结束按钮
-        gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(HelloWorld::cleanBoard, this));
+        gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(LocalMode::cleanBoard, this));
         if (gameOverBtn) {
             gameOverBtn->setScale(250.0f / gameOverBtn->getContentSize().width, 80.0f / gameOverBtn->getContentSize().height);
             gameOverBtn->setPosition(Vec2::ZERO);
@@ -701,7 +624,7 @@ void HelloWorld::gameOver(){
     gameOverBtn->setVisible(true);              //显示结束游戏按钮
 }
 
-void HelloWorld::cleanBoard(Ref* pSender) {
+void LocalMode::cleanBoard(Ref* pSender) {
     lastChessSum = 0; curChessSum = 0;                          //棋盘上棋子总数清零
     for(int row = 0; row < 19; row++)
         for (int col = 0; col < 19; col++)

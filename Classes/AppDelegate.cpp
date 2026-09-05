@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "LocalModeScene.h"
 #include "StartScene.h"
 #include "MusicControl.h"
 
@@ -121,7 +121,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = StartScene::createScene();
-    //auto scene = HelloWorld::createScene();
+    //auto scene = LocalMode::createScene();
 
     // run
     director->runWithScene(scene);

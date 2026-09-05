@@ -21,9 +21,16 @@ bool MusicControl::init() {
     if (!Node::init())
         return false;
 
-    //预加载背景音乐和动画点击音效
-    SimpleAudioEngine::getInstance()->preloadBackgroundMusic("music/bgm.mp3");
-    SimpleAudioEngine::getInstance()->preloadEffect("music/victory.mp3");
+    //预加载背景音乐、动画点击音效、落子和输赢音效
+    auto audio = SimpleAudioEngine::getInstance();
+    audio->preloadBackgroundMusic("music/bgm.mp3");
+    audio->preloadEffect("music/victory.mp3");
+    audio->preloadEffect("music/zhe.mp3");
+    audio->preloadEffect("music/shui.mp3");
+    audio->preloadEffect("music/beng.mp3");
+    audio->preloadEffect("music/de.mp3");
+    audio->preloadEffect("music/zhu.mp3");
+    audio->preloadEffect("music/defeat.mp3");
 
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -35,6 +42,7 @@ bool MusicControl::init() {
     }
     else
         cocos2d::log("'music/bgm.mp3'");
+    
     //创建菜单并添加按钮
     auto bgmMenu = Menu::create(bgmBtn, nullptr);                   
     if (bgmMenu) {

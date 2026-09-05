@@ -41,4 +41,4 @@ private:
 	cocos2d::ui::Layout* popup = nullptr;                   //µ¯´°
 };
 
-#endif // !__StartScene_H__
+#endif // __StartScene_H__
