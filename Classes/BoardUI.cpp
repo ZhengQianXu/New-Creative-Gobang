@@ -238,6 +238,16 @@ bool BoardUI::init() {
     listener->onTouchBegan = CC_CALLBACK_2(BoardUI::onTouchBegan, this);        //点击开始回调函数
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //将监听器注册到事件分发器
 
+    selectedHighlight = Sprite::create("highlight.png");                        //创建高亮效果
+    if (selectedHighlight) {        
+        float ScaleX = 70.0f / selectedHighlight->getContentSize().width;
+        float ScaleY = 70.0f / selectedHighlight->getContentSize().height;
+        selectedHighlight->setScale(ScaleX, ScaleY);                            //设置大小为70px * 70px
+        this->addChild(selectedHighlight, 0);
+    }
+    else
+        cocos2d::log("highlight.png");
+
     //添加“当前回合”标签，位置在顶部中间
     auto curRound = Label::create(u8"当前回合", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
     if (curRound) {
@@ -269,7 +279,7 @@ bool BoardUI::init() {
         cocos2d::log("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
     //创建开始游戏按钮   
-    auto startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(BoardUI::onStartGameBtn, this));
+    startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(BoardUI::onStartGameBtn, this));
     if (startGameBtn) {
         startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
         startGameBtn->setPosition(Vec2::ZERO);
@@ -285,6 +295,100 @@ bool BoardUI::init() {
     }
     else
         cocos2d::log("'startGameBtn'");
+    
+    //创建计时器标签，放在“当前回合”标签下面
+    timer = Label::create("20", "fonts/arial.ttf", 50);
+    if (timer) {
+        timer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 120.0f);
+        timer->setTextColor(Color4B::BLACK);
+        this->addChild(timer, 0);
+        timer->setVisible(false);
+    }
+    else
+        cocos2d::log("'fonts/arial.ttf'");
+    
+    //创建指向黑方的箭头，放在“当前回合”标签左边
+    blackRoundArrow = Sprite::create("blackRound.png");
+    if (blackRoundArrow) {
+        blackRoundArrow->setScale(80.0f / blackRoundArrow->getContentSize().width, 25.0f / blackRoundArrow->getContentSize().height);
+        blackRoundArrow->setPosition(origin.x + visibleSize.width / 2 - 200.0f, origin.y + visibleSize.height - 35.0f);
+        this->addChild(blackRoundArrow, 0);
+        blackRoundArrow->setVisible(false);
+    }
+    else
+        cocos2d::log("blackRound.png");
+    
+    //创建指向白方的箭头，放在“当前回合”标签右边
+    whiteRoundArrow = Sprite::create("whiteRound.png");
+    if (whiteRoundArrow) {
+        whiteRoundArrow->setScale(80.0f / whiteRoundArrow->getContentSize().width, 25.0f / whiteRoundArrow->getContentSize().height);
+        whiteRoundArrow->setPosition(origin.x + visibleSize.width / 2 + 200.0f, origin.y + visibleSize.height - 35.0f);
+        this->addChild(whiteRoundArrow, 0);
+        whiteRoundArrow->setVisible(false);
+    }
+    else
+        cocos2d::log("whiteRound.png");
+    
+    //创建获胜方提示，位置在获胜动画上面
+    gameOverTip = Label::create("", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
+    if (gameOverTip) {
+        gameOverTip->setTextColor(Color4B::YELLOW);
+        gameOverTip->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 250.0f);
+        gameOverTip->setVisible(false);
+    }
+    else
+        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+    
+    //创建获胜动画，位置在屏幕正中间
+    victoryAnimation = Sprite::create("victory.jpg");
+    if (victoryAnimation) {
+        victoryAnimation->setScale(316.0f / victoryAnimation->getContentSize().width, 360.5f / victoryAnimation->getContentSize().height);
+        victoryAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);       
+        victoryAnimation->setVisible(false);
+    }
+    else
+        cocos2d::log("'victory.jpg'");
+
+    //创建平局动画，位置在屏幕正中间
+    drawAnimation = Sprite::create("defeat.jpg");
+    if (drawAnimation) {
+        drawAnimation->setScale(320.0f / drawAnimation->getContentSize().width, 338.75f / drawAnimation->getContentSize().height);
+        drawAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+        drawAnimation->setVisible(false);
+    }
+    else
+        cocos2d::log("'defeat.jpg'");
+    
+    //创建游戏结束按钮
+    gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
+    if (gameOverBtn) {
+        gameOverBtn->setPosition(Vec2::ZERO);
+        gameOverBtn->setVisible(false);
+    }
+    else
+        cocos2d::log("'gameOver.png or gameOver_pressed.png'");
+
+    //创建平局结束按钮
+    gameOverDrawBtn = MenuItemImage::create("gameOverDraw.png", "gameOverDraw_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
+    if (gameOverDrawBtn) {        
+        gameOverDrawBtn->setPosition(Vec2::ZERO);
+        gameOverDrawBtn->setVisible(false);
+    }
+    else
+        cocos2d::log("'gameOverDraw.png or gameOverDraw_pressed.png'");
+    
+    //创建存放游戏结束按钮的菜单，位置在结算动画下方
+    auto gameOverMenu = Menu::create(gameOverBtn, gameOverDrawBtn, nullptr);
+    if (gameOverMenu)
+        gameOverMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 280.0f);        
+    else
+        cocos2d::log("'gameOverBtn' or 'gameOverDrawBtn'");
+
+    victoryUI = Node::create();
+    victoryUI->addChild(gameOverTip, 0);
+    victoryUI->addChild(victoryAnimation, 0);
+    victoryUI->addChild(drawAnimation, 0);
+    victoryUI->addChild(gameOverMenu, 0);
 
     return true;
 }
@@ -307,7 +411,7 @@ void BoardUI::onToggleEffectBtn(Ref* pSender) {
         _onToggleEffect();
 }
 
-void BoardUI::setOnToughBeganCallBack(std::function<bool(Touch*, Event*)> callback){
+void BoardUI::setOnTouchBeganCallBack(std::function<bool(Touch*, Event*)> callback){
     _onTouchBegan = callback;
 }
 
@@ -317,11 +421,39 @@ bool BoardUI::onTouchBegan(Touch* touch, Event* event) {
     return false;
 }
 
-void BoardUI::setOnStartGameCallBack(std::function<void()> callback){
+void BoardUI::setOnStartGameCallBack(std::function<void(Ref*)> callback){
     _onStartGame = callback;
 }
 
-void BoardUI::onStartGameBtn(cocos2d::Ref* pSender){
+void BoardUI::onStartGameBtn(Ref* pSender){
     if (_onStartGame)
-        _onStartGame();
+        _onStartGame(pSender);
+}
+
+void BoardUI::setOnCleanBoardCallBack(std::function<void(Ref*)> callback) {
+    _onCleanBoard = callback;
+}
+
+void BoardUI::onCleanBoard(Ref* pSender){
+    if (_onCleanBoard)
+        _onCleanBoard(pSender);
+}
+
+void BoardUI::getBoardUImember(std::vector<Sprite*>& cs, Sprite*& sH, MenuItemImage*& sGB, Label*& t, Sprite*& bRA, Sprite*& wRA, 
+    Label*& gOT, Sprite*& vA, Sprite*& dA, MenuItemImage*& gOB, MenuItemImage*& gODB) const{
+    cs = chessSprites;
+    sH = selectedHighlight;
+    sGB = startGameBtn;
+    t = timer;
+    bRA = blackRoundArrow;
+    wRA = whiteRoundArrow;
+    gOT = gameOverTip;
+    vA = victoryAnimation;
+    dA = drawAnimation;
+    gOB = gameOverBtn;
+    gODB = gameOverDrawBtn;
+}
+
+Node* BoardUI::getGameOverUI() const{        
+    return victoryUI;
 }

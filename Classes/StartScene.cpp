@@ -246,6 +246,7 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
         closeBtn->setPosition(Vec2::ZERO);
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
+    
     //创建存放关闭按钮的菜单，位置在弹窗右上角
     auto closeMenu = Menu::create(closeBtn, nullptr);
     if (closeMenu) {
