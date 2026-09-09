@@ -384,11 +384,12 @@ bool BoardUI::init() {
     else
         cocos2d::log("'gameOverBtn' or 'gameOverDrawBtn'");
 
-    victoryUI = Node::create();
-    victoryUI->addChild(gameOverTip, 0);
-    victoryUI->addChild(victoryAnimation, 0);
-    victoryUI->addChild(drawAnimation, 0);
-    victoryUI->addChild(gameOverMenu, 0);
+    //创建节点存放游戏结算界面的ui控件
+    gameOverUI = Node::create();
+    gameOverUI->addChild(gameOverTip, 0);
+    gameOverUI->addChild(victoryAnimation, 0);
+    gameOverUI->addChild(drawAnimation, 0);
+    gameOverUI->addChild(gameOverMenu, 0);
 
     return true;
 }
@@ -455,5 +456,5 @@ void BoardUI::getBoardUImember(std::vector<Sprite*>& cs, Sprite*& sH, MenuItemIm
 }
 
 Node* BoardUI::getGameOverUI() const{        
-    return victoryUI;
+    return gameOverUI;
 }

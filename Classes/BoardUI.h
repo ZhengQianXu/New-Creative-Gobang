@@ -69,7 +69,7 @@ private:
 	cocos2d::MenuItemImage* gameOverBtn = nullptr;          //游戏结束按钮
 	cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;		//平局结束按钮
 
-	cocos2d::Node* victoryUI = nullptr;						//用来存储3个获胜界面ui控件的节点
+	cocos2d::Node* gameOverUI = nullptr;					//用来存储结算界面ui控件的节点
 };
 
 #endif // !__BOARD_UI_H__
