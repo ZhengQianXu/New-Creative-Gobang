@@ -190,40 +190,40 @@ void StartScene::closePopup(Ref* pSender) {
     }
 }
 
-void StartScene::createPopup(const std::string& title, const std::string& content) {
+void StartScene::createPopup(const std::string& title, const std::string& content, bool isOnline) {
     //创建半透明遮罩层，遮罩层会覆盖整个屏幕，让主场景变暗
-    auto mask = LayerColor::create(Color4B(0, 0, 0, 150));
-    mask->setContentSize(visibleSize);                                      //铺满屏幕
-    mask->setPosition(origin);                                              //从屏幕左下角开始
-    this->addChild(mask, 10);
-    popupMask = mask;                                                       //保存指针，方便关闭时移除
-
+    popupMask = LayerColor::create(Color4B(0, 0, 0, 150));
+    popupMask->setContentSize(visibleSize);                                 //铺满屏幕
+    popupMask->setPosition(origin);                                         //从屏幕左下角开始
+    this->addChild(popupMask, 10);
+    
     //遮罩层拦截所有触摸事件，防止玩家在弹窗打开时点击到主场景的按钮或棋子
     auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);                                      //吞掉事件，不传递到主场景
-    listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-        return true;                                                        //拦截所有触摸，消费掉事件
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, mask);
+    listener->setSwallowTouches(true);                                      //拦截所有触摸，吞掉事件，不传递到主场景
+    listener->onTouchBegan = [=](Touch* touch, Event* event) -> bool {
+        return true;                                                        //消费掉事件
+    };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, popupMask);
 
     //创建弹窗主体（白色背景）
     popup = ui::Layout::create();
     popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //纯色背景
     popup->setBackGroundColor(Color3B::WHITE);                              //白色背景
     popup->setBackGroundColorOpacity(255);                                  //不透明
-    popup->setContentSize(Size(600, 300));                                  //弹窗宽600，高300
+    popup->setContentSize(Size(600, 300));                                  //弹窗宽600，高300    
+
     //位置：屏幕中心偏移半个弹窗大小（因为锚点在左下角）
     popup->setPosition(Vec2(origin.x + visibleSize.width / 2 - 300.0f, origin.y + visibleSize.height / 2 - 200.0f));
     popup->setAnchorPoint(Vec2::ZERO);                                      //锚点在左下角
     popup->setTouchEnabled(true);                                           //允许弹窗接收触摸，防止点击穿透
     popup->setCascadeOpacityEnabled(true);                                  //子节点继承父节点透明度
-    mask->addChild(popup, 1);                                               //添加到遮罩层之上
+    popupMask->addChild(popup, 1);                                          //添加到遮罩层之上
 
-    //创建标题文字
+    //创建标题文字，位置在弹窗顶部居中
     auto titleLabel = Label::create(title, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 32);
     if (titleLabel) {
         titleLabel->setTextColor(Color4B::BLACK);
-        titleLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height - 40.0f);//标题在弹窗顶部居中
+        titleLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 40.0f);
         popup->addChild(titleLabel);
     }
     else
@@ -233,14 +233,18 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     auto contentLabel = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
     if (contentLabel) {
         contentLabel->setTextColor(Color4B::BLACK);
-        contentLabel->setPosition(popup->getContentSize().width / 2, popup->getContentSize().height / 2 - 20.0f);
+		//如果是联机模式弹窗，内容文字位置在弹窗顶部偏下；如果是规则或反馈弹窗，内容文字位置在弹窗正中间偏下
+        if(isOnline)
+            contentLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
+        else
+            contentLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);        
         contentLabel->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
         popup->addChild(contentLabel);
     }
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //创建关闭按钮
+    //创建关闭弹窗按钮
     auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closePopup, this));
     if (closeBtn)
         closeBtn->setPosition(Vec2::ZERO);
@@ -250,11 +254,77 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     //创建存放关闭按钮的菜单，位置在弹窗右上角
     auto closeMenu = Menu::create(closeBtn, nullptr);
     if (closeMenu) {
-        closeMenu->setPosition(popup->getContentSize().width - 30, popup->getContentSize().height - 30);
+        closeMenu->setPosition(origin.x + popup->getContentSize().width - 30, origin.y + popup->getContentSize().height - 30);
         popup->addChild(closeMenu, 1);
     }
     else
         cocos2d::log("closeBtn");
+
+    if (!isOnline)
+		return;         //如果不是联机模式弹窗，则不需要添加创建房间按钮、输入框和加入房间按钮
+
+    //添加创建房间按钮
+    auto createRoomBtn = MenuItemImage::create("createRoom.png", "createRoom_pressed.png", CC_CALLBACK_1(StartScene::createRoom, this));
+    if (createRoomBtn)
+        createRoomBtn->setPosition(Vec2::ZERO);       
+    else
+        cocos2d::log("'CloseNormal.png or CloseSelected.png'");
+
+    //添加存放创建房间按钮的菜单，位置在弹窗正中间偏下
+    auto createRoomMenu = Menu::create(createRoomBtn, nullptr);
+    if (createRoomMenu) {
+        createRoomMenu->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);
+        popup->addChild(createRoomMenu, 1);
+    }
+    else
+        cocos2d::log("createRoomBtn");
+
+	//添加房间号输入框
+	auto roomCodeInput = ui::TextField::create(u8"这里输入房间号", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    if(roomCodeInput) {
+		roomCodeInput->setContentSize(Size(200.0f, 50.0f));
+		roomCodeInput->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));  //位置在弹窗左下角
+        roomCodeInput->setMaxLengthEnabled(true);
+        roomCodeInput->setMaxLength(6);                                         //房间号长度限制为6位
+        roomCodeInput->setTextColor(Color4B::BLACK);
+        popup->addChild(roomCodeInput, 2);
+    }
+    else
+		cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+
+	//设置输入框的占位符颜色为灰色，点击时变为透明
+    roomCodeInput->addEventListener([=](Ref*, ui::TextField::EventType type) {
+        if (type == ui::TextField::EventType::ATTACH_WITH_IME)
+            roomCodeInput->setPlaceHolderColor(Color4B(0, 0, 0, 0));
+        else if (type == ui::TextField::EventType::DETACH_WITH_IME)
+            roomCodeInput->setPlaceHolderColor(Color4B::GRAY);               
+    });        
+
+	//创建输入框的边框图片，位置在输入框下方，层级比输入框低一层，作为输入框的背景
+	auto roomCodeInputFrame = ui::Scale9Sprite::create("roomCodeInputFrame.png");
+    if (roomCodeInputFrame) {
+        roomCodeInputFrame->setScale(200.0f / roomCodeInputFrame->getContentSize().width, 50.0f / roomCodeInputFrame->getContentSize().height);
+        roomCodeInputFrame->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));
+        popup->addChild(roomCodeInputFrame, 1);
+    }
+    else
+		CCLOG("'roomCodeInputFrame.png'");
+
+    //创建加入房间按钮
+    auto joinRoomBtn = MenuItemImage::create("joinRoom.png", "joinRoom_pressed.png", CC_CALLBACK_1(StartScene::joinRoom, this));
+    if (joinRoomBtn)
+        joinRoomBtn->setPosition(Vec2::ZERO);       
+    else
+        cocos2d::log("'CloseNormal.png or CloseSelected.png'");
+
+	//创建存放加入房间按钮的菜单，位置在弹窗右下方，输入框的正右侧
+    auto joinRoomMenu = Menu::create(joinRoomBtn, nullptr);
+    if (joinRoomMenu) {
+        joinRoomMenu->setPosition(origin.x + 420.0f, origin.y + 55.0f);
+        popup->addChild(joinRoomMenu, 1);
+    }
+    else
+        cocos2d::log("joinRoomBtn");
 }
 
 void StartScene::createLocalMode(Ref* pSender) {
@@ -262,11 +332,22 @@ void StartScene::createLocalMode(Ref* pSender) {
 }
 
 void StartScene::createOnlineMode(Ref* pSender) {
-    Director::getInstance()->pushScene(OnlineMode::createScene());
+    std::string title = u8"联机准备";
+    std::string content = u8"请选择创建或加入房间";
+
+    createPopup(title, content, true);
 }
 
 void StartScene::closeStartScene(Ref* pSender)
 {
     Director::getInstance()->end();
     SimpleAudioEngine::getInstance()->end();
+}
+
+void StartScene::createRoom(Ref* pSender) {
+
+}
+
+void StartScene::joinRoom(Ref* pSender) {
+
 }
