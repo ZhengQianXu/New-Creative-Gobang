@@ -3,6 +3,7 @@
 #include "SimpleAudioEngine.h"
 #include "LocalModeScene.h"
 #include "OnlineModeScene.h"
+#include "NetworkManager.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -187,7 +188,9 @@ void StartScene::closePopup(Ref* pSender) {
     if (popupMask) {
         popupMask->removeFromParent();
         popupMask = nullptr;
-    }
+    }   
+    popupContent = nullptr;    
+    roomIdInput = nullptr;
 }
 
 void StartScene::createPopup(const std::string& title, const std::string& content, bool isOnline) {
@@ -229,21 +232,21 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //创建内容文字
-    auto contentLabel = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
-    if (contentLabel) {
-        contentLabel->setTextColor(Color4B::BLACK);
-		//如果是联机模式弹窗，内容文字位置在弹窗顶部偏下；如果是规则或反馈弹窗，内容文字位置在弹窗正中间偏下
-        if(isOnline)
-            contentLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
+    //创建内容文字   
+    popupContent = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
+    if (popupContent) {
+        popupContent->setTextColor(Color4B::BLACK);
+        //如果是联机模式弹窗，内容文字位置在弹窗顶部偏下；如果是规则或反馈弹窗，内容文字位置在弹窗正中间偏下
+        if (isOnline)
+            popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
         else
-            contentLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);        
-        contentLabel->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
-        popup->addChild(contentLabel);
+            popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);
+        popupContent->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
+        popup->addChild(popupContent);
     }
     else
-        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
-
+        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");    
+    
     //创建关闭弹窗按钮
     auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closePopup, this));
     if (closeBtn)
@@ -263,6 +266,16 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     if (!isOnline)
 		return;         //如果不是联机模式弹窗，则不需要添加创建房间按钮、输入框和加入房间按钮
 
+	//创建当前房间号显示文字，位置在弹窗正中间左边
+	curRoomId = Label::create(u8"当前房间号：------", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    if (curRoomId) {
+        curRoomId->setPosition(origin.x + 180.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);  //位置在弹窗左下角
+        curRoomId->setTextColor(Color4B::BLACK);
+        popup->addChild(curRoomId, 1);
+    }
+	else
+		CCLOG("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
+
     //添加创建房间按钮
     auto createRoomBtn = MenuItemImage::create("createRoom.png", "createRoom_pressed.png", CC_CALLBACK_1(StartScene::createRoom, this));
     if (createRoomBtn)
@@ -270,42 +283,42 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
 
-    //添加存放创建房间按钮的菜单，位置在弹窗正中间偏下
+	//添加存放创建房间按钮的菜单，位置在弹窗正中间右边，当前房间号显示的正右侧
     auto createRoomMenu = Menu::create(createRoomBtn, nullptr);
     if (createRoomMenu) {
-        createRoomMenu->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);
+        createRoomMenu->setPosition(origin.x + 420.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);
         popup->addChild(createRoomMenu, 1);
     }
     else
         cocos2d::log("createRoomBtn");
 
-	//添加房间号输入框
-	auto roomCodeInput = ui::TextField::create(u8"这里输入房间号", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
-    if(roomCodeInput) {
-		roomCodeInput->setContentSize(Size(200.0f, 50.0f));
-		roomCodeInput->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));  //位置在弹窗左下角
-        roomCodeInput->setMaxLengthEnabled(true);
-        roomCodeInput->setMaxLength(6);                                         //房间号长度限制为6位
-        roomCodeInput->setTextColor(Color4B::BLACK);
-        popup->addChild(roomCodeInput, 2);
+	//添加房间号输入框，位置在弹窗左下角，当前房间号显示的正下方
+    roomIdInput = ui::TextField::create(u8"这里输入房间号", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    if(roomIdInput) {
+        roomIdInput->setContentSize(Size(200.0f, 50.0f));
+        roomIdInput->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));
+        roomIdInput->setMaxLengthEnabled(true);
+        roomIdInput->setMaxLength(6);                                         //房间号长度限制为6位
+        roomIdInput->setTextColor(Color4B::BLACK);
+        popup->addChild(roomIdInput, 2);
     }
     else
 		cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
 	//设置输入框的占位符颜色为灰色，点击时变为透明
-    roomCodeInput->addEventListener([=](Ref*, ui::TextField::EventType type) {
+    roomIdInput->addEventListener([=](Ref*, ui::TextField::EventType type) {
         if (type == ui::TextField::EventType::ATTACH_WITH_IME)
-            roomCodeInput->setPlaceHolderColor(Color4B(0, 0, 0, 0));
+            roomIdInput->setPlaceHolderColor(Color4B(0, 0, 0, 0));
         else if (type == ui::TextField::EventType::DETACH_WITH_IME)
-            roomCodeInput->setPlaceHolderColor(Color4B::GRAY);               
+            roomIdInput->setPlaceHolderColor(Color4B::GRAY);
     });        
 
 	//创建输入框的边框图片，位置在输入框下方，层级比输入框低一层，作为输入框的背景
-	auto roomCodeInputFrame = ui::Scale9Sprite::create("roomCodeInputFrame.png");
-    if (roomCodeInputFrame) {
-        roomCodeInputFrame->setScale(200.0f / roomCodeInputFrame->getContentSize().width, 50.0f / roomCodeInputFrame->getContentSize().height);
-        roomCodeInputFrame->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));
-        popup->addChild(roomCodeInputFrame, 1);
+	auto roomIdInputFrame = ui::Scale9Sprite::create("roomCodeInputFrame.png");
+    if (roomIdInputFrame) {
+        roomIdInputFrame->setScale(200.0f / roomIdInputFrame->getContentSize().width, 50.0f / roomIdInputFrame->getContentSize().height);
+        roomIdInputFrame->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));
+        popup->addChild(roomIdInputFrame, 1);
     }
     else
 		CCLOG("'roomCodeInputFrame.png'");
@@ -317,7 +330,7 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
 
-	//创建存放加入房间按钮的菜单，位置在弹窗右下方，输入框的正右侧
+	//创建存放加入房间按钮的菜单，位置在弹窗右下方，输入框的正右侧，创建房间按钮的正下方
     auto joinRoomMenu = Menu::create(joinRoomBtn, nullptr);
     if (joinRoomMenu) {
         joinRoomMenu->setPosition(origin.x + 420.0f, origin.y + 55.0f);
@@ -335,19 +348,44 @@ void StartScene::createOnlineMode(Ref* pSender) {
     std::string title = u8"联机准备";
     std::string content = u8"请选择创建或加入房间";
 
+	//设置NetworkManager的回调函数，当联机成功时，弹窗内容显示“房间已准备好，即将进入房间！”，并切换到OnlineMode场景
+    NetworkManager::getInstance()->setOnStartCallBack([=]() {
+		popupContent->setString(u8"房间已准备好，即将进入房间！");
+        Director::getInstance()->pushScene(OnlineMode::createScene());
+    });
+    
+	//设置NetworkManager的回调函数，当联机失败时，弹窗内容显示错误信息
+    NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
+        popupContent->setString(msg);
+    });
+
+    //创建联机准备的弹窗，为联机模式服务
     createPopup(title, content, true);
 }
 
 void StartScene::closeStartScene(Ref* pSender)
 {
+    NetworkManager::getInstance()->disconnect();
     Director::getInstance()->end();
     SimpleAudioEngine::getInstance()->end();
 }
 
 void StartScene::createRoom(Ref* pSender) {
-
+	//调用NetworkManager的createRoom函数，创建房间，并传入回调函数
+    NetworkManager::getInstance()->createRoom([=](bool success, const std::string& roomId) {       
+        if (success) {
+			curRoomId->setString(u8"当前房间号：" + roomId);
+            popupContent->setString(u8"房间创建成功！等待玩家加入...");
+        }
+        else
+            popupContent->setString(u8"房间创建失败！请稍后再试");
+    });   
 }
 
 void StartScene::joinRoom(Ref* pSender) {
-
+	//获取输入框中的房间号，并调用NetworkManager的joinRoom函数，加入房间，并传入回调函数
+    std::string room_id = roomIdInput->getString();
+    NetworkManager::getInstance()->joinRoom(room_id, [=](const std::string& msg) {       
+        popupContent->setString(msg);        
+    });
 }

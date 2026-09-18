@@ -62,7 +62,7 @@ bool MusicControl::init() {
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //≤•∑≈±≥æ∞“Ù¿÷
+    //SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //≤•∑≈±≥æ∞“Ù¿÷
     
     return true;
 }

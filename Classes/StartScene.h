@@ -39,7 +39,7 @@ private:
 	void createRoom(cocos2d::Ref* pSender);
 
 	//加入房间
-	void joinRoom(cocos2d::Ref* pSender);
+	void joinRoom(cocos2d::Ref* pSender);	
 
 private:
 	cocos2d::Size visibleSize;                              //窗口大小
@@ -47,6 +47,9 @@ private:
 
 	cocos2d::LayerColor* popupMask = nullptr;               //遮罩层
 	cocos2d::ui::Layout* popup = nullptr;                   //弹窗
+	cocos2d::Label* popupContent = nullptr;					//弹窗内容
+	cocos2d::Label* curRoomId = nullptr;					//当前房间号
+	cocos2d::ui::TextField* roomIdInput = nullptr;			//房间号输入框
 };
 
 #endif // !__StartScene_H__
