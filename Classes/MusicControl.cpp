@@ -1,16 +1,16 @@
-#include "MusicControl.h"
+ï»¿#include "MusicControl.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
-//±³¾°ÒôÀÖÄ¬ÈÏ²¥·Å
+//èƒŒæ™¯éŸ³ä¹é»˜è®¤æ’­æ”¾
 bool MusicControl::isBgmOn = true;
 
 MusicControl* MusicControl::create() {
     auto instance = new MusicControl();
     if (instance && instance->init()) {
-        instance->autorelease();        //×Ô¶¯ÊÍ·Åinstance
+        instance->autorelease();        //è‡ªåŠ¨é‡Šæ”¾instance
         return instance;
     }
     CC_SAFE_DELETE(instance);
@@ -21,7 +21,7 @@ bool MusicControl::init() {
     if (!Node::init())
         return false;
 
-    //Ô¤¼ÓÔØ±³¾°ÒôÀÖ¡¢¶¯»­µã»÷ÒôĞ§¡¢Âä×ÓºÍÊäÓ®ÒôĞ§
+    //é¢„åŠ è½½èƒŒæ™¯éŸ³ä¹ã€åŠ¨ç”»ç‚¹å‡»éŸ³æ•ˆã€è½å­å’Œè¾“èµ¢éŸ³æ•ˆ
     auto audio = SimpleAudioEngine::getInstance();
     audio->preloadBackgroundMusic("music/bgm.mp3");
     audio->preloadEffect("music/victory.mp3");
@@ -34,41 +34,41 @@ bool MusicControl::init() {
 
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    //Ìí¼Ó±³¾°ÒôÀÖ¿ØÖÆ°´Å¥
+    //æ·»åŠ èƒŒæ™¯éŸ³ä¹æ§åˆ¶æŒ‰é’®
     bgmBtn = MenuItemImage::create("bgm_btn.png", "bgm_btn.png", CC_CALLBACK_1(MusicControl::toggleBGM, this));
     if (bgmBtn) {
-        bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);  //ÉèÖÃ´óĞ¡Îª44px * 44px
+        bgmBtn->setScale(44.0f / bgmBtn->getContentSize().width, 44.0f / bgmBtn->getContentSize().height);  //è®¾ç½®å¤§å°ä¸º44px * 44px
         bgmBtn->setPosition(Vec2::ZERO);        
     }
     else
         cocos2d::log("'music/bgm.mp3'");
     
-    //´´½¨²Ëµ¥²¢Ìí¼Ó°´Å¥
+    //åˆ›å»ºèœå•å¹¶æ·»åŠ æŒ‰é’®
     auto bgmMenu = Menu::create(bgmBtn, nullptr);                   
     if (bgmMenu) {
-        bgmMenu->setPosition(origin.x + 22.0f, origin.y + 22.0f);   //Î»ÖÃ·ÅÔÚ×óÏÂ½Ç        
+        bgmMenu->setPosition(origin.x + 22.0f, origin.y + 22.0f);   //ä½ç½®æ”¾åœ¨å·¦ä¸‹è§’        
         this->addChild(bgmMenu, 0);
     }
     else
         cocos2d::log("'bgmBtn'");
 
-    //Ìí¼Ó±³¾°ÒôÀÖ°´Å¥ÌáÊ¾
-    auto bgmBtnTip = Label::create(u8"<-µã»÷¿ª¹Ø±³¾°ÒôÀÖ", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //æ·»åŠ èƒŒæ™¯éŸ³ä¹æŒ‰é’®æç¤º
+    auto bgmBtnTip = Label::create(u8"<-ç‚¹å‡»å¼€å…³èƒŒæ™¯éŸ³ä¹", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (bgmBtnTip) {
-        bgmBtnTip->setPosition(origin.x + 160.0f, origin.y + 22.0f);                //·ÅÔÚ±³¾°ÒôÀÖ°´Å¥ÓÒ±ß
+        bgmBtnTip->setPosition(origin.x + 160.0f, origin.y + 22.0f);                //æ”¾åœ¨èƒŒæ™¯éŸ³ä¹æŒ‰é’®å³è¾¹
         bgmBtnTip->setTextColor(Color4B::BLACK);
         this->addChild(bgmBtnTip, 0);
     }
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //²¥·Å±³¾°ÒôÀÖ
+    SimpleAudioEngine::getInstance()->playBackgroundMusic("music/bgm.mp3", true);   //æ’­æ”¾èƒŒæ™¯éŸ³ä¹
     
     return true;
 }
 
 void MusicControl::toggleBGM(Ref* pSender) {
-    //Èç¹û±³¾°ÒôÀÖÕıÔÚ²¥·Å£¬ÔòÍ£Ö¹Ğı×ª°´Å¥²¢ÔİÍ£±³¾°ÒôÀÖ£»·ñÔò£¬¿ªÊ¼Ğı×ª°´Å¥²¢»Ö¸´±³¾°ÒôÀÖ
+    //å¦‚æœèƒŒæ™¯éŸ³ä¹æ­£åœ¨æ’­æ”¾ï¼Œåˆ™åœæ­¢æ—‹è½¬æŒ‰é’®å¹¶æš‚åœèƒŒæ™¯éŸ³ä¹ï¼›å¦åˆ™ï¼Œå¼€å§‹æ—‹è½¬æŒ‰é’®å¹¶æ¢å¤èƒŒæ™¯éŸ³ä¹
     if (isBgmOn) {
         stopRotate();
         SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
@@ -82,14 +82,14 @@ void MusicControl::toggleBGM(Ref* pSender) {
 }
 
 void MusicControl::startRotate() {
-    //´´½¨Ğı×ª¶¯×÷£¨3Ãë×ªÒ»È¦£©²¢ÖØ¸´Ö´ĞĞ
+    //åˆ›å»ºæ—‹è½¬åŠ¨ä½œï¼ˆ3ç§’è½¬ä¸€åœˆï¼‰å¹¶é‡å¤æ‰§è¡Œ
     auto rotate = RotateBy::create(3.0f, 360.0f);
     rotateAction = RepeatForever::create(rotate);
     bgmBtn->runAction(rotateAction);
 }
 
 void MusicControl::stopRotate() {
-    //Í£Ö¹Ğı×ª°´Å¥µÄĞı×ª¶¯×÷
+    //åœæ­¢æ—‹è½¬æŒ‰é’®çš„æ—‹è½¬åŠ¨ä½œ
     if (rotateAction) {
         bgmBtn->stopAction(rotateAction);
         rotateAction = nullptr;
@@ -99,6 +99,6 @@ void MusicControl::stopRotate() {
 void MusicControl::onEnter(){
     Node::onEnter();
 
-    isBgmOn = !isBgmOn;     //ÏÈ×ª±ä×´Ì¬£¬ÒòÎª½ÓÏÂÀ´»¹Òª×ª±äÒ»´Î£¬Ïàµ±ÓÚ²»±ä
-    toggleBGM(bgmBtn);      //µ÷ÓÃ´Ëº¯ÊıÓÃÀ´¸üĞÂ±³¾°ÒôÀÖ×´Ì¬
+    isBgmOn = !isBgmOn;     //å…ˆè½¬å˜çŠ¶æ€ï¼Œå› ä¸ºæ¥ä¸‹æ¥è¿˜è¦è½¬å˜ä¸€æ¬¡ï¼Œç›¸å½“äºä¸å˜
+    toggleBGM(bgmBtn);      //è°ƒç”¨æ­¤å‡½æ•°ç”¨æ¥æ›´æ–°èƒŒæ™¯éŸ³ä¹çŠ¶æ€
 }

@@ -1,4 +1,4 @@
-#ifndef __BOARD_UI_H__
+ï»¿#ifndef __BOARD_UI_H__
 #define __BOARD_UI_H__
 
 #include "cocos2d.h"
@@ -9,67 +9,67 @@ public:
 
 	CREATE_FUNC(BoardUI);
 
-	//ÉèÖÃ·µ»Ø°´Å¥µã»÷»Øµ÷£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®è¿”å›æŒ‰é’®ç‚¹å‡»å›è°ƒï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setOnReturnCallBack(std::function<void()> callback);
 
-	//ÉèÖÃ¸Ä±äÒôĞ§°´Å¥µã»÷»Øµ÷£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®æ”¹å˜éŸ³æ•ˆæŒ‰é’®ç‚¹å‡»å›è°ƒï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setOnToggleEffectCallBack(std::function<void()> callback);
 
-	//ÉèÖÃ´¥ÃşÊÂ¼şµã»÷»Øµ÷£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®è§¦æ‘¸äº‹ä»¶ç‚¹å‡»å›è°ƒï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setOnTouchBeganCallBack(std::function<bool(cocos2d::Touch*, cocos2d::Event*)> callback);
 
-	//ÉèÖÃ¿ªÊ¼ÓÎÏ·°´Å¥µã»÷»Øµ÷£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®å¼€å§‹æ¸¸æˆæŒ‰é’®ç‚¹å‡»å›è°ƒï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setOnStartGameCallBack(std::function<void(cocos2d::Ref*)> callback);
 
-	//ÉèÖÃÇåÀíÆåÅÌ×´Ì¬»Øµ÷£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®æ¸…ç†æ£‹ç›˜çŠ¶æ€å›è°ƒï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setOnCleanBoardCallBack(std::function<void(cocos2d::Ref*)> callback);
 
-	//»ñÈ¡²¿·Öui¿Ø¼şÖ¸Õë£¬ÓÃÓÚÂß¼­´¦Àí
+	//è·å–éƒ¨åˆ†uiæ§ä»¶æŒ‡é’ˆï¼Œç”¨äºé€»è¾‘å¤„ç†
 	void getBoardUImember(std::vector<cocos2d::Sprite*>& cs, cocos2d::Sprite*& sH, cocos2d::MenuItemImage*& sGB, cocos2d::Label*& t, 
 		cocos2d::Sprite*& bRA, cocos2d::Sprite*& wRA, cocos2d::Label*& gOT, cocos2d::Sprite*& vA, cocos2d::Sprite*& dA, 
 		cocos2d::MenuItemImage*& gOB, cocos2d::MenuItemImage*& gODB) const;
 
-	//»ñÈ¡½áËã½çÃæui¿Ø¼şµÄ¼¯ºÏ£¬Íâ²¿³¡¾°Ö±½Ó½«ÆäaddChild£¬·½±ãÉèÖÃÔÚÉÏ²ã£¬±ÜÃâÆäËûuiÕÚµ²
+	//è·å–ç»“ç®—ç•Œé¢uiæ§ä»¶çš„é›†åˆï¼Œå¤–éƒ¨åœºæ™¯ç›´æ¥å°†å…¶addChildï¼Œæ–¹ä¾¿è®¾ç½®åœ¨ä¸Šå±‚ï¼Œé¿å…å…¶ä»–uié®æŒ¡
 	cocos2d::Node* getGameOverUI() const;
 
 private:
-	//·µ»Ø°´Å¥»Øµ÷
+	//è¿”å›æŒ‰é’®å›è°ƒ
 	void onReturnBtn(cocos2d::Ref* pSender);
 	std::function<void()> _onReturn = nullptr;
 
-	//¸Ä±äÒôĞ§¿ª¹Ø×´Ì¬
+	//æ”¹å˜éŸ³æ•ˆå¼€å…³çŠ¶æ€
 	void onToggleEffectBtn(cocos2d::Ref* pSender);
 	std::function<void()> _onToggleEffect = nullptr;
 
-	//´¥ÃşÊÂ¼ş»Øµ÷
+	//è§¦æ‘¸äº‹ä»¶å›è°ƒ
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	std::function<bool(cocos2d::Touch*, cocos2d::Event*)> _onTouchBegan = nullptr;
 
-	//¿ªÊ¼ÓÎÏ·»Øµ÷
+	//å¼€å§‹æ¸¸æˆå›è°ƒ
 	void onStartGameBtn(cocos2d::Ref* pSender);
 	std::function<void(cocos2d::Ref*)> _onStartGame = nullptr;
 
-	//ÇåÀíÆåÅÌ×´Ì¬»Øµ÷
+	//æ¸…ç†æ£‹ç›˜çŠ¶æ€å›è°ƒ
 	void onCleanBoard(cocos2d::Ref* pSender);
 	std::function<void(cocos2d::Ref*)> _onCleanBoard = nullptr;
 
 private:
-	std::vector<cocos2d::Sprite*> chessSprites;             //Æå×ÓÊı×é
-	cocos2d::Sprite* selectedHighlight = nullptr;           //Ñ¡ÖĞ¸ßÁÁĞ§¹û
+	std::vector<cocos2d::Sprite*> chessSprites;             //æ£‹å­æ•°ç»„
+	cocos2d::Sprite* selectedHighlight = nullptr;           //é€‰ä¸­é«˜äº®æ•ˆæœ
 
-	cocos2d::MenuItemImage* startGameBtn = nullptr;			//¿ªÊ¼ÓÎÏ·°´Å¥
+	cocos2d::MenuItemImage* startGameBtn = nullptr;			//å¼€å§‹æ¸¸æˆæŒ‰é’®
 
-	cocos2d::Label* timer = nullptr;                        //¼ÆÊ±Æ÷ÏÔÊ¾±êÇ©
-	cocos2d::Sprite* blackRoundArrow = nullptr;             //Ö¸ÏòºÚ·½µÄ¼ıÍ·
-	cocos2d::Sprite* whiteRoundArrow = nullptr;             //Ö¸Ïò°×·½µÄ¼ıÍ·
+	cocos2d::Label* timer = nullptr;                        //è®¡æ—¶å™¨æ˜¾ç¤ºæ ‡ç­¾
+	cocos2d::Sprite* blackRoundArrow = nullptr;             //æŒ‡å‘é»‘æ–¹çš„ç®­å¤´
+	cocos2d::Sprite* whiteRoundArrow = nullptr;             //æŒ‡å‘ç™½æ–¹çš„ç®­å¤´
 
-	cocos2d::Label* gameOverTip = nullptr;                  //ÓÎÏ·½áËãÌáÊ¾
-	cocos2d::Sprite* victoryAnimation = nullptr;            //»ñÊ¤¶¯»­Õ¹Ê¾
-	cocos2d::Sprite* drawAnimation = nullptr;				//Æ½¾Ö½áËã¶¯»­
-	cocos2d::MenuItemImage* gameOverBtn = nullptr;          //ÓÎÏ·½áÊø°´Å¥
-	cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;		//Æ½¾Ö½áÊø°´Å¥
+	cocos2d::Label* gameOverTip = nullptr;                  //æ¸¸æˆç»“ç®—æç¤º
+	cocos2d::Sprite* victoryAnimation = nullptr;            //è·èƒœåŠ¨ç”»å±•ç¤º
+	cocos2d::Sprite* drawAnimation = nullptr;				//å¹³å±€ç»“ç®—åŠ¨ç”»
+	cocos2d::MenuItemImage* gameOverBtn = nullptr;          //æ¸¸æˆç»“æŸæŒ‰é’®
+	cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;		//å¹³å±€ç»“æŸæŒ‰é’®
 
-	cocos2d::Node* gameOverUI = nullptr;					//ÓÃÀ´´æ´¢½áËã½çÃæui¿Ø¼şµÄ½Úµã
+	cocos2d::Node* gameOverUI = nullptr;					//ç”¨æ¥å­˜å‚¨ç»“ç®—ç•Œé¢uiæ§ä»¶çš„èŠ‚ç‚¹
 };
 
 #endif // !__BOARD_UI_H__

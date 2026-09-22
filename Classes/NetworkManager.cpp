@@ -1,4 +1,4 @@
-#include "NetworkManager.h"
+ï»¿#include "NetworkManager.h"
 #include "json/rapidjson.h"
 #include "json/document.h"
 #include "json/stringbuffer.h"
@@ -8,12 +8,12 @@ USING_NS_CC;
 using namespace cocos2d::network;
 
 NetworkManager* NetworkManager::getInstance() {
-	static NetworkManager instance;		//¾²Ì¬¾Ö²¿±äÁ¿£¬±£Ö¤Ö»´´½¨Ò»´Î
-	return &instance;					//·µ»ØÎ¨Ò»ÊµÀı
+	static NetworkManager instance;		//é™æ€å±€éƒ¨å˜é‡ï¼Œä¿è¯åªåˆ›å»ºä¸€æ¬¡
+	return &instance;					//è¿”å›å”¯ä¸€å®ä¾‹
 }
 
 void NetworkManager::runOnMainThread(std::function<void()> func) {
-	//Èç¹ûµ÷¶ÈÆ÷´æÔÚ£¬ÔòÔÚCocosÏß³ÌÖĞÖ´ĞĞfunc£¬·ñÔòÖ±½ÓÖ´ĞĞfunc£¬ÕâÊ±Ö»ÓĞÖ÷Ïß³Ì
+	//å¦‚æœè°ƒåº¦å™¨å­˜åœ¨ï¼Œåˆ™åœ¨Cocosçº¿ç¨‹ä¸­æ‰§è¡Œfuncï¼Œå¦åˆ™ç›´æ¥æ‰§è¡Œfuncï¼Œè¿™æ—¶åªæœ‰ä¸»çº¿ç¨‹
 	if (Director::getInstance()->getScheduler())
 		Director::getInstance()->getScheduler()->performFunctionInCocosThread(func);
 	else
@@ -21,8 +21,7 @@ void NetworkManager::runOnMainThread(std::function<void()> func) {
 }
 
 void NetworkManager::fireError(const std::string& msg) {
-	CCLOG("[NetworkManager] Error: %s", msg.c_str());
-	auto cb = _onError;		//ÍøÂçÏß³ÌÖĞÏÈ¿½±´»Øµ÷£¬±ÜÃâ¿çÏß³Ì¾ºÕù
+	auto cb = _onError;		//ç½‘ç»œçº¿ç¨‹ä¸­å…ˆæ‹·è´å›è°ƒï¼Œé¿å…è·¨çº¿ç¨‹ç«äº‰
 	runOnMainThread([=]() {
 		if (cb)
 			cb(msg);
@@ -33,10 +32,10 @@ void NetworkManager::createRoom(std::function<void(bool, const std::string&)> ca
 {
 	_createRoomCallBack = callback;
 
-	//´´½¨HttpRequest¶ÔÏó£¬std::nothrow±íÊ¾Èç¹ûÄÚ´æ²»×ãÔò·µ»Ønullptr¶ø²»ÊÇÅ×³öÒì³£
+	//åˆ›å»ºHttpRequestå¯¹è±¡ï¼Œstd::nothrowè¡¨ç¤ºå¦‚æœå†…å­˜ä¸è¶³åˆ™è¿”å›nullptrè€Œä¸æ˜¯æŠ›å‡ºå¼‚å¸¸
 	HttpRequest* request = new (std::nothrow) HttpRequest();
 	if (!request) {
-		fireError(u8"ÍøÂçÁ¬½Ó´íÎó£¬ÇëÉÔºóÔÙÊÔ...");
+		fireError(u8"ç½‘ç»œè¿æ¥é”™è¯¯ï¼Œè¯·ç¨åå†è¯•...");
 		return;
 	}
 
@@ -54,26 +53,26 @@ void NetworkManager::onCreateRoomResponse(HttpClient* client, HttpResponse* resp
 	bool success = false;
 
 	if (response && response->isSucceed()) {
-		//»ñÈ¡ÏìÓ¦Êı¾İ²¢×ª»»Îª×Ö·û´®
+		//è·å–å“åº”æ•°æ®å¹¶è½¬æ¢ä¸ºå­—ç¬¦ä¸²
 		std::vector<char>* data = response->getResponseData();
 		std::string body(data->begin(), data->end());	
-		//½«ÏìÓ¦Êı¾İ½âÎöÎªJSON¸ñÊ½
+		//å°†å“åº”æ•°æ®è§£æä¸ºJSONæ ¼å¼
 		rapidjson::Document doc;
 		doc.Parse(body.c_str());
 		CCLOG("[NetworkManager] CreateRoom response: %s", body.c_str());
 
-		if (!doc.HasParseError() && doc.HasMember("roomId") && doc.HasMember("status"))	//¼ì²éÊÇ·ñ½âÎö³É¹¦²¢ÇÒ°üº¬roomIdºÍstatus×Ö¶Î
-			if (std::string(doc["status"].GetString()) == "waiting") {					//Èç¹û×´Ì¬Îªwaiting£¬±íÊ¾·¿¼ä´´½¨³É¹¦
+		if (!doc.HasParseError() && doc.HasMember("roomId") && doc.HasMember("status"))	//æ£€æŸ¥æ˜¯å¦è§£ææˆåŠŸå¹¶ä¸”åŒ…å«roomIdå’Œstatuså­—æ®µ
+			if (std::string(doc["status"].GetString()) == "waiting") {					//å¦‚æœçŠ¶æ€ä¸ºwaitingï¼Œè¡¨ç¤ºæˆ¿é—´åˆ›å»ºæˆåŠŸ
 				roomId = doc["roomId"].GetString();
 				success = true;
-				connectWebSocket(roomId);												//Á¬½ÓWebSocket·şÎñÆ÷
+				connectWebSocket(roomId);												//è¿æ¥WebSocketæœåŠ¡å™¨
 			}
 	}
 	else
 		CCLOG("[NetworkManager] CreateRoom response is not successed");
 
-	auto cb = _createRoomCallBack;		//ÍøÂçÏß³ÌÖĞÏÈ¿½±´»Øµ÷£¬±ÜÃâ¿çÏß³Ì¾ºÕù
-	_createRoomCallBack = nullptr;		//ÖÃ¿Õ£¬±£Ö¤»Øµ÷Ö»´¥·¢Ò»´Î
+	auto cb = _createRoomCallBack;		//ç½‘ç»œçº¿ç¨‹ä¸­å…ˆæ‹·è´å›è°ƒï¼Œé¿å…è·¨çº¿ç¨‹ç«äº‰
+	_createRoomCallBack = nullptr;		//ç½®ç©ºï¼Œä¿è¯å›è°ƒåªè§¦å‘ä¸€æ¬¡
 	runOnMainThread([cb, success, roomId]() {
 		if (cb)
 			cb(success, roomId);
@@ -85,23 +84,23 @@ void NetworkManager::joinRoom(const std::string& roomId, std::function<void(cons
 
 	HttpRequest* request = new (std::nothrow) HttpRequest();
 	if (!request) {
-		fireError(u8"ÍøÂçÁ¬½Ó´íÎó£¬ÇëÉÔºóÔÙÊÔ...");
+		fireError(u8"ç½‘ç»œè¿æ¥é”™è¯¯ï¼Œè¯·ç¨åå†è¯•...");
 		return;
 	}	
 
 	request->setUrl("http://" + _serverHost + ":" + _serverPort + "/join_room");
 	request->setRequestType(HttpRequest::Type::POST);
-	request->setHeaders({ "Content-Type: application/json" });			//ÉèÖÃÇëÇóÍ·ÎªJSON¸ñÊ½
+	request->setHeaders({ "Content-Type: application/json" });			//è®¾ç½®è¯·æ±‚å¤´ä¸ºJSONæ ¼å¼
 
-	rapidjson::Document doc;											//´´½¨Ò»¸öJSONÎÄµµ¶ÔÏó
-	doc.SetObject();													//ÉèÖÃÎÄµµÀàĞÍÎª¶ÔÏó
-	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();	//»ñÈ¡·ÖÅäÆ÷£¬ÓÃÓÚ·ÖÅäÄÚ´æ
-	doc.AddMember("roomId", rapidjson::Value(roomId.c_str(), allocator).Move(), allocator);	//Ìí¼ÓroomId×Ö¶Îµ½JSON¶ÔÏóÖĞ
+	rapidjson::Document doc;											//åˆ›å»ºä¸€ä¸ªJSONæ–‡æ¡£å¯¹è±¡
+	doc.SetObject();													//è®¾ç½®æ–‡æ¡£ç±»å‹ä¸ºå¯¹è±¡
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();	//è·å–åˆ†é…å™¨ï¼Œç”¨äºåˆ†é…å†…å­˜
+	doc.AddMember("roomId", rapidjson::Value(roomId.c_str(), allocator).Move(), allocator);	//æ·»åŠ roomIdå­—æ®µåˆ°JSONå¯¹è±¡ä¸­
 
-	rapidjson::StringBuffer buffer;										//´´½¨Ò»¸ö×Ö·û´®»º³åÇø£¬ÓÃÓÚ´æ´¢JSON×Ö·û´®
-	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);			//´´½¨Ò»¸öJSONĞ´ÈëÆ÷£¬½«JSON¶ÔÏóĞ´Èë»º³åÇø
-	doc.Accept(writer);													//½«JSON¶ÔÏóĞ´Èë»º³åÇø
-	std::string body = buffer.GetString();								//»ñÈ¡JSON×Ö·û´®
+	rapidjson::StringBuffer buffer;										//åˆ›å»ºä¸€ä¸ªå­—ç¬¦ä¸²ç¼“å†²åŒºï¼Œç”¨äºå­˜å‚¨JSONå­—ç¬¦ä¸²
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);			//åˆ›å»ºä¸€ä¸ªJSONå†™å…¥å™¨ï¼Œå°†JSONå¯¹è±¡å†™å…¥ç¼“å†²åŒº
+	doc.Accept(writer);													//å°†JSONå¯¹è±¡å†™å…¥ç¼“å†²åŒº
+	std::string body = buffer.GetString();								//è·å–JSONå­—ç¬¦ä¸²
 
 	request->setRequestData(body.c_str(), body.size());
 	request->setResponseCallback(CC_CALLBACK_2(NetworkManager::onJoinRoomResponse, this));
@@ -113,7 +112,7 @@ void NetworkManager::joinRoom(const std::string& roomId, std::function<void(cons
 void NetworkManager::onJoinRoomResponse(HttpClient* client, HttpResponse* response)
 {	
 	bool success = false;
-	std::string msg = u8"Î´Öª´íÎó";
+	std::string msg = u8"æœªçŸ¥é”™è¯¯";
 
 	if (response && response->isSucceed()) {
 		auto data = response->getResponseData();
@@ -124,10 +123,10 @@ void NetworkManager::onJoinRoomResponse(HttpClient* client, HttpResponse* respon
 
 		if (!doc.HasParseError() && doc.HasMember("status")) {
 			if (std::string(doc["status"].GetString()) == "error" && doc.HasMember("msg"))
-				msg = doc["msg"].GetString();					//Èç¹û¼ÓÈë·¿¼äÊ§°Ü£¬»ñÈ¡´íÎóÏûÏ¢
+				msg = doc["msg"].GetString();					//å¦‚æœåŠ å…¥æˆ¿é—´å¤±è´¥ï¼Œè·å–é”™è¯¯æ¶ˆæ¯
 			else if (std::string(doc["status"].GetString()) == "preparing" && doc.HasMember("roomId")) {
 				success = true;
-				connectWebSocket(doc["roomId"].GetString());	//Èç¹û¼ÓÈë·¿¼ä³É¹¦£¬Á¬½ÓWebSocket·şÎñÆ÷
+				connectWebSocket(doc["roomId"].GetString());	//å¦‚æœåŠ å…¥æˆ¿é—´æˆåŠŸï¼Œè¿æ¥WebSocketæœåŠ¡å™¨
 			}
 		}
 	}
@@ -137,7 +136,7 @@ void NetworkManager::onJoinRoomResponse(HttpClient* client, HttpResponse* respon
 	auto cb = _joinRoomCallBack;
 	_joinRoomCallBack = nullptr;
 	if(success)
-		msg = u8"·¿¼ä¼ÓÈë³É¹¦";
+		msg = u8"æˆ¿é—´åŠ å…¥æˆåŠŸ";
 	runOnMainThread([cb, msg]() {
 		if (cb)
 			cb(msg);
@@ -147,54 +146,109 @@ void NetworkManager::onJoinRoomResponse(HttpClient* client, HttpResponse* respon
 void NetworkManager::connectWebSocket(const std::string& roomId)
 {
 	if (_ws) {
-		CCLOG(u8"[NetworkManager] WebSocket ÒÑ´æÔÚ£¬ÏÈ¶Ï¿ª");
-		disconnect();			//¶Ï¿ª¾ÉµÄsocketÁ¬½Ó£¬Á¬½ÓĞÂµÄ
+		CCLOG(u8"[NetworkManager] WebSocket å·²å­˜åœ¨ï¼Œå…ˆæ–­å¼€");
+		disconnect();			//æ–­å¼€æ—§çš„socketè¿æ¥ï¼Œè¿æ¥æ–°çš„
 	}
 
-	_currentRoomId = roomId;	//ÉèÖÃµ±Ç°·¿¼äºÅ
+	_currentRoomId = roomId;	//è®¾ç½®å½“å‰æˆ¿é—´å·
 
 	_ws = new (std::nothrow) WebSocket();
 	if (!_ws) {
-		fireError(u8"ÍøÂçÁ¬½ÓÊ§°Ü£¬ÇëÉÔºóÔÙÊÔ...");
+		fireError(u8"ç½‘ç»œè¿æ¥å¤±è´¥ï¼Œè¯·ç¨åå†è¯•...");
 		return;
 	}
 
-	//ÉèÖÃWebSocketµÄ»Øµ÷º¯ÊıÎªµ±Ç°¶ÔÏó£¬²¢Á¬½Óµ½·şÎñÆ÷µÄWebSocketµØÖ·£¬µ±WebSocketÓĞÊÂ¼ş·¢ÉúÊ±£¬»áµ÷ÓÃµ±Ç°¶ÔÏóµÄ»Øµ÷º¯Êı
+	//è®¾ç½®WebSocketçš„å›è°ƒå‡½æ•°ä¸ºå½“å‰å¯¹è±¡ï¼Œå¹¶è¿æ¥åˆ°æœåŠ¡å™¨çš„WebSocketåœ°å€ï¼Œå½“WebSocketæœ‰äº‹ä»¶å‘ç”Ÿæ—¶ï¼Œä¼šè°ƒç”¨å½“å‰å¯¹è±¡çš„å›è°ƒå‡½æ•°
 	_ws->init(*this, "ws://" + _serverHost + ":" + _serverPort + "/ws");
 }
 
 void NetworkManager::disconnect() {	
 	if(_ws)
-		_ws->close();		//¹Ø±ÕWebSocketÁ¬½Ó
+		_ws->close();		//å…³é—­WebSocketè¿æ¥
 	
-	//ÖØÖÃÁ¬½Ó×´Ì¬ºÍ·¿¼äºÅ
-	_isConnected = false;
+	//é‡ç½®æˆ¿é—´å·
 	_currentRoomId = "";
 }
 
 void NetworkManager::onOpen(WebSocket* ws)
 {
-	CCLOG(u8"WebSocket ÒÑÁ¬½Ó");
-	_isConnected = true;
+	CCLOG(u8"WebSocket å·²è¿æ¥");
 
-	ws->send("join:" + _currentRoomId);		//·¢ËÍ¼ÓÈë·¿¼äµÄÏûÏ¢£¬¸ñÊ½Îª"join:·¿¼äºÅ"
+	ws->send("join:" + _currentRoomId);		//å‘é€åŠ å…¥æˆ¿é—´çš„æ¶ˆæ¯ï¼Œæ ¼å¼ä¸º"join:æˆ¿é—´å·"
 }
 
 void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 {
 	std::string msg(data.bytes, data.len);
-	CCLOG(u8"[NetworkManager] ÊÕµ½ÏûÏ¢: %s", msg.c_str());
+	CCLOG(u8"[NetworkManager] æ”¶åˆ°æ¶ˆæ¯: %s", msg.c_str());
 
-	//ÊÕµ½·şÎñÆ÷success£¬¼´Æ¥Åä³É¹¦µÄÏûÏ¢£¬µ÷ÓÃ_onStart»Øµ÷º¯Êı
-	if (msg == "success") {		
-		runOnMainThread([=]() {
-			if (_onStart)
-				_onStart();
+	//æ”¶åˆ°æœåŠ¡å™¨successï¼Œå³åŒ¹é…æˆåŠŸçš„æ¶ˆæ¯ï¼Œè°ƒç”¨_onEnterå›è°ƒå‡½æ•°
+	if (msg == "success") {
+		auto cb = _onEnterScene;
+		runOnMainThread([cb]() {
+			if (cb)
+				cb();
 		});
 	}
-	//moveÊÇÁíÒ»¸ö¿Í»§¶ËµÄÂä×ÓÏûÏ¢£¬¸ñÊ½Îª"move:ĞĞºÅ,ÁĞºÅ"£¬µ÷ÓÃ_onOpponentMove»Øµ÷º¯Êı
+	//æœåŠ¡å™¨æŒ‡æ´¾è§’è‰²ï¼Œé»‘æ–¹æˆ–ç™½æ–¹ï¼Œç„¶åæ¯å›åˆè½®æ¢
+	else if (msg.substr(0, 5) == "role:") {
+		bool curRole;
+		if (msg.substr(5) == "black")
+			curRole = true;					//trueä»£è¡¨é»‘æ–¹
+		else if (msg.substr(5) == "white")
+			curRole = false;
+		auto cb = _onCurRole;
+		runOnMainThread([cb, curRole]() {
+			if (cb)
+				cb(curRole);
+		});
+	}
+	//åŒæ–¹éƒ½å·²å‡†å¤‡å¥½ï¼Œå¼€å§‹æ¸¸æˆ
+	else if (msg == "status:playing") {		
+		auto cb = _onStartGame;
+		runOnMainThread([cb]() {
+			if (cb)
+				cb(true);
+		});
+	}
+	//å›åˆæ—¶é—´åœ¨æœåŠ¡å™¨æ›´æ–°ï¼Œå†åˆ†å‘ç»™ä¸¤ä¸ªå®¢æˆ·ç«¯
+	else if (msg.substr(0, 7) == "update:") {
+		float surplusTime = std::stof(msg.substr(7));
+		auto cb = _onUpdateTime;
+		runOnMainThread([cb, surplusTime]() {
+			if (cb)
+				cb(surplusTime);
+		});
+	}
+	//moveæ˜¯å¦ä¸€ä¸ªå®¢æˆ·ç«¯çš„è½å­æ¶ˆæ¯ï¼Œæ ¼å¼ä¸º"move:è¡Œå·,åˆ—å·,æ£‹å­åå­—"ï¼Œè°ƒç”¨_onOpponentMoveå›è°ƒå‡½æ•°
 	else if (msg.substr(0, 5) == "move:") {
-
+		auto body = msg.substr(5);
+		auto p1 = body.find(',');			//ç¬¬ä¸€ä¸ªâ€˜ï¼Œâ€™çš„ä½ç½®
+		auto p2 = body.find(',', p1 + 1);	//ç¬¬äºŒä¸ªâ€˜ï¼Œâ€™çš„ä½ç½®
+		if (p1 == std::string::npos || p2 == std::string::npos) {
+			CCLOG(u8"å¯¹æ–¹è½å­ä¿¡æ¯æ ¼å¼ä¸æ­£ç¡®");
+			return;
+		}
+		//ç”±ä¸¤ä¸ªé€—å·åˆ†éš”3éƒ¨åˆ†ï¼Œåˆ†åˆ«è¿›è¡Œå¤„ç†ï¼Œè·å–å¯¹åº”ä¿¡æ¯
+		int row = std::stoi(body.substr(0, p1));
+		int col = std::stoi(body.substr(p1 + 1, p2 - p1 - 1));
+		auto chessName = body.substr(p2 + 1);
+		auto cb = _onOpponentMove;
+		runOnMainThread([cb, row, col, chessName]() {
+			if (cb)
+				cb(row, col, chessName);
+		});
+	}
+	//æœ‰ä¸€æ–¹ç¦»å¼€æˆ¿é—´ï¼Œå¦ä¸€æ–¹ä¹Ÿåº”è¯¥ç¦»å¼€æˆ¿é—´
+	else if (msg == "notice:opponentQuit") {
+		auto cb = _onQuitRoom;
+		auto tip = _onError;
+		runOnMainThread([cb, tip]() {
+			if (cb)
+				cb();
+			if (tip)
+				tip(u8"å¯¹æ–¹å·²é€€å‡ºæˆ¿é—´ï¼");
+		});
 	}
 }
 
@@ -203,19 +257,18 @@ void NetworkManager::onClose(WebSocket* ws)
 	if (_ws == ws)			
 		_ws = nullptr;	
 	
-	//ÖØÖÃÁ¬½Ó×´Ì¬ºÍ·¿¼äºÅ
-	_isConnected = false;
+	//é‡ç½®æˆ¿é—´å·
 	_currentRoomId = "";
-	CCLOG(u8"[NetworkManager] ws ÒÑ¶Ï¿ª");
+	CCLOG(u8"[NetworkManager] ws å·²æ–­å¼€");
 }
 
 void NetworkManager::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
 {
-	CCLOG(u8"[NetworkManager] ws ´íÎó: %d", int(error));
-	_isConnected = false;
-	fireError(u8"ÍøÂçÁ¬½Ó´íÎó£¬ÇëÉÔºóÔÙÊÔ...");
+	CCLOG(u8"[NetworkManager] ws é”™è¯¯: %d", int(error));
+	fireError(u8"ç½‘ç»œè¿æ¥é”™è¯¯ï¼Œè¯·ç¨åå†è¯•...");
 }
 
-void NetworkManager::sendMove(int row, int col)
+void NetworkManager::sendMsg(const std::string& msg)
 {
+	_ws->send(msg);
 }

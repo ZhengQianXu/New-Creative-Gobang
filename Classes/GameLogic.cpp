@@ -1,13 +1,15 @@
-#include "GameLogic.h"
+ï»¿#include "GameLogic.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
 
 GameLogic::GameLogic(Scene* s, bool& iEO, bool& iGP, bool& iBR, float& rST, std::string& sCN, Sprite*& sH, Sprite*& sPP, 
-    std::vector<Sprite*>& cS, std::vector<std::vector<Sprite*>>& pP, std::vector<std::vector<Sprite*>>& bC, int& cCS) 
+    std::vector<int>& sRC, std::vector<Sprite*>& cS, std::vector<std::vector<Sprite*>>& pP, std::vector<std::vector<Sprite*>>& bC,
+    int& cCS) 
     : scene(s), isEffectOn(iEO), isGamePlaying(iGP), isBlackRound(iBR), roundSurplusTime(rST), selectedChessName(sCN)
-    , selectedHighlight(sH), selectedPlacePoint(sPP), chessSprites(cS), placePoints(pP), boardChesses(bC), curChessSum(cCS) {}
+    , selectedHighlight(sH), selectedPlacePoint(sPP), selectedRowCol(sRC), chessSprites(cS), placePoints(pP), boardChesses(bC), 
+    curChessSum(cCS) {}
 //{
 //    scene = s;
 //    isEffectOn = iEO;
@@ -25,43 +27,49 @@ GameLogic::GameLogic(Scene* s, bool& iEO, bool& iGP, bool& iBR, float& rST, std:
 
 bool GameLogic::onTouchBegan(Touch* touch, Event* event) {
     if (!isGamePlaying)
-        return false;                                           //Ã»ÔÚÓÎÏ·ÖĞ¾Í²»ÏìÓ¦µã»÷
-    Vec2 touchPos = touch->getLocation();                       //»ñÈ¡µã»÷µÄÎ»ÖÃ
+        return false;                                           //æ²¡åœ¨æ¸¸æˆä¸­å°±ä¸å“åº”ç‚¹å‡»
+
+    Vec2 touchPos = touch->getLocation();                       //è·å–ç‚¹å‡»çš„ä½ç½®
     for (auto& chess : chessSprites)
-        if (chess->getBoundingBox().containsPoint(touchPos)) {  //ÅĞ¶ÏÊÇ·ñÓĞÆå×Ó±»µã»÷ÁË
-            onSelectChess(chess, chess->getName());             //µ÷ÓÃÑ¡ÖĞÆå×Óº¯Êı
-            return true;                                        //Ïû·ÑµôÕâ¸öµã»÷ÊÂ¼ş
+        if (chess->getBoundingBox().containsPoint(touchPos)) {  //åˆ¤æ–­æ˜¯å¦æœ‰æ£‹å­è¢«ç‚¹å‡»äº†
+            onSelectChess(chess, chess->getName());             //è°ƒç”¨é€‰ä¸­æ£‹å­å‡½æ•°
+            return true;                                        //æ¶ˆè´¹æ‰è¿™ä¸ªç‚¹å‡»äº‹ä»¶
         }
-    if (!selectedChessName.empty())                             //Èç¹ûÓĞÆå×Ó±»Ñ¡ÖĞ£¬¶øµã»÷µÄÎ»ÖÃ²»ÊÇÆå×Ó£¬¿ÉÄÜÔÚÆåÅÌÉÏ
-        return onPlaceChess(touchPos);                          //½øĞĞÂä×Ó´¦Àí
+
+    if (!selectedChessName.empty()) {                           //å¦‚æœæœ‰æ£‹å­è¢«é€‰ä¸­ï¼Œè€Œç‚¹å‡»çš„ä½ç½®ä¸æ˜¯æ£‹å­ï¼Œå¯èƒ½åœ¨æ£‹ç›˜ä¸Š
+        if (selectedPlacePoint && selectedPlacePoint->getBoundingBox().containsPoint(touchPos))
+            return onPlaceChess(selectedRowCol);                //å¦‚æœå·²é€‰ä¸­æ”¾ç½®ç‚¹ï¼Œä¸”å†æ¬¡ç‚¹å‡»è¯¥æ”¾ç½®ç‚¹ï¼Œé‚£ä¹ˆæ”¾ç½®æ£‹å­
+        else
+            return onSelectPlacePoint(touchPos);                //ç‚¹å‡»ä½ç½®ä¸æ˜¯å·²é€‰ä¸­çš„æ”¾ç½®ç‚¹ï¼Œè¿›è¡Œæ”¾ç½®ç‚¹é€‰ä¸­å¤„ç†
+    }
     return false;
 }
 
 void GameLogic::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
-    //ºÚ·½»ØºÏÊ±²»¿ÉÑ¡Ôñ°×·½Æå×Ó£¬°×·½»ØºÏÊ±²»¿ÉÑ¡ÔñºÚ·½Æå×Ó
+    //é»‘æ–¹å›åˆæ—¶ä¸å¯é€‰æ‹©ç™½æ–¹æ£‹å­ï¼Œç™½æ–¹å›åˆæ—¶ä¸å¯é€‰æ‹©é»‘æ–¹æ£‹å­
     if ((isBlackRound && chessName.substr(0, 5) == "white") || (!isBlackRound && chessName.substr(0, 5) == "black"))
         return;
 
-    selectedChessName = chessName;                                  //±£´æµ±Ç°±»Ñ¡ÖĞÆå×ÓµÄÃû×Ö
-    selectedHighlight->setPosition(chessSprite->getPosition());     //¸ß¹âºÍÆå×ÓÏàÍ¬Î»ÖÃ
+    selectedChessName = chessName;                                  //ä¿å­˜å½“å‰è¢«é€‰ä¸­æ£‹å­çš„åå­—
+    selectedHighlight->setPosition(chessSprite->getPosition());     //é«˜å…‰å’Œæ£‹å­ç›¸åŒä½ç½®
 }
 
 void GameLogic::onInitBoardPlacePoint() {
-    //ÏÈ³õÊ¼»¯¸÷Êı×é
+    //å…ˆåˆå§‹åŒ–å„æ•°ç»„
     placePoints.assign(19, std::vector<Sprite*>(19, nullptr));
     boardChesses.assign(19, std::vector<Sprite*>(19, nullptr));
     for (size_t row = 0; row < 19; row++)
         for (size_t col = 0; col < 19; col++) {
             auto pp = Sprite::create("placePoint.png");
             if (pp) {
-                //´Ó×óÏÂ½Çµ½ÓÒÉÏ½Ç¼ÆËã¿É·ÅÖÃµãÎ»ÖÃ
+                //ä»å·¦ä¸‹è§’åˆ°å³ä¸Šè§’è®¡ç®—å¯æ”¾ç½®ç‚¹ä½ç½®
                 auto origin = Director::getInstance()->getVisibleOrigin();
                 pp->setPosition(origin.x + 75.0f + col * 50.0f, origin.y + 75.0f + row * 50.0f);
                 pp->setScale(35.0f / pp->getContentSize().width, 35.0f / pp->getContentSize().height);
                 pp->setOpacity(200);
-                pp->setVisible(false);          //È«²¿·ÅÖÃµãÒş²Ø
+                pp->setVisible(false);          //å…¨éƒ¨æ”¾ç½®ç‚¹éšè—
                 scene->addChild(pp, 1);
-                placePoints[row][col] = pp;     //±£´æÔÚÊı×éÀï
+                placePoints[row][col] = pp;     //ä¿å­˜åœ¨æ•°ç»„é‡Œ
             }
             else
                 cocos2d::log("placePoint.png");
@@ -77,49 +85,53 @@ void GameLogic::gameOver(bool isDraw) {
         _gameOver(isDraw);
 }
 
-bool GameLogic::onPlaceChess(Vec2 touchPos) {
+bool GameLogic::onSelectPlacePoint(Vec2 touchPos)
+{
     for (int row = 0; row < 19; row++)
         for (int col = 0; col < 19; col++)
-            //Èç¹ûµ±Ç°µã¿É·ÅÖÃ£¬boardChesses[row][col] == nullptr±íÊ¾¸Ã´¦Î´·ÅÖÃÆå×Ó£¬¼´¿É·ÅÖÃ
+            //å¦‚æœå½“å‰ç‚¹å¯æ”¾ç½®ï¼ŒboardChesses[row][col] == nullptr è¡¨ç¤ºè¯¥å¤„æœªæ”¾ç½®æ£‹å­ï¼Œå³å¯æ”¾ç½®ï¼Œå¹¶ä¸”ç‚¹å‡»çš„æ˜¯å½“å‰ç‚¹
             if (boardChesses[row][col] == nullptr && placePoints[row][col]->getBoundingBox().containsPoint(touchPos)) {
-                if (selectedPlacePoint) {                                           //Èç¹ûÒÑ´æÔÚÑ¡ÖĞ·ÅÖÃµã
-                    if (selectedPlacePoint == placePoints[row][col]) {              //¼ì²éÊÇ·ñÊÇµ±Ç°·ÅÖÃµã
-                        auto chess = Sprite::create("chess/" + selectedChessName + ".png");    //ÓÉÑ¡ÖĞÆå×ÓÃû×ÖÉú³É¶ÔÓ¦Æå×Ó
-                        if (chess) {
-                            chess->setPosition(selectedPlacePoint->getPosition());  //Æå×ÓÎ»ÖÃÓë·ÅÖÃµãÒ»ÖÂ
-                            chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
-                            chess->setName(selectedChessName);
-                            scene->addChild(chess, 1);
-                            boardChesses[row][col] = chess;                         //´æ·ÅÔÚÆåÅÌÆå×ÓÊı×éÀï
-                            selectedPlacePoint->setVisible(false);                  //·ÅÖÃµãÒş²Ø
-                            selectedPlacePoint = nullptr;                           //ÖÃ¿Õ£¬·ÀÖ¹Ò°Ö¸Õë                           
-                            //µ±ÒôĞ§¿ªÆôÊ±£¬¸ù¾İÆå×ÓÀàĞÍÊä³ö¶ÔÓ¦Âä×ÓÒôĞ§
-                            CCLOG("onPlaceChess, %d", isEffectOn);
-                            if (isEffectOn)
-                                SimpleAudioEngine::getInstance()->playEffect(("music/" + selectedChessName.substr(6) + ".mp3").c_str());
-                            curChessSum++;                                          //µ±Ç°ÆåÅÌÉÏÆå×Ó×ÜÊı¼Ó1
-                            if (isVictory(row, col))
-                                gameOver(false);                                    //Èç¹û»ñÊ¤£¬µ÷ÓÃÓÎÏ·½áÊøº¯Êı
-                            roundSurplusTime = 0;                                   //»ØºÏÊ±¼äÇåÁã£¬¼´ÇĞ»»»ØºÏ
-                        }
-                        else
-                            cocos2d::log("chess.png");
-                        return true;
-                    }
-                    else
-                        selectedPlacePoint->setVisible(false);                      //Èç¹ûÑ¡ÖĞµã²»ÊÇµ±Ç°µã£¬½«Ö®Ç°µãÒş²Ø
-                }
-                selectedPlacePoint = placePoints[row][col];                         //¸üĞÂÑ¡ÖĞµã
-                selectedPlacePoint->setVisible(true);                               //ÏÔÊ¾Ñ¡ÖĞµã
+                if (selectedPlacePoint)
+                    selectedPlacePoint->setVisible(false);      //æŠŠä¹‹å‰é€‰ä¸­çš„æ”¾ç½®ç‚¹éšè—
+                selectedPlacePoint = placePoints[row][col];     //æ›´æ–°åˆšæ‰é€‰ä¸­çš„æ”¾ç½®ç‚¹
+                selectedPlacePoint->setVisible(true);           //æ˜¾ç¤ºå‡ºæ¥
+                selectedRowCol = { row, col };                  //å­˜å‚¨é€‰ä¸­çš„è¡Œå’Œåˆ—
                 return true;
-            }
+            }        
+    return false;                                               //ä»£è¡¨ç‚¹å‡»ä¸åœ¨æ£‹ç›˜ä¸Šï¼Œè®©ç‚¹å‡»äº‹ä»¶ç»™ä¸‹ä¸€ä¸ªç›‘å¬å™¨å¤„ç†
+}
+
+bool GameLogic::onPlaceChess(std::vector<int> rowCol) {   
+    int row = rowCol[0], col = rowCol[1];
+    auto chess = Sprite::create("chess/" + selectedChessName + ".png"); //ç”±é€‰ä¸­æ£‹å­åå­—ç”Ÿæˆå¯¹åº”æ£‹å­
+    if (chess) {
+        chess->setPosition(placePoints[row][col]->getPosition());       //æ£‹å­ä½ç½®ä¸æ”¾ç½®ç‚¹ä¸€è‡´
+        chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
+        chess->setName(selectedChessName);
+        scene->addChild(chess, 1);
+        boardChesses[row][col] = chess;                                 //å­˜æ”¾åœ¨æ£‹ç›˜æ£‹å­æ•°ç»„é‡Œ
+        if (selectedPlacePoint) {
+            selectedPlacePoint->setVisible(false);                      //æ”¾ç½®ç‚¹éšè—
+            selectedPlacePoint = nullptr;                               //ç½®ç©ºï¼Œé˜²æ­¢é‡æŒ‡é’ˆ     
+        }
+        //å½“éŸ³æ•ˆå¼€å¯æ—¶ï¼Œæ ¹æ®æ£‹å­ç±»å‹è¾“å‡ºå¯¹åº”è½å­éŸ³æ•ˆ        
+        if (isEffectOn)
+            SimpleAudioEngine::getInstance()->playEffect(("music/" + selectedChessName.substr(6) + ".mp3").c_str());
+        curChessSum++;                                                  //å½“å‰æ£‹ç›˜ä¸Šæ£‹å­æ€»æ•°åŠ 1
+        if (isVictory(row, col))
+            gameOver(false);                                            //å¦‚æœè·èƒœï¼Œè°ƒç”¨æ¸¸æˆç»“æŸå‡½æ•°
+        roundSurplusTime = 0;                                           //å›åˆæ—¶é—´æ¸…é›¶ï¼Œå³åˆ‡æ¢å›åˆ
+        return true;
+    }
+    else
+        cocos2d::log("chess.png");
     return false;
 }
 
 bool GameLogic::isVictory(int row, int col) {
-    std::unordered_map<std::string, int> needChesses;   //ÓÃÀ´ÅĞ¶ÏÁ¬³ÉÏßµÄ5¸öÆå×ÓÊÇ·ñÍ¬ÑÕÉ«²»Í¬×Ö
+    std::unordered_map<std::string, int> needChesses;   //ç”¨æ¥åˆ¤æ–­è¿æˆçº¿çš„5ä¸ªæ£‹å­æ˜¯å¦åŒé¢œè‰²ä¸åŒå­—
     if (isBlackRound) {
-        //±íÊ¾ÔÚºÚ·½»ØºÏÊ±£¬ĞèÒª¡°ÕâË­±ÁµÃ×¡¡±5ÖÖºÚÆå¸÷Ò»¸ö
+        //è¡¨ç¤ºåœ¨é»‘æ–¹å›åˆæ—¶ï¼Œéœ€è¦â€œè¿™è°ç»·å¾—ä½â€5ç§é»‘æ£‹å„ä¸€ä¸ª
         needChesses["black_zhe"] = 1;
         needChesses["black_shui"] = 1;
         needChesses["black_beng"] = 1;
@@ -127,7 +139,7 @@ bool GameLogic::isVictory(int row, int col) {
         needChesses["black_zhu"] = 1;
     }
     else {
-        //±íÊ¾ÔÚ°×·½»ØºÏÊ±£¬ĞèÒª¡°ÕâË­±ÁµÃ×¡¡±5ÖÖ°×Æå¸÷Ò»¸ö
+        //è¡¨ç¤ºåœ¨ç™½æ–¹å›åˆæ—¶ï¼Œéœ€è¦â€œè¿™è°ç»·å¾—ä½â€5ç§ç™½æ£‹å„ä¸€ä¸ª
         needChesses["white_zhe"] = 1;
         needChesses["white_shui"] = 1;
         needChesses["white_beng"] = 1;
@@ -135,7 +147,7 @@ bool GameLogic::isVictory(int row, int col) {
         needChesses["white_zhu"] = 1;
     }
 
-    //Ò»¹²ÓĞ4ÌõÏßĞèÒªÅĞ¶Ï£¬·Ö±ğÊÇÊú¡¢Ğ±¡¢ºá¡¢·´Ğ±£¬¶øÒ»ÌõÏßÓÖ·ÖÁ½¸ö·½Ïò£¬Ö»ÒªÓĞÒ»ÌõÏßÄÜÁ¬³É5×Ó£¬¼´Îª»ñÊ¤
+    //ä¸€å…±æœ‰4æ¡çº¿éœ€è¦åˆ¤æ–­ï¼Œåˆ†åˆ«æ˜¯ç«–ã€æ–œã€æ¨ªã€åæ–œï¼Œè€Œä¸€æ¡çº¿åˆåˆ†ä¸¤ä¸ªæ–¹å‘ï¼Œåªè¦æœ‰ä¸€æ¡çº¿èƒ½è¿æˆ5å­ï¼Œå³ä¸ºè·èƒœ
     if (searchBoardChesses(row, col, Up, Down, needChesses))
         return true;
     else if (searchBoardChesses(row, col, LeftUp, RightDown, needChesses))
@@ -148,17 +160,17 @@ bool GameLogic::isVictory(int row, int col) {
 }
 
 bool GameLogic::searchBoardChesses(int row, int col, Direction dir_1, Direction dir_2, std::unordered_map<std::string, int> needChesses) {
-    int r = row, c = col;                                           //ÏÈ±£´æÂä×Óµã×ø±ê£¬ÅĞ¶ÏµÚÒ»¸ö·½Ïò
+    int r = row, c = col;                                           //å…ˆä¿å­˜è½å­ç‚¹åæ ‡ï¼Œåˆ¤æ–­ç¬¬ä¸€ä¸ªæ–¹å‘
     while (r >= 0 && r < 19 && c >= 0 && c < 19 && boardChesses[r][c]) {
         std::string curChessName = boardChesses[r][c]->getName();
-        if (needChesses.find(curChessName) == needChesses.end())    //Èç¹ûÓöµ½ÁíÒ»·½µÄÆå×Ó£¬Ö±½ÓÍË³öÅĞ¶Ï
+        if (needChesses.find(curChessName) == needChesses.end())    //å¦‚æœé‡åˆ°å¦ä¸€æ–¹çš„æ£‹å­ï¼Œç›´æ¥é€€å‡ºåˆ¤æ–­
             break;
-        else if (needChesses[curChessName] == 0)                    //Èç¹û¸ÃÆå×ÓÀàĞÍÒÑÓĞÒ»¸ö£¬ÍË³öÅĞ¶Ï
+        else if (needChesses[curChessName] == 0)                    //å¦‚æœè¯¥æ£‹å­ç±»å‹å·²æœ‰ä¸€ä¸ªï¼Œé€€å‡ºåˆ¤æ–­
             break;
-        needChesses[curChessName]--;                                //¼õ1Îª0£¬´ú±í¸ÃÆå×ÓÀàĞÍÒÑÕÒµ½Ò»¸ö
-        r += dir_1.x; c += dir_1.y;                                 //¸üĞÂ×ø±ê
+        needChesses[curChessName]--;                                //å‡1ä¸º0ï¼Œä»£è¡¨è¯¥æ£‹å­ç±»å‹å·²æ‰¾åˆ°ä¸€ä¸ª
+        r += dir_1.x; c += dir_1.y;                                 //æ›´æ–°åæ ‡
     }
-    row += dir_2.x; col += dir_2.y;                                 //´ÓÂä×ÓµãÁíÒ»¸ö·½Ïò×ßÒ»²½£¬¿ªÊ¼ÁíÒ»¸ö·½ÏòµÄÅĞ¶Ï
+    row += dir_2.x; col += dir_2.y;                                 //ä»è½å­ç‚¹å¦ä¸€ä¸ªæ–¹å‘èµ°ä¸€æ­¥ï¼Œå¼€å§‹å¦ä¸€ä¸ªæ–¹å‘çš„åˆ¤æ–­
     while (row >= 0 && row < 19 && col >= 0 && col < 19 && boardChesses[row][col]) {
         std::string curChessName = boardChesses[row][col]->getName();
         if (needChesses.find(curChessName) == needChesses.end())
@@ -170,6 +182,6 @@ bool GameLogic::searchBoardChesses(int row, int col, Direction dir_1, Direction 
     }
     for (auto& n : needChesses)
         if (n.second == 1)
-            return false;           //Ö»Òª·¢ÏÖÓĞÒ»¸öÆå×Ó²»ÔÚ£¬¾ÍÃ»»ñÊ¤
+            return false;                                           //åªè¦å‘ç°æœ‰ä¸€ä¸ªæ£‹å­ä¸åœ¨ï¼Œå°±æ²¡è·èƒœ
     return true;
 }

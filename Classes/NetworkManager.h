@@ -1,4 +1,4 @@
-#ifndef __NETWORK_MANAGER_H__
+ï»¿#ifndef __NETWORK_MANAGER_H__
 #define __NETWORK_MANAGER_H__
 
 #include "cocos2d.h"
@@ -7,90 +7,96 @@
 
 class NetworkManager : public cocos2d::network::WebSocket::Delegate{
 public:
-	//µ¥ÀıÄ£Ê½
+	//å•ä¾‹æ¨¡å¼
 	static NetworkManager* getInstance();
 
-	//Îª±£Ö¤Ö»ÓĞÎ¨Ò»ÊµÀı£¬²»ÔÊĞí¿½±´ºÍ¸³Öµ
+	//ä¸ºä¿è¯åªæœ‰å”¯ä¸€å®ä¾‹ï¼Œä¸å…è®¸æ‹·è´å’Œèµ‹å€¼
 	NetworkManager(const NetworkManager&) = delete;
 	NetworkManager& operator=(const NetworkManager&) = delete;
 
-	//´´½¨·¿¼ä
+	//åˆ›å»ºæˆ¿é—´
 	void createRoom(std::function<void(bool, const std::string&)> callback);
 
-	//¼ÓÈë·¿¼ä
+	//åŠ å…¥æˆ¿é—´
 	void joinRoom(const std::string& roomId, std::function<void(const std::string&)> callback);
 
-	//´´½¨websocketÁ¬½Ó
+	//åˆ›å»ºwebsocketè¿æ¥
 	void connectWebSocket(const std::string& roomId);
 
-	//Ïò¶ÔÊÖ·¢ËÍÂä×ÓĞÅÏ¢
-	void sendMove(int row, int col);
+	//å‘å¯¹æ‰‹å‘é€ä¿¡æ¯
+	void sendMsg(const std::string& msg);
 
-	//¶Ï¿ªÁ¬½Ó
+	//æ–­å¼€è¿æ¥
 	void disconnect();
 	
-	//ÉèÖÃonStart»Øµ÷º¯Êı
-	void setOnStartCallBack(std::function<void()> cb) { _onStart = cb; }
+	//è®¾ç½®onEnterå›è°ƒå‡½æ•°
+	void setOnEnterSceneCallBack(std::function<void()> cb) { _onEnterScene = cb; }
 
-	//ÉèÖÃ_onOpponentMove»Øµ÷º¯Êı
-	void setOnOpponentMoveCallBack(std::function<void(int, int)> cb) { _onOpponentMove = cb; }
+	//è®¾ç½®å½“å‰è§’è‰²å›è°ƒ
+	void setOnCurRoleCallBack(std::function<void(bool)> cb) { _onCurRole = cb; }
 
-	//ÉèÖÃ_onError»Øµ÷º¯Êı
+	//è®¾ç½®å¼€å§‹æ¸¸æˆå¤„ç†å›è°ƒ
+	void setOnStartGameCallBack(std::function<void(bool)> cb) { _onStartGame = cb; }
+
+	//è®¾ç½®å›åˆæ—¶é—´æ›´æ–°å›è°ƒ
+	void setOnUpdateTimeCallBack(std::function<void(float)> cb) { _onUpdateTime = cb; }
+
+	//è®¾ç½®_onOpponentMoveå›è°ƒå‡½æ•°
+	void setOnOpponentMoveCallBack(std::function<void(int, int, const std::string&)> cb) { _onOpponentMove = cb; }
+
+	//è®¾ç½®é€€å‡ºæˆ¿é—´å›è°ƒ
+	void setOnQuitRoomCallBack(std::function<void()> cb) { _onQuitRoom = cb; }
+
+	//è®¾ç½®_onErrorå›è°ƒå‡½æ•°
 	void setOnErrorCallBack(std::function<void(const std::string&)> cb) { _onError = cb; }
 
-	//·µ»ØsocketÁ¬½Ó×´Ì¬
-	bool isConnected() const { return _isConnected; }
-
-	//»ñÈ¡µ±Ç°·¿¼äºÅ
-	std::string getCurrentRoomId() const { return _currentRoomId; }
-
-	//ÉèÖÃ·şÎñÆ÷IPµØÖ·ºÍ¶Ë¿ÚºÅ
-	void setServerAddress(const std::string& host, int post) { _serverHost = host; _serverPort = post; }
-
 private:
-	//Îª±£Ö¤Ö»ÓĞÎ¨Ò»ÊµÀı£¬²»ÔÊĞí¹¹ÔìºÍÎö¹¹
+	//ä¸ºä¿è¯åªæœ‰å”¯ä¸€å®ä¾‹ï¼Œä¸å…è®¸æ„é€ å’Œææ„
 	NetworkManager() = default;
 	~NetworkManager() = default;
 	
-	//ÔÚÖ÷Ïß³ÌÔËĞĞfuncº¯Êı
+	//åœ¨ä¸»çº¿ç¨‹è¿è¡Œfuncå‡½æ•°
 	void runOnMainThread(std::function<void()> func);
 
-	//±¨´ímsg
+	//æŠ¥é”™msg
 	void fireError(const std::string& msg);
 
-	//´´½¨·¿¼äÏìÓ¦´¦Àí
+	//åˆ›å»ºæˆ¿é—´å“åº”å¤„ç†
 	void onCreateRoomResponse(cocos2d::network::HttpClient* client, cocos2d::network::HttpResponse* response);
 
-	//¼ÓÈë·¿¼äÏìÓ¦´¦Àí
+	//åŠ å…¥æˆ¿é—´å“åº”å¤„ç†
 	void onJoinRoomResponse(cocos2d::network::HttpClient* client, cocos2d::network::HttpResponse* response);
 
-	//socketÁ¬½Ó³É¹¦´¦Àí
+	//socketè¿æ¥æˆåŠŸå¤„ç†
 	virtual void onOpen(cocos2d::network::WebSocket* ws) override;
 
-	//socketÏûÏ¢´¦Àí
+	//socketæ¶ˆæ¯å¤„ç†
 	virtual void onMessage(cocos2d::network::WebSocket* ws, const cocos2d::network::WebSocket::Data& data) override;
 
-	//socket¹Ø±Õ´¦Àí
+	//socketå…³é—­å¤„ç†
 	virtual void onClose(cocos2d::network::WebSocket* ws) override;
 
-	//socket³ö´í´¦Àí
+	//socketå‡ºé”™å¤„ç†
 	virtual void onError(cocos2d::network::WebSocket* ws, const cocos2d::network::WebSocket::ErrorCode& error) override;
 
 private:	
-	std::function<void(bool, const std::string&)> _createRoomCallBack = nullptr;	//´´½¨·¿¼äÏìÓ¦»Øµ÷
-	std::function<void(const std::string&)> _joinRoomCallBack = nullptr;			//¼ÓÈë·¿¼äÏìÓ¦»Øµ÷
+	std::function<void(bool, const std::string&)> _createRoomCallBack = nullptr;	//åˆ›å»ºæˆ¿é—´å“åº”å›è°ƒ
+	std::function<void(const std::string&)> _joinRoomCallBack = nullptr;			//åŠ å…¥æˆ¿é—´å“åº”å›è°ƒ
 
-	std::function<void()> _onStart = nullptr;										//Áª»úÆ¥Åä³É¹¦»Øµ÷
-	std::function<void(int, int)> _onOpponentMove = nullptr;						//¶ÔÊÖÂä×Ó»Øµ÷
-	std::function<void(const std::string&)> _onError = nullptr;						//fireError»Øµ÷
+	std::function<void()> _onEnterScene = nullptr;									//è”æœºåŒ¹é…æˆåŠŸå›è°ƒ
+	std::function<void(bool)> _onCurRole = nullptr;									//å½“å‰è§’è‰²ï¼Œå³é»‘æ–¹æˆ–ç™½æ–¹
+	std::function<void(bool)> _onStartGame = nullptr;								//å¼€å§‹æ¸¸æˆå‡½æ•°
+	std::function<void(float)> _onUpdateTime = nullptr;								//å›åˆæ—¶é—´æ›´æ–°å‡½æ•°
+	std::function<void(int, int, const std::string&)> _onOpponentMove = nullptr;	//å¯¹æ‰‹è½å­å›è°ƒ
+	std::function<void()> _onQuitRoom = nullptr;									//é€€å‡ºæˆ¿é—´å‡½æ•°
+	std::function<void(const std::string&)> _onError = nullptr;						//fireErrorå›è°ƒ
 
-	std::string _serverHost = "127.0.0.1";											//IPµØÖ·
-	std::string _serverPort = "8080";												//¶Ë¿ÚºÅ
+	std::string _serverHost = "127.0.0.1";											//IPåœ°å€
+	std::string _serverPort = "8080";												//ç«¯å£å·
 
-	std::string _currentRoomId = "";												//µ±Ç°·¿¼äºÅ
-	bool _isConnected = false;														//socketÁ¬½Ó×´Ì¬
+	std::string _currentRoomId = "";												//å½“å‰æˆ¿é—´å·
 
-	cocos2d::network::WebSocket* _ws = nullptr;										//socketÁ¬½Ó
+	cocos2d::network::WebSocket* _ws = nullptr;										//socketè¿æ¥
 };
 
 #endif // !__NETWORK_MANAGER_H__

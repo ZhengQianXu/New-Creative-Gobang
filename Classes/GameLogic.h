@@ -1,73 +1,77 @@
-#ifndef __GAME_LOGIC_H__
+ï»¿#ifndef __GAME_LOGIC_H__
 #define __GAME_LOGIC_H__
 
 #include "cocos2d.h"
 
-//¶¨Òå·½ÏòÀàĞÍ
+//å®šä¹‰æ–¹å‘ç±»å‹
 struct Direction {
-	int x;      //ºá×ø±ê
-	int y;      //×İ×ø±ê
+	int x;      //æ¨ªåæ ‡
+	int y;      //çºµåæ ‡
 };
 
-constexpr Direction Up = { 1, 0 };          //ÉÏ
-constexpr Direction LeftUp = { 1,-1 };      //×óÉÏ
-constexpr Direction Left = { 0, -1 };       //×ó
-constexpr Direction LeftDown = { -1, -1 };  //×óÏÂ
-constexpr Direction Down = { -1,0 };        //ÏÂ
-constexpr Direction RightDown = { -1,1 };   //ÓÒÏÂ
-constexpr Direction Right = { 0,1 };        //ÓÒ
-constexpr Direction RightUp = { 1,1 };      //ÓÒÉÏ
+constexpr Direction Up = { 1, 0 };          //ä¸Š
+constexpr Direction LeftUp = { 1,-1 };      //å·¦ä¸Š
+constexpr Direction Left = { 0, -1 };       //å·¦
+constexpr Direction LeftDown = { -1, -1 };  //å·¦ä¸‹
+constexpr Direction Down = { -1,0 };        //ä¸‹
+constexpr Direction RightDown = { -1,1 };   //å³ä¸‹
+constexpr Direction Right = { 0,1 };        //å³
+constexpr Direction RightUp = { 1,1 };      //å³ä¸Š
 
 class GameLogic {
 public:
-	//³ÉÔ±»ù±¾¶¼ÊÇÒıÓÃÀàĞÍ&£¬ĞèÒªÔÚ¹¹Ôìº¯Êı´¦¸øÓè±äÁ¿£¬²¢ÇÒÖ»ÄÜÈç GameLogic.cpp ÀïÊµÏÖµÄÄÇÑù½øĞĞ³õÊ¼»¯
+	//æˆå‘˜åŸºæœ¬éƒ½æ˜¯å¼•ç”¨ç±»å‹&ï¼Œéœ€è¦åœ¨æ„é€ å‡½æ•°å¤„ç»™äºˆå˜é‡ï¼Œå¹¶ä¸”åªèƒ½å¦‚ GameLogic.cpp é‡Œå®ç°çš„é‚£æ ·è¿›è¡Œåˆå§‹åŒ–
 	GameLogic(cocos2d::Scene* s, bool& iEO, bool& iGP, bool& iBR, float& rST, std::string& sCN, cocos2d::Sprite*& sH, 
-		cocos2d::Sprite*& sPP, std::vector<cocos2d::Sprite*>& cS, std::vector<std::vector<cocos2d::Sprite*>>& pP,
-		std::vector<std::vector<cocos2d::Sprite*>>& bC, int& cCS);
+		cocos2d::Sprite*& sPP, std::vector<int>& sRC, std::vector<cocos2d::Sprite*>& cS, 
+		std::vector<std::vector<cocos2d::Sprite*>>& pP, std::vector<std::vector<cocos2d::Sprite*>>& bC, int& cCS);
 
-	//´¥ÃşÊÂ¼ş»Øµ÷
+	//è§¦æ‘¸äº‹ä»¶å›è°ƒ
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 
-	//Æå×ÓÑ¡ÖĞ´¦Àí
+	//æ£‹å­é€‰ä¸­å¤„ç†
 	void onSelectChess(cocos2d::Sprite* chessSprite, const std::string& chessName);
 
-	//³õÊ¼»¯ÆåÅÌ¿É·ÅÖÃ¸÷µã
+	//åˆå§‹åŒ–æ£‹ç›˜å¯æ”¾ç½®å„ç‚¹
 	void onInitBoardPlacePoint();
 
-	//ÉèÖÃÓÎÏ·½áËãº¯Êı´¦Àí£¨Íâ²¿×¢Èë£©
+	//è®¾ç½®æ¸¸æˆç»“ç®—å‡½æ•°å¤„ç†ï¼ˆå¤–éƒ¨æ³¨å…¥ï¼‰
 	void setGameOverFunction(std::function<void(bool)> func);
 
-	//Æå×Ó·ÅÖÃ´¦Àí
-	bool onPlaceChess(cocos2d::Vec2 touchPos);
+	//æ”¾ç½®ç‚¹é€‰ä¸­å¤„ç†
+	bool onSelectPlacePoint(cocos2d::Vec2 touchPos);
 
-	//ÅĞÓ®´¦Àí
+	//æ£‹å­æ”¾ç½®å¤„ç†ï¼ŒrowColåŒ…å«ä¸¤ä¸ªå…ƒç´ ,[0]=row,[1]=col
+	bool onPlaceChess(std::vector<int> rowCol);
+
+	//åˆ¤èµ¢å¤„ç†
 	bool isVictory(int row, int col);
 
 private:
-	//ÓÎÏ·½áËã´¦Àí
+	//æ¸¸æˆç»“ç®—å¤„ç†
 	void gameOver(bool isDraw);
 	std::function<void(bool)> _gameOver = nullptr;
 
-	//´Óµ±Ç°Âä×Ó´¦·øÉäËÑË÷
+	//ä»å½“å‰è½å­å¤„è¾å°„æœç´¢
 	bool searchBoardChesses(int row, int col, Direction dir_1, Direction dir_2, std::unordered_map<std::string, int> needChesses);
 
 private:
-	cocos2d::Scene* scene;										//µ±Ç°³¡¾°
+	cocos2d::Scene* scene;										//å½“å‰åœºæ™¯
 
-	bool& isEffectOn;											//ÒôĞ§¿ª¹Ø×´Ì¬
+	bool& isEffectOn;											//éŸ³æ•ˆå¼€å…³çŠ¶æ€
 
-	bool& isGamePlaying;										//ÊÇ·ñÕıÔÚÓÎÏ·ÖĞ
-	bool& isBlackRound;											//ÊÇ·ñÊÇºÚ·½»ØºÏ
-	float& roundSurplusTime;									//»ØºÏÊ£ÓàÊ±¼ä£¬ÕâÀï»®¶¨Ò»¸ö»ØºÏÊ±¼äÎª20Ãë×óÓÒ
+	bool& isGamePlaying;										//æ˜¯å¦æ­£åœ¨æ¸¸æˆä¸­
+	bool& isBlackRound;											//æ˜¯å¦æ˜¯é»‘æ–¹å›åˆ
+	float& roundSurplusTime;									//å›åˆå‰©ä½™æ—¶é—´ï¼Œè¿™é‡Œåˆ’å®šä¸€ä¸ªå›åˆæ—¶é—´ä¸º20ç§’å·¦å³
 
-	std::string& selectedChessName;								//Ñ¡ÖĞÆå×ÓÃû×Ö
-	cocos2d::Sprite* selectedHighlight;							//Ñ¡ÖĞ¸ßÁÁĞ§¹û
-	cocos2d::Sprite*& selectedPlacePoint;						//Ñ¡ÖĞ·ÅÖÃµã
+	std::string& selectedChessName;								//é€‰ä¸­æ£‹å­åå­—
+	cocos2d::Sprite* selectedHighlight;							//é€‰ä¸­é«˜äº®æ•ˆæœ
+	cocos2d::Sprite*& selectedPlacePoint;						//é€‰ä¸­æ”¾ç½®ç‚¹
+	std::vector<int>& selectedRowCol;							//å½“å‰é€‰ä¸­æ”¾ç½®ç‚¹çš„è¡Œå’Œåˆ—ï¼Œç”¨äºç›´æ¥è½å­ï¼Œä¸å¿…å†åˆ¤æ–­æ˜¯å“ªä¸ªä½ç½®è¢«ç‚¹å‡»
 	
-	std::vector<cocos2d::Sprite*>& chessSprites;                //Æå×ÓÊı×é
-	std::vector<std::vector<cocos2d::Sprite*>>& placePoints;    //ÆåÅÌËùÓĞ¿É·ÅÖÃµãÊı×é
-	std::vector<std::vector<cocos2d::Sprite*>>& boardChesses;   //´æ·ÅÆåÅÌÉÏÆå×ÓÊı×é
-	int& curChessSum;											//µ±Ç°»ØºÏÆåÅÌÉÏÆå×Ó×ÜÊı
+	std::vector<cocos2d::Sprite*>& chessSprites;                //æ£‹å­æ•°ç»„
+	std::vector<std::vector<cocos2d::Sprite*>>& placePoints;    //æ£‹ç›˜æ‰€æœ‰å¯æ”¾ç½®ç‚¹æ•°ç»„
+	std::vector<std::vector<cocos2d::Sprite*>>& boardChesses;   //å­˜æ”¾æ£‹ç›˜ä¸Šæ£‹å­æ•°ç»„
+	int& curChessSum;											//å½“å‰å›åˆæ£‹ç›˜ä¸Šæ£‹å­æ€»æ•°
 };
 
 #endif // !__GAME_LOGIC_H__

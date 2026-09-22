@@ -1,4 +1,4 @@
-#include "BoardUI.h"
+ï»¿#include "BoardUI.h"
 #include "MusicControl.h"
 
 USING_NS_CC;
@@ -10,7 +10,7 @@ bool BoardUI::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     auto origin = Director::getInstance()->getVisibleOrigin();
 
-    //Ìí¼Ó·µ»ØµÄ°´Å¥
+    //æ·»åŠ è¿”å›çš„æŒ‰é’®
     auto returnBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(BoardUI::onReturnBtn, this));
     if (returnBtn) {
         returnBtn->setPosition(Vec2::ZERO);
@@ -19,30 +19,30 @@ bool BoardUI::init() {
     else
         cocos2d::log("'CloseNormal.png' and 'CloseSelected.png'");
 
-    //´´½¨´æ·Å·µ»Ø°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚÓÒÏÂ½Ç
+    //åˆ›å»ºå­˜æ”¾è¿”å›æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å³ä¸‹è§’
     auto returnMenu = Menu::create(returnBtn, nullptr);
     if (returnMenu) {
         returnMenu->setPosition(origin.x + visibleSize.width - 22.0f, origin.y + 22.0f);
         this->addChild(returnMenu, 1);
     }
     else
-        cocos2d::log("¡°returnBtn¡±");
+        cocos2d::log("â€œreturnBtnâ€");
 
-    //¸ø¹Ø±Õ°´Å¥¼Ó¸öÌáÊ¾£¬ÎÄ×ÖÎ»ÖÃÔÚ°´Å¥×ó±ß
-    auto returnTip = Label::create(u8"µã»÷·µ»ØÖ÷½çÃæ->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //ç»™å…³é—­æŒ‰é’®åŠ ä¸ªæç¤ºï¼Œæ–‡å­—ä½ç½®åœ¨æŒ‰é’®å·¦è¾¹
+    auto returnTip = Label::create(u8"ç‚¹å‡»è¿”å›ä¸»ç•Œé¢->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (returnTip) {
         returnTip->setPosition(origin.x + visibleSize.width - 130.0f, origin.y + 22.0f);
         returnTip->setTextColor(Color4B::BLACK);
         this->addChild(returnTip, 1);
     }
     else
-        cocos2d::log("¡°fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf¡±");
+        cocos2d::log("â€œfonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttfâ€");
 
-    //Ìí¼Ó±³¾°ÒôÀÖºÍ¿ØÖÆ°´Å¥
+    //æ·»åŠ èƒŒæ™¯éŸ³ä¹å’Œæ§åˆ¶æŒ‰é’®
     MusicControl* mc = MusicControl::create();
     this->addChild(mc, 1);
 
-    //Ìí¼ÓÂä×ÓÒôĞ§¿ØÖÆ°´Å¥
+    //æ·»åŠ è½å­éŸ³æ•ˆæ§åˆ¶æŒ‰é’®
     auto effectBtn = MenuItemImage::create("effect_btn.png", "effect_btn.png", CC_CALLBACK_1(BoardUI::onToggleEffectBtn, this));
     if (effectBtn) {
         effectBtn->setScale(44.0f / effectBtn->getContentSize().width, 44.0f / effectBtn->getContentSize().height);
@@ -51,58 +51,58 @@ bool BoardUI::init() {
     else
         cocos2d::log("'effect_btn.png'");
 
-    //Ìí¼Ó´æ·ÅÒôĞ§°´Å¥µÄ²Ëµ¥
+    //æ·»åŠ å­˜æ”¾éŸ³æ•ˆæŒ‰é’®çš„èœå•
     auto effectMenu = Menu::create(effectBtn, nullptr);
     if (effectMenu) {
-        effectMenu->setPosition(origin.x + visibleSize.width / 2 - 70.0f, origin.y + 22.0f);    //Î»ÖÃÔÚµ×²¿ÖĞ¼ä¿¿×ó
+        effectMenu->setPosition(origin.x + visibleSize.width / 2 - 70.0f, origin.y + 22.0f);    //ä½ç½®åœ¨åº•éƒ¨ä¸­é—´é å·¦
         this->addChild(effectMenu, 1);
     }
     else
         cocos2d::log("'effectBtn'");
 
-    //Ìí¼ÓÂä×ÓÒôĞ§°´Å¥ÌáÊ¾
-    auto effectBtnTip = Label::create(u8"<-µã»÷¿ª¹ØÂä×ÓÒôĞ§", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //æ·»åŠ è½å­éŸ³æ•ˆæŒ‰é’®æç¤º
+    auto effectBtnTip = Label::create(u8"<-ç‚¹å‡»å¼€å…³è½å­éŸ³æ•ˆ", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (effectBtnTip) {
-        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 70.0f, origin.y + 22.0f); //·ÅÔÚÒôĞ§°´Å¥ÓÒ±ß
+        effectBtnTip->setPosition(origin.x + visibleSize.width / 2 + 70.0f, origin.y + 22.0f); //æ”¾åœ¨éŸ³æ•ˆæŒ‰é’®å³è¾¹
         effectBtnTip->setTextColor(Color4B::BLACK);
         this->addChild(effectBtnTip, 1);
     }
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //Ìí¼ÓÄ¾ÎÆÉ«±³¾°
+    //æ·»åŠ æœ¨çº¹è‰²èƒŒæ™¯
     auto bgLayer = LayerColor::create(Color4B(181, 136, 99, 255));
-    this->addChild(bgLayer, -1);    //·ÅÔÚ×îµ×²ã
+    this->addChild(bgLayer, -1);    //æ”¾åœ¨æœ€åº•å±‚
 
-    //Ìí¼ÓÆåÅÌÍ¼Æ¬
+    //æ·»åŠ æ£‹ç›˜å›¾ç‰‡
     auto board = Sprite::create("board.png");
     if (board) {
-        //ÉèÖÃÆåÅÌÕ¼ÂúÆÁ¿í£¬³¤¿íÒ»ÖÂ
+        //è®¾ç½®æ£‹ç›˜å æ»¡å±å®½ï¼Œé•¿å®½ä¸€è‡´
         board->setScale(visibleSize.width / board->getContentSize().width, visibleSize.width / board->getContentSize().height);
-        //ÉèÖÃÆåÅÌÍ¼Æ¬Î»ÖÃÎªÆÁÄ»ÏÂ·½ÖĞĞÄ
+        //è®¾ç½®æ£‹ç›˜å›¾ç‰‡ä½ç½®ä¸ºå±å¹•ä¸‹æ–¹ä¸­å¿ƒ
         board->setPosition(origin.x + visibleSize.width / 2, origin.x + visibleSize.width / 2);
-        //Ìí¼ÓÆåÅÌÍ¼Æ¬µ½³¡¾°ÖĞ
+        //æ·»åŠ æ£‹ç›˜å›¾ç‰‡åˆ°åœºæ™¯ä¸­
         this->addChild(board, 0);
     }
     else
         cocos2d::log("'board.png'");
 
-    //Ìí¼ÓºÚ·½Æå×Ó,°´¡°ÕâË­±ÁµÃ×¡¡±´ÎĞòÌí¼Ó£¬ºÚµ×°××Ö£¬ÏÔÊ¾ÔÚÆåÅÌ×óÉÏ·½
-    //´´½¨ºÚ·½Æå×Ó "Õâ"
+    //æ·»åŠ é»‘æ–¹æ£‹å­,æŒ‰â€œè¿™è°ç»·å¾—ä½â€æ¬¡åºæ·»åŠ ï¼Œé»‘åº•ç™½å­—ï¼Œæ˜¾ç¤ºåœ¨æ£‹ç›˜å·¦ä¸Šæ–¹
+    //åˆ›å»ºé»‘æ–¹æ£‹å­ "è¿™"
     auto black_zhe = Sprite::create("chess/black_zhe.png");
     if (black_zhe) {
-        //ÉèÖÃ´óĞ¡50px * 50px
+        //è®¾ç½®å¤§å°50px * 50px
         black_zhe->setScale(50.0f / black_zhe->getContentSize().width, 50.0f / black_zhe->getContentSize().height);
-        //Î»ÖÃÔÚÆåÅÌ×óÉÏ·½µÚÒ»¸ö
+        //ä½ç½®åœ¨æ£‹ç›˜å·¦ä¸Šæ–¹ç¬¬ä¸€ä¸ª
         black_zhe->setPosition(origin.x + 25.0f, origin.y + visibleSize.width + 25.0f);
         this->addChild(black_zhe, 0);
-        black_zhe->setName("black_zhe");        //ÉèÖÃ¾«ÁéÃû×Ö
-        chessSprites.push_back(black_zhe);      //¼ÓÈëÆå×ÓÊı×éÀï
+        black_zhe->setName("black_zhe");        //è®¾ç½®ç²¾çµåå­—
+        chessSprites.push_back(black_zhe);      //åŠ å…¥æ£‹å­æ•°ç»„é‡Œ
     }
     else
         cocos2d::log("black_zhe.png");
 
-    //´´½¨ºÚ·½Æå×Ó "Ë­"
+    //åˆ›å»ºé»‘æ–¹æ£‹å­ "è°"
     auto black_shui = Sprite::create("chess/black_shui.png");
     if (black_shui) {
         black_shui->setScale(50.0f / black_shui->getContentSize().width, 50.0f / black_shui->getContentSize().height);
@@ -114,7 +114,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/black_shui.png");
 
-    //´´½¨ºÚ·½Æå×Ó "±Á"
+    //åˆ›å»ºé»‘æ–¹æ£‹å­ "ç»·"
     auto black_beng = Sprite::create("chess/black_beng.png");
     if (black_beng) {
         black_beng->setScale(50.0f / black_beng->getContentSize().width, 50.0f / black_beng->getContentSize().height);
@@ -126,7 +126,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/black_beng.png");
 
-    //´´½¨ºÚ·½Æå×Ó "µÃ"
+    //åˆ›å»ºé»‘æ–¹æ£‹å­ "å¾—"
     auto black_de = Sprite::create("chess/black_de.png");
     if (black_de) {
         black_de->setScale(50.0f / black_de->getContentSize().width, 50.0f / black_de->getContentSize().height);
@@ -138,7 +138,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/black_de.png");
 
-    //´´½¨ºÚ·½Æå×Ó "×¡"
+    //åˆ›å»ºé»‘æ–¹æ£‹å­ "ä½"
     auto black_zhu = Sprite::create("chess/black_zhu.png");
     if (black_zhu) {
         black_zhu->setScale(50.0f / black_zhu->getContentSize().width, 50.0f / black_zhu->getContentSize().height);
@@ -150,12 +150,12 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/black_zhu.png");
 
-    //Ìí¼Ó°×·½Æå×Ó,°´¡°ÕâË­±ÁµÃ×¡¡±´ÎĞòÌí¼Ó£¬°×µ×ºÚ×Ö£¬ÏÔÊ¾ÔÚÆåÅÌÓÒÉÏ·½
-    //´´½¨°×·½Æå×Ó "Õâ"
+    //æ·»åŠ ç™½æ–¹æ£‹å­,æŒ‰â€œè¿™è°ç»·å¾—ä½â€æ¬¡åºæ·»åŠ ï¼Œç™½åº•é»‘å­—ï¼Œæ˜¾ç¤ºåœ¨æ£‹ç›˜å³ä¸Šæ–¹
+    //åˆ›å»ºç™½æ–¹æ£‹å­ "è¿™"
     auto white_zhe = Sprite::create("chess/white_zhe.png");
     if (white_zhe) {
         white_zhe->setScale(50.0f / white_zhe->getContentSize().width, 50.0f / white_zhe->getContentSize().height);
-        //Î»ÖÃÎªÆåÅÌÓÒÉÏ·½¿¿×óµÚÒ»¸ö
+        //ä½ç½®ä¸ºæ£‹ç›˜å³ä¸Šæ–¹é å·¦ç¬¬ä¸€ä¸ª
         white_zhe->setPosition(origin.x + visibleSize.width - 225.0f, origin.y + visibleSize.width + 25.0f);
         this->addChild(white_zhe, 0);
         white_zhe->setName("white_zhe");
@@ -164,7 +164,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/white_zhe.png");
 
-    //´´½¨°×·½Æå×Ó "Ë­"
+    //åˆ›å»ºç™½æ–¹æ£‹å­ "è°"
     auto white_shui = Sprite::create("chess/white_shui.png");
     if (white_shui) {
         white_shui->setScale(50.0f / white_shui->getContentSize().width, 50.0f / white_shui->getContentSize().height);
@@ -176,7 +176,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/white_shui.png");
 
-    //´´½¨°×·½Æå×Ó "±Á"
+    //åˆ›å»ºç™½æ–¹æ£‹å­ "ç»·"
     auto white_beng = Sprite::create("chess/white_beng.png");
     if (white_beng) {
         white_beng->setScale(50.0f / white_beng->getContentSize().width, 50.0f / white_beng->getContentSize().height);
@@ -188,7 +188,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/white_beng.png");
 
-    //´´½¨°×·½Æå×Ó "µÃ"
+    //åˆ›å»ºç™½æ–¹æ£‹å­ "å¾—"
     auto white_de = Sprite::create("chess/white_de.png");
     if (white_de) {
         white_de->setScale(50.0f / white_de->getContentSize().width, 50.0f / white_de->getContentSize().height);
@@ -200,7 +200,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/white_de.png");
 
-    //´´½¨°×·½Æå×Ó "×¡"
+    //åˆ›å»ºç™½æ–¹æ£‹å­ "ä½"
     auto white_zhu = Sprite::create("chess/white_zhu.png");
     if (white_zhu) {
         white_zhu->setScale(50.0f / white_zhu->getContentSize().width, 50.0f / white_zhu->getContentSize().height);
@@ -212,18 +212,18 @@ bool BoardUI::init() {
     else
         cocos2d::log("chess/white_zhu.png");
 
-    //Ìí¼ÓºÚ·½Æå×ÓÑ¡ÔñÌáÊ¾
-    auto blackTipLabel = Label::createWithTTF(u8"ºÚ·½ÔÚÉÏÃæÑ¡ÔñÆå×Ó", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //æ·»åŠ é»‘æ–¹æ£‹å­é€‰æ‹©æç¤º
+    auto blackTipLabel = Label::createWithTTF(u8"é»‘æ–¹åœ¨ä¸Šé¢é€‰æ‹©æ£‹å­", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (blackTipLabel) {
-        blackTipLabel->setPosition(origin.x + 125.0f, origin.y + visibleSize.width - 25.0f);    //Î»ÖÃÔÚ5¸öºÚÆåÕıÏÂ·½
-        blackTipLabel->setTextColor(Color4B::BLACK);                                            //×ÖÌåÎªºÚÉ«
+        blackTipLabel->setPosition(origin.x + 125.0f, origin.y + visibleSize.width - 25.0f);    //ä½ç½®åœ¨5ä¸ªé»‘æ£‹æ­£ä¸‹æ–¹
+        blackTipLabel->setTextColor(Color4B::BLACK);                                            //å­—ä½“ä¸ºé»‘è‰²
         this->addChild(blackTipLabel, 1);
     }
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //Ìí¼Ó°×·½Æå×ÓÑ¡ÔñÌáÊ¾£¬Î»ÖÃÔÚ5¸ö°×ÆåÕıÏÂ·½
-    auto whiteTipLabel = Label::createWithTTF(u8"°×·½ÔÚÉÏÃæÑ¡ÔñÆå×Ó", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //æ·»åŠ ç™½æ–¹æ£‹å­é€‰æ‹©æç¤ºï¼Œä½ç½®åœ¨5ä¸ªç™½æ£‹æ­£ä¸‹æ–¹
+    auto whiteTipLabel = Label::createWithTTF(u8"ç™½æ–¹åœ¨ä¸Šé¢é€‰æ‹©æ£‹å­", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (whiteTipLabel) {
         whiteTipLabel->setPosition(origin.x + visibleSize.width - 125.0f, origin.y + visibleSize.width - 25.0f);
         whiteTipLabel->setTextColor(Color4B::BLACK);
@@ -232,24 +232,26 @@ bool BoardUI::init() {
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //Ìí¼Óµã»÷ÊÂ¼ş´¦Àí
-    auto listener = EventListenerTouchOneByOne::create();                       //´´½¨µã»÷ÊÂ¼ş¼àÌıÆ÷
-    listener->setSwallowTouches(false);                                         //²»ÍÌµôµã»÷ÊÂ¼ş£¬ÈÃÆäËû¼àÌıÆ÷Ò²ÄÜ´¦Àí¸ÃÊÂ¼ş
-    listener->onTouchBegan = CC_CALLBACK_2(BoardUI::onTouchBegan, this);        //µã»÷¿ªÊ¼»Øµ÷º¯Êı
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //½«¼àÌıÆ÷×¢²áµ½ÊÂ¼ş·Ö·¢Æ÷
+    //æ·»åŠ ç‚¹å‡»äº‹ä»¶å¤„ç†
+    auto listener = EventListenerTouchOneByOne::create();                       //åˆ›å»ºç‚¹å‡»äº‹ä»¶ç›‘å¬å™¨
+    listener->setSwallowTouches(false);                                         //ä¸åæ‰ç‚¹å‡»äº‹ä»¶ï¼Œè®©å…¶ä»–ç›‘å¬å™¨ä¹Ÿèƒ½å¤„ç†è¯¥äº‹ä»¶
+    listener->onTouchBegan = CC_CALLBACK_2(BoardUI::onTouchBegan, this);        //ç‚¹å‡»å¼€å§‹å›è°ƒå‡½æ•°
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //å°†ç›‘å¬å™¨æ³¨å†Œåˆ°äº‹ä»¶åˆ†å‘å™¨
 
-    selectedHighlight = Sprite::create("highlight.png");                        //´´½¨¸ßÁÁĞ§¹û
+    //æ·»åŠ é«˜äº®æ•ˆæœ
+    selectedHighlight = Sprite::create("highlight.png");
     if (selectedHighlight) {        
         float ScaleX = 70.0f / selectedHighlight->getContentSize().width;
         float ScaleY = 70.0f / selectedHighlight->getContentSize().height;
-        selectedHighlight->setScale(ScaleX, ScaleY);                            //ÉèÖÃ´óĞ¡Îª70px * 70px
+        selectedHighlight->setScale(ScaleX, ScaleY);                            //è®¾ç½®å¤§å°ä¸º70px * 70px
+        selectedHighlight->setVisible(false);
         this->addChild(selectedHighlight, 0);
     }
     else
         cocos2d::log("highlight.png");
 
-    //Ìí¼Ó¡°µ±Ç°»ØºÏ¡±±êÇ©£¬Î»ÖÃÔÚ¶¥²¿ÖĞ¼ä
-    auto curRound = Label::create(u8"µ±Ç°»ØºÏ", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
+    //æ·»åŠ â€œå½“å‰å›åˆâ€æ ‡ç­¾ï¼Œä½ç½®åœ¨é¡¶éƒ¨ä¸­é—´
+    auto curRound = Label::create(u8"å½“å‰å›åˆ", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
     if (curRound) {
         curRound->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 35.0f);
         curRound->setTextColor(Color4B::BLACK);
@@ -258,8 +260,8 @@ bool BoardUI::init() {
     else
         cocos2d::log("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
-    //Ìí¼Ó¡°ºÚ·½¡±±êÇ©£¬Î»ÖÃÔÚ¶¥²¿×ó±ß
-    auto blackRound = Label::create(u8"ºÚ·½", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
+    //æ·»åŠ â€œé»‘æ–¹â€æ ‡ç­¾ï¼Œä½ç½®åœ¨é¡¶éƒ¨å·¦è¾¹
+    auto blackRound = Label::create(u8"é»‘æ–¹", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
     if (blackRound) {
         blackRound->setPosition(origin.x + 125.0f, origin.y + visibleSize.height - 35.0f);
         blackRound->setTextColor(Color4B::BLACK);
@@ -268,8 +270,8 @@ bool BoardUI::init() {
     else
         cocos2d::log("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
-    //Ìí¼Ó¡°°×·½¡±±êÇ©£¬Î»ÖÃÔÚ¶¥²¿ÓÒ±ß
-    auto whiteRound = Label::create(u8"°×·½", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
+    //æ·»åŠ â€œç™½æ–¹â€æ ‡ç­¾ï¼Œä½ç½®åœ¨é¡¶éƒ¨å³è¾¹
+    auto whiteRound = Label::create(u8"ç™½æ–¹", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 35);
     if (whiteRound) {
         whiteRound->setPosition(origin.x + visibleSize.width - 125.0f, origin.y + visibleSize.height - 35.0f);
         whiteRound->setTextColor(Color4B::WHITE);
@@ -278,7 +280,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf");
 
-    //´´½¨¿ªÊ¼ÓÎÏ·°´Å¥   
+    //åˆ›å»ºå¼€å§‹æ¸¸æˆæŒ‰é’®   
     startGameBtn = MenuItemImage::create("startGame.png", "startGame_pressed.png", CC_CALLBACK_1(BoardUI::onStartGameBtn, this));
     if (startGameBtn) {
         startGameBtn->setScale(250.0f / startGameBtn->getContentSize().width, 70.0f / startGameBtn->getContentSize().height);
@@ -287,7 +289,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("'startGame.png or startGame_pressed.png'");
 
-    //´´½¨´æ·Å¿ªÊ¼ÓÎÏ·°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚÆåÅÌÕıÉÏ·½
+    //åˆ›å»ºå­˜æ”¾å¼€å§‹æ¸¸æˆæŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨æ£‹ç›˜æ­£ä¸Šæ–¹
     auto startGameMenu = Menu::create(startGameBtn, nullptr);
     if (startGameMenu) {
         startGameMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.width + 45.0f);
@@ -296,8 +298,8 @@ bool BoardUI::init() {
     else
         cocos2d::log("'startGameBtn'");
     
-    //´´½¨¼ÆÊ±Æ÷±êÇ©£¬·ÅÔÚ¡°µ±Ç°»ØºÏ¡±±êÇ©ÏÂÃæ
-    timer = Label::create("20", "fonts/arial.ttf", 50);
+    //åˆ›å»ºè®¡æ—¶å™¨æ ‡ç­¾ï¼Œæ”¾åœ¨â€œå½“å‰å›åˆâ€æ ‡ç­¾ä¸‹é¢
+    timer = Label::create("20", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
     if (timer) {
         timer->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 120.0f);
         timer->setTextColor(Color4B::BLACK);
@@ -305,9 +307,9 @@ bool BoardUI::init() {
         timer->setVisible(false);
     }
     else
-        cocos2d::log("'fonts/arial.ttf'");
+        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
     
-    //´´½¨Ö¸ÏòºÚ·½µÄ¼ıÍ·£¬·ÅÔÚ¡°µ±Ç°»ØºÏ¡±±êÇ©×ó±ß
+    //åˆ›å»ºæŒ‡å‘é»‘æ–¹çš„ç®­å¤´ï¼Œæ”¾åœ¨â€œå½“å‰å›åˆâ€æ ‡ç­¾å·¦è¾¹
     blackRoundArrow = Sprite::create("blackRound.png");
     if (blackRoundArrow) {
         blackRoundArrow->setScale(80.0f / blackRoundArrow->getContentSize().width, 25.0f / blackRoundArrow->getContentSize().height);
@@ -318,7 +320,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("blackRound.png");
     
-    //´´½¨Ö¸Ïò°×·½µÄ¼ıÍ·£¬·ÅÔÚ¡°µ±Ç°»ØºÏ¡±±êÇ©ÓÒ±ß
+    //åˆ›å»ºæŒ‡å‘ç™½æ–¹çš„ç®­å¤´ï¼Œæ”¾åœ¨â€œå½“å‰å›åˆâ€æ ‡ç­¾å³è¾¹
     whiteRoundArrow = Sprite::create("whiteRound.png");
     if (whiteRoundArrow) {
         whiteRoundArrow->setScale(80.0f / whiteRoundArrow->getContentSize().width, 25.0f / whiteRoundArrow->getContentSize().height);
@@ -329,7 +331,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("whiteRound.png");
     
-    //´´½¨»ñÊ¤·½ÌáÊ¾£¬Î»ÖÃÔÚ»ñÊ¤¶¯»­ÉÏÃæ
+    //åˆ›å»ºè·èƒœæ–¹æç¤ºï¼Œä½ç½®åœ¨è·èƒœåŠ¨ç”»ä¸Šé¢
     gameOverTip = Label::create("", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 50);
     if (gameOverTip) {
         gameOverTip->setTextColor(Color4B::YELLOW);
@@ -339,7 +341,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
     
-    //´´½¨»ñÊ¤¶¯»­£¬Î»ÖÃÔÚÆÁÄ»ÕıÖĞ¼ä
+    //åˆ›å»ºè·èƒœåŠ¨ç”»ï¼Œä½ç½®åœ¨å±å¹•æ­£ä¸­é—´
     victoryAnimation = Sprite::create("victory.jpg");
     if (victoryAnimation) {
         victoryAnimation->setScale(316.0f / victoryAnimation->getContentSize().width, 360.5f / victoryAnimation->getContentSize().height);
@@ -349,7 +351,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("'victory.jpg'");
 
-    //´´½¨Æ½¾Ö¶¯»­£¬Î»ÖÃÔÚÆÁÄ»ÕıÖĞ¼ä
+    //åˆ›å»ºå¹³å±€åŠ¨ç”»ï¼Œä½ç½®åœ¨å±å¹•æ­£ä¸­é—´
     drawAnimation = Sprite::create("defeat.jpg");
     if (drawAnimation) {
         drawAnimation->setScale(320.0f / drawAnimation->getContentSize().width, 338.75f / drawAnimation->getContentSize().height);
@@ -359,7 +361,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("'defeat.jpg'");
     
-    //´´½¨ÓÎÏ·½áÊø°´Å¥
+    //åˆ›å»ºæ¸¸æˆç»“æŸæŒ‰é’®
     gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
     if (gameOverBtn) {
         gameOverBtn->setPosition(Vec2::ZERO);
@@ -368,7 +370,7 @@ bool BoardUI::init() {
     else
         cocos2d::log("'gameOver.png or gameOver_pressed.png'");
 
-    //´´½¨Æ½¾Ö½áÊø°´Å¥
+    //åˆ›å»ºå¹³å±€ç»“æŸæŒ‰é’®
     gameOverDrawBtn = MenuItemImage::create("gameOverDraw.png", "gameOverDraw_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
     if (gameOverDrawBtn) {        
         gameOverDrawBtn->setPosition(Vec2::ZERO);
@@ -377,14 +379,14 @@ bool BoardUI::init() {
     else
         cocos2d::log("'gameOverDraw.png or gameOverDraw_pressed.png'");
     
-    //´´½¨´æ·ÅÓÎÏ·½áÊø°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚ½áËã¶¯»­ÏÂ·½
+    //åˆ›å»ºå­˜æ”¾æ¸¸æˆç»“æŸæŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨ç»“ç®—åŠ¨ç”»ä¸‹æ–¹
     auto gameOverMenu = Menu::create(gameOverBtn, gameOverDrawBtn, nullptr);
     if (gameOverMenu)
         gameOverMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 280.0f);        
     else
         cocos2d::log("'gameOverBtn' or 'gameOverDrawBtn'");
 
-    //´´½¨½Úµã´æ·ÅÓÎÏ·½áËã½çÃæµÄui¿Ø¼ş
+    //åˆ›å»ºèŠ‚ç‚¹å­˜æ”¾æ¸¸æˆç»“ç®—ç•Œé¢çš„uiæ§ä»¶
     gameOverUI = Node::create();
     gameOverUI->addChild(gameOverTip, 0);
     gameOverUI->addChild(victoryAnimation, 0);

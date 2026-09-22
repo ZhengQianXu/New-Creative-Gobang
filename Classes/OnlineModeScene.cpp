@@ -1,6 +1,7 @@
-#include "OnlineModeScene.h"
+ï»¿#include "OnlineModeScene.h"
 #include "SimpleAudioEngine.h"
 #include "BoardUI.h"
+#include "NetworkManager.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -13,170 +14,256 @@ bool OnlineMode::init() {
     if (!Scene::init())
         return false;
 
-    //´´½¨ÓÎÏ·½çÃæui
+    //åˆ›å»ºæ¸¸æˆç•Œé¢ui
     auto bu = BoardUI::create();
     this->addChild(bu, 0);
 
-    //ÊµÏÖ·µ»Ø°´Å¥´¦Àí
+    //å®ç°è¿”å›æŒ‰é’®å¤„ç†
     bu->setOnReturnCallBack([]() {
+        NetworkManager::getInstance()->disconnect();
         Director::getInstance()->popScene();
     });
 
-    //ÊµÏÖÒôĞ§¿ª¹ØÇĞ»»
+    //å®ç°éŸ³æ•ˆå¼€å…³åˆ‡æ¢
     bu->setOnToggleEffectCallBack([=]() {
         isEffectOn = !isEffectOn;
     });
 
-    //bu->setOnTouchBeganCallBack(CC_CALLBACK_2(OnlineMode::onTouchBegan, this));
+    //ä¼ å…¥è§¦æ‘¸å¤„ç†å›è°ƒ
+    bu->setOnTouchBeganCallBack(CC_CALLBACK_2(OnlineMode::onTouchBegan, this));
 
-    //´«Èë¿ªÊ¼ÓÎÏ·´¦Àí»Øµ÷
+    //ä¼ å…¥å¼€å§‹æ¸¸æˆå¤„ç†å›è°ƒ
     bu->setOnStartGameCallBack(CC_CALLBACK_1(OnlineMode::onStartGame, this));
 
-    //´«ÈëÆåÅÌÇåÀí´¦Àí»Øµ÷
+    //ä¼ å…¥æ£‹ç›˜æ¸…ç†å¤„ç†å›è°ƒ
     bu->setOnCleanBoardCallBack(CC_CALLBACK_1(OnlineMode::cleanBoard, this));
 
-    //´ÓuiÀà»ñÈ¡ĞèÒª±»²Ù×÷µÄui¿Ø¼ş
+    //ä»uiç±»è·å–éœ€è¦è¢«æ“ä½œçš„uiæ§ä»¶
     bu->getBoardUImember(chessSprites, selectedHighlight, startGameBtn, timer, blackRoundArrow, whiteRoundArrow, gameOverTip,
         victoryAnimation, drawAnimation, gameOverBtn, gameOverDrawBtn);
 
     auto origin = Director::getInstance()->getVisibleOrigin();
-    bu->getGameOverUI()->setPosition(origin.x, origin.y + 84.0f);    //¸Ãui×é±¾À´ÔÚÕıÖĞ¼ä£¬ÍùÉÏÌáÁËµã
-    this->addChild(bu->getGameOverUI(), 2);                          //ui×éµ¥¶ÀÄÃ³öÀ´µÄÄ¿µÄ£¬ÎªÁËÏÔÊ¾ÔÚ×î¸ß²ã¼¶
+    bu->getGameOverUI()->setPosition(origin.x, origin.y + 84.0f);    //è¯¥uiç»„æœ¬æ¥åœ¨æ­£ä¸­é—´ï¼Œå¾€ä¸Šæäº†ç‚¹
+    this->addChild(bu->getGameOverUI(), 2);                          //uiç»„å•ç‹¬æ‹¿å‡ºæ¥çš„ç›®çš„ï¼Œä¸ºäº†æ˜¾ç¤ºåœ¨æœ€é«˜å±‚çº§
 
-    //´´½¨ÓÎÏ·Âß¼­¶ÔÏó£¬²¢´«ÈëĞèÒªÓÃµ½µÄui¿Ø¼ş
+    //åˆ›å»ºæ¸¸æˆé€»è¾‘å¯¹è±¡ï¼Œå¹¶ä¼ å…¥éœ€è¦ç”¨åˆ°çš„uiæ§ä»¶
     gl = new GameLogic(this, isEffectOn, isGamePlaying, isBlackRound, roundSurplusTime, selectedChessName, selectedHighlight,
-        selectedPlacePoint, chessSprites, placePoints, boardChesses, curChessSum);
+        selectedPlacePoint, selectedRowCol, chessSprites, placePoints, boardChesses, curChessSum);
 
-    /*std::function<void(bool)> _gameOver = std::bind(&OnlineMode::gameOver, this, std::placeholders::_1);
-    gl->setGameOverFunction(_gameOver);*/
-
-    //µ÷ÓÃ³¡¾°ÊµÏÖµÄÓÎÏ·½áËã´¦Àíº¯Êı
+    //è°ƒç”¨åœºæ™¯å®ç°çš„æ¸¸æˆç»“ç®—å¤„ç†å‡½æ•°
     gl->setGameOverFunction([this](bool isDraw) {
         this->gameOver(isDraw);
     });
 
-    //´«Èë´¥Ãş´¦Àíº¯Êı
-    bu->setOnTouchBeganCallBack([=](Touch* touch, Event* event) {
-        return gl->onTouchBegan(touch, event);
+    //è·å–ç½‘ç»œç®¡ç†æ¨¡å—å•ä¾‹
+    auto nm = NetworkManager::getInstance();
+
+    //ä¼ å…¥å¼€å§‹æ¸¸æˆå›è°ƒ
+    nm->setOnStartGameCallBack([=](bool ok) {
+        canStartGame = ok;                              //å¯ä»¥å¼€å§‹æ¸¸æˆ
+        onStartGame(startGameBtn);                      //å†æ¬¡è°ƒç”¨å¼€å§‹æ¸¸æˆæŒ‰é’®å›è°ƒ
+    });
+
+    //ä¼ å…¥å½“å‰è§’è‰²è®¾ç½®å›è°ƒ
+    nm->setOnCurRoleCallBack([=](bool curRole) {
+        isBlackRole = curRole;
+    });
+
+    //ä¼ å…¥å›åˆæ—¶é—´æ›´æ–°å›è°ƒ
+    nm->setOnUpdateTimeCallBack([=](float surplusTime) {
+        roundSurplusTime = surplusTime;
+        int seconds = (int)std::floor(roundSurplusTime);//å€’è®¡æ—¶å‘ä¸‹å–æ•´ï¼Œå¯ä»¥ç¡®ä¿çœ‹å¾—åˆ°0
+        timer->setString(std::to_string(seconds));      //å®æ—¶æ˜¾ç¤ºåœ¨è®¡æ—¶å™¨æ ‡ç­¾ä¸Š
+        if (roundSurplusTime <= 0)
+            autoPlaceChess();
+        else if (roundSurplusTime < 6)
+            timer->setTextColor(Color4B::RED);          //å€’è®¡æ—¶å‰©5ç§’æ—¶å‘ˆçº¢è‰²
+    });
+
+    //ä¼ å…¥å¯¹æ‰‹è½å­å›è°ƒ
+    nm->setOnOpponentMoveCallBack([=](int row, int col, const std::string chessName) {       
+        selectedChessName = chessName;                  //å…ˆè®¾ç½®æ£‹å­åå­—
+        gl->onPlaceChess({ row, col });                 //å†è¿›è¡Œè½å­       
+        switchRound();                                  //è½å­å®Œæˆå›åˆåˆ‡æ¢        
+    });
+
+    //ä¼ å…¥é€€å‡ºæˆ¿é—´å¤„ç†å›è°ƒï¼Œå¦ä¸€æ–¹é€€å‡ºæˆ¿é—´æ—¶è°ƒç”¨
+    nm->setOnQuitRoomCallBack([]() {
+        NetworkManager::getInstance()->disconnect();
+        Director::getInstance()->popScene();
     });
 
     return true;
 }
 
-void OnlineMode::onStartGame(Ref* pSender) {
-    startGameBtn->setVisible(false);                //°´Å¥Òş²Ø£¬´ú±íÒÑ¿ªÊ¼ÓÎÏ·
-
-    isGamePlaying = true;                           //±íÊ¾ÕıÔÚÓÎÏ·ÖĞ
-    roundSurplusTime = 20.9f;                       //»ØºÏÊ±¼ä20Ãë×óÓÒ
-    isBlackRound = true;                            //Ä¬ÈÏµÚÒ»»ØºÏÊÇºÚ·½
-    blackRoundArrow->setVisible(true);
-    whiteRoundArrow->setVisible(false);             //Ö¸Ïò°×·½µÄ¼ıÍ·ÏÈÒş²Ø
-    timer->setVisible(true);                        //ÏÔÊ¾¼ÆÊ±Æ÷
-
-    this->scheduleUpdate();                         //Æô¶¯Ö¡Ñ­»·£¬Ã¿Ö¡×Ô¶¯µ÷ÓÃ update(float dt)
-
-    if (placePoints.empty())
-        gl->onInitBoardPlacePoint();                //µÚÒ»»ØºÏ¿ªÊ¼Ê±³õÊ¼»¯ÆåÅÌ·ÅÖÃµã
-
-    selectedHighlight->setVisible(true);            //ÏÔÊ¾¸ßÁÁ
-    gl->onSelectChess(chessSprites[0], "black_zhe");//×Ô¶¯Ñ¡ÖĞµÚÒ»¸öºÚÆå
+bool OnlineMode::onTouchBegan(Touch* touch, Event* event) {
+    if (!isGamePlaying)
+        return false;                                           //æ²¡åœ¨æ¸¸æˆä¸­å°±ä¸å“åº”ç‚¹å‡»
+    
+    Vec2 touchPos = touch->getLocation();                       //è·å–ç‚¹å‡»çš„ä½ç½®
+    for (auto& chess : chessSprites)
+        if (chess->getBoundingBox().containsPoint(touchPos)) {  //åˆ¤æ–­æ˜¯å¦æœ‰æ£‹å­è¢«ç‚¹å‡»äº†
+            bool myTurn = ((isBlackRole && isBlackRound) || (!isBlackRole && !isBlackRound));
+            if (!myTurn)
+                return false;                                   //ä¸æ˜¯è‡ªå·±å›åˆä¸èƒ½é€‰æ‹©æ£‹å­
+            gl->onSelectChess(chess, chess->getName());         //è°ƒç”¨é€‰ä¸­æ£‹å­å‡½æ•°
+            selectedHighlight->setVisible(true);
+            return true;                                        //æ¶ˆè´¹æ‰è¿™ä¸ªç‚¹å‡»äº‹ä»¶
+        }
+    
+    //å¦‚æœæœ‰æ£‹å­è¢«é€‰ä¸­ï¼Œè€Œç‚¹å‡»çš„ä½ç½®ä¸æ˜¯æ£‹å­ï¼Œå¯èƒ½åœ¨æ£‹ç›˜ä¸Šï¼Œä½†æ˜¯åªæœ‰åœ¨è‡ªå·±å›åˆæ‰èƒ½å¯¹æ£‹ç›˜è¿›è¡Œæ“ä½œ
+    if (!selectedChessName.empty() && ((isBlackRole && isBlackRound) || (!isBlackRole && !isBlackRound))) {
+        //å¦‚æœå·²é€‰ä¸­æ”¾ç½®ç‚¹ï¼Œä¸”å†æ¬¡ç‚¹å‡»æ”¾ç½®ç‚¹ï¼Œåˆ™è½å­
+        if (selectedPlacePoint && selectedPlacePoint->getBoundingBox().containsPoint(touchPos)) {
+            std::string row = std::to_string(selectedRowCol[0]), col = std::to_string(selectedRowCol[1]);   //è½¬æ¢è¡Œåˆ—æ•°æ®ç±»å‹
+            NetworkManager::getInstance()->sendMsg("move:" + row + ',' + col + ',' + selectedChessName);    //å‘é€è½å­ä¿¡æ¯
+            bool ok = gl->onPlaceChess(selectedRowCol);         //å…ˆä¿å­˜è½å­åé¦ˆ
+            switchRound();                                      //è½å­å®Œæˆå›åˆåˆ‡æ¢
+            return ok;
+        }
+        else
+            return gl->onSelectPlacePoint(touchPos);            //å¦åˆ™è¿›å…¥é€‰ä¸­æ”¾ç½®ç‚¹é€»è¾‘
+    }
+    return false;
 }
 
-void OnlineMode::update(float dt) {
-    if (!isGamePlaying)
-        return;                                         //²»ÔÚÓÎÏ·ÖĞ²»´¦Àí¸üĞÂÂß¼­
+void OnlineMode::onStartGame(Ref* pSender) {
+    startGameBtn->setVisible(false);                //æŒ‰é’®éšè—ï¼Œä»£è¡¨å·²å¼€å§‹æ¸¸æˆ
+    if (!canStartGame)
+        timer->setString(u8"ç­‰å¾…å¯¹æ–¹å‡†å¤‡ä¸­...");
+    else
+        timer->setString(u8"æ¸¸æˆå¼€å§‹!");
+    timer->setVisible(true);                        //æ˜¾ç¤ºè®¡æ—¶å™¨
 
-    roundSurplusTime -= dt;                             //¸üĞÂµ±Ç°»ØºÏÊ£ÓàÊ±¼ä
-    if (roundSurplusTime <= 0) {                        //»ØºÏÊ±¼äµ½
-        if (lastChessSum == curChessSum) {              //Èç¹ûÍæ¼ÒÎ´Âä×Ó
-            if (selectedPlacePoint)                     //Èç¹ûÓĞÑ¡ÖĞ·ÅÖÃµã£¬×Ô¶¯Âä×Ó
-                gl->onPlaceChess(selectedPlacePoint->getPosition());
-            else
-                for (int row = 0; row < 19 && lastChessSum == curChessSum; row++)    //lastChessSum == curChessSum±£Ö¤Ö»ÂäÒ»¸ö×Ó
-                    for (int col = 0; col < 19; col++)
-                        if (boardChesses[row][col] == nullptr) {                    //Ã»ÓĞÑ¡ÖĞ·ÅÖÃµã£¬ÕÒµ½µÚÒ»¸ö¿É·ÅÖÃµã£¬°ïÃ¦Âä×Ó
-                            gl->onPlaceChess(placePoints[row][col]->getPosition()); //µÚÒ»²½ÊÇÏÈÑ¡·ÅÖÃµã
-                            gl->onPlaceChess(placePoints[row][col]->getPosition()); //µÚ¶ş²½²ÅÕıÊ½Âä×Ó
-                            break;                                                  //Ö±½ÓÍË³ö£¬±£Ö¤Ö»ÂäÒ»¸ö×Ó
-                        }
-        }
-        if (!isGamePlaying)
-            return;                                         //Èç¹ûÏµÍ³°ïÃ¦Âä×ÓÇ¡ºÃÓĞÒ»·½»ñÊ¤£¬Ö±½ÓÍË³ö£¬ÎŞĞèºóĞøÂß¼­        
-        if (curChessSum == 19 * 19) {
-            gameOver(true);                                 //Èç¹ûÆåÅÌ·ÅÂú¶¼Ã»Ê¤¸º£¬ÔòÎªÆ½¾Ö
-            return;
-        }
-        lastChessSum = curChessSum;                         //¸üĞÂÆåÅÌ¾ÉÆå×Ó×ÜÊı
-        roundSurplusTime = 20.9f;                           //»ØºÏ½áÊø£¬¿ªÊ¼ÏÂÒ»»ØºÏ
-        isBlackRound = !isBlackRound;                       //»ØºÏ½»»»       
-        if (isBlackRound) {                                 //Èç¹ûºÚ·½»ØºÏ
-            timer->setTextColor(Color4B::BLACK);            //ºÚ·½»ØºÏ¼ÆÊ±Æ÷ÊÇºÚÉ«µÄ
-            blackRoundArrow->setVisible(true);              //Ö¸ÏòºÚ·½µÄ¼ıÍ·ÏÔÊ¾
-            whiteRoundArrow->setVisible(false);             //Ö¸Ïò°×·½µÄ¼ıÍ·Òş²Ø
-            gl->onSelectChess(chessSprites[0], "black_zhe");//×Ô¶¯Ñ¡ÖĞµÚÒ»¸öºÚ·½Æå×Ó
-        }
-        else {                                              //·´Ö®
-            timer->setTextColor(Color4B::WHITE);
-            whiteRoundArrow->setVisible(true);
-            blackRoundArrow->setVisible(false);
-            gl->onSelectChess(chessSprites[5], "white_zhe");//×Ô¶¯Ñ¡ÖĞµÚÒ»¸ö°×·½Æå×Ó
-        }
+    //ç‚¹å‡»å¼€å§‹æ¸¸æˆæŒ‰é’®æ—¶ï¼Œè¿˜ä¸èƒ½å¼€å§‹æ¸¸æˆï¼Œå› ä¸ºéœ€è¦åŒæ–¹å‡†å¤‡ï¼Œå‘æœåŠ¡å™¨å‘é€å‡†å¤‡å¥½çš„ä¿¡æ¯ï¼Œç­‰å¾…æœåŠ¡å™¨å›æ¶ˆæ¯è§¦å‘å›è°ƒï¼Œæ‰æ‰§è¡Œåç»­æ“ä½œ
+    if (!canStartGame) {
+        NetworkManager::getInstance()->sendMsg("ready:ok");
+        return;
+    }  
+    
+    isGamePlaying = true;                           //è¡¨ç¤ºæ­£åœ¨æ¸¸æˆä¸­
+    isBlackRound = true;                            //é»˜è®¤ç¬¬ä¸€å›åˆæ˜¯é»‘æ–¹
+    blackRoundArrow->setVisible(true);              //æŒ‡å‘é»‘æ–¹çš„ç®­å¤´æ˜¾ç¤º
+
+    if (placePoints.empty())
+        gl->onInitBoardPlacePoint();                //ç¬¬ä¸€å›åˆå¼€å§‹æ—¶åˆå§‹åŒ–æ£‹ç›˜æ”¾ç½®ç‚¹
+
+    bool blackTurn = isBlackRole && isBlackRound;   //åœ¨å¼€å§‹æ¸¸æˆåï¼Œåªæœ‰é»‘æ–¹èƒ½é€‰ä¸­ç¬¬ä¸€ä¸ªæ£‹å­
+    if (!blackTurn)
+        return;
+    gl->onSelectChess(chessSprites[0], "black_zhe");//è‡ªåŠ¨é€‰ä¸­ç¬¬ä¸€ä¸ªé»‘æ£‹
+    selectedHighlight->setVisible(true);
+}
+
+void OnlineMode::switchRound()
+{
+    isBlackRound = !isBlackRound;                       //å›åˆäº¤æ¢       
+    if (isBlackRound) {                                 //å¦‚æœé»‘æ–¹å›åˆ
+        timer->setTextColor(Color4B::BLACK);            //é»‘æ–¹å›åˆè®¡æ—¶å™¨æ˜¯é»‘è‰²çš„
+        blackRoundArrow->setVisible(true);              //æŒ‡å‘é»‘æ–¹çš„ç®­å¤´æ˜¾ç¤º
+        whiteRoundArrow->setVisible(false);             //æŒ‡å‘ç™½æ–¹çš„ç®­å¤´éšè—           
     }
-    else if (roundSurplusTime < 6)
-        timer->setTextColor(Color4B::RED);                  //µ¹¼ÆÊ±Ê£5ÃëÊ±³ÊºìÉ«
+    else {                                              //åä¹‹
+        timer->setTextColor(Color4B::WHITE);
+        whiteRoundArrow->setVisible(true);
+        blackRoundArrow->setVisible(false);
+    }
 
-    int seconds = (int)std::floor(roundSurplusTime);        //µ¹¼ÆÊ±ÏòÏÂÈ¡Õû£¬¿ÉÒÔÈ·±£¿´µÃµ½0
-    timer->setString(std::to_string(seconds));              //ÊµÊ±ÏÔÊ¾ÔÚ¼ÆÊ±Æ÷±êÇ©ÉÏ
+    //å½“å¤„äºè‡ªå·±å›åˆæ—¶æ‰è‡ªåŠ¨é€‰ä¸­æ£‹å­
+    if (isBlackRole && isBlackRound) {                  
+        gl->onSelectChess(chessSprites[0], "black_zhe");//è‡ªåŠ¨é€‰ä¸­ç¬¬ä¸€ä¸ªé»‘æ–¹æ£‹å­
+        selectedHighlight->setVisible(true);
+    }
+    else if (!isBlackRole && !isBlackRound) {
+        gl->onSelectChess(chessSprites[5], "white_zhe");//è‡ªåŠ¨é€‰ä¸­ç¬¬ä¸€ä¸ªç™½æ–¹æ£‹å­
+        selectedHighlight->setVisible(true);
+    }
+    else
+        selectedHighlight->setVisible(false);           //ä¸åœ¨è‡ªå·±å›åˆæ—¶éšè—é«˜äº®
+
+    lastChessSum = curChessSum;                 //æ›´æ–°æ£‹ç›˜æ—§æ£‹å­æ€»æ•°
+}
+
+void OnlineMode::autoPlaceChess() {      
+    //å½“å¤„äºè‡ªå·±å›åˆï¼Œå´æ²¡æœ‰è½å­æ—¶ï¼Œç³»ç»Ÿå¸®å¿™è½å­
+    bool myTurn = ((isBlackRole && isBlackRound) || (!isBlackRole && !isBlackRound));
+    if (myTurn && lastChessSum == curChessSum) {       
+        if (selectedPlacePoint) {               //å¦‚æœæœ‰é€‰ä¸­æ”¾ç½®ç‚¹ï¼Œè‡ªåŠ¨è½å­
+            std::string msg = "move:" + std::to_string(selectedRowCol[0]) + ',' + std::to_string(selectedRowCol[1]) + ',' + selectedChessName;
+            NetworkManager::getInstance()->sendMsg(msg);
+            gl->onPlaceChess(selectedRowCol);
+        }
+        else
+            for (int row = 0; row < 19 && lastChessSum == curChessSum; row++)   //lastChessSum == curChessSumä¿è¯åªè½ä¸€ä¸ªå­
+                for (int col = 0; col < 19; col++)
+                    if (boardChesses[row][col] == nullptr) {                    //æ²¡æœ‰é€‰ä¸­æ”¾ç½®ç‚¹ï¼Œæ‰¾åˆ°ç¬¬ä¸€ä¸ªå¯æ”¾ç½®å¤„ï¼Œå¸®å¿™è½å­
+                        NetworkManager::getInstance()->sendMsg("move:" + std::to_string(row) + ',' + std::to_string(col) + ',' + selectedChessName);
+                        gl->onPlaceChess({ row, col });                         //ç›´æ¥è½å­
+                        break;                                                  //ç›´æ¥é€€å‡ºï¼Œä¿è¯åªè½ä¸€ä¸ªå­              
+        }
+        switchRound();                          //ç³»ç»Ÿå¸®å¿™è½å­å®Œä¹Ÿè¦åˆ‡æ¢å›åˆ
+        
+        if (!isGamePlaying)
+            return;                             //å¦‚æœç³»ç»Ÿå¸®å¿™è½å­æ°å¥½æœ‰ä¸€æ–¹è·èƒœï¼Œç›´æ¥é€€å‡ºï¼Œæ— éœ€åç»­é€»è¾‘
+    }
+        
+    if (curChessSum == 19 * 19) {
+        gameOver(true);                         //å¦‚æœæ£‹ç›˜æ”¾æ»¡éƒ½æ²¡èƒœè´Ÿï¼Œåˆ™ä¸ºå¹³å±€
+        return;
+    }
+    
 }
 
 void OnlineMode::gameOver(bool isDraw) {
     if (isDraw) {
-        gameOverTip->setString(u8"Ë«·½´òÆ½!");
-        drawAnimation->setVisible(true);        //ÏÔÊ¾Æ½¾Ö¶¯»­
-        gameOverDrawBtn->setVisible(true);      //ÏÔÊ¾Æ½¾ÖÇé¿öÏÂÓÎÏ·½áÊø°´Å¥
+        gameOverTip->setString(u8"åŒæ–¹æ‰“å¹³!");
+        drawAnimation->setVisible(true);        //æ˜¾ç¤ºå¹³å±€åŠ¨ç”»
+        gameOverDrawBtn->setVisible(true);      //æ˜¾ç¤ºå¹³å±€æƒ…å†µä¸‹æ¸¸æˆç»“æŸæŒ‰é’®
 
         if (isEffectOn)
-            SimpleAudioEngine::getInstance()->playEffect("music/defeat.mp3");   //²¥·ÅÆ½¾ÖÒôĞ§
+            SimpleAudioEngine::getInstance()->playEffect("music/defeat.mp3");   //æ’­æ”¾å¹³å±€éŸ³æ•ˆ
     }
     else {
-        //¸ù¾İ»ñÊ¤·½µÄ²»Í¬£¬ÌáÊ¾ÎÄ±¾Ò²²»Í¬
+        //æ ¹æ®è·èƒœæ–¹çš„ä¸åŒï¼Œæç¤ºæ–‡æœ¬ä¹Ÿä¸åŒ
         if (isBlackRound)
-            gameOverTip->setString(u8"ºÚ·½»ñÊ¤!");
+            gameOverTip->setString(u8"é»‘æ–¹è·èƒœ!");
         else
-            gameOverTip->setString(u8"°×·½»ñÊ¤!");
+            gameOverTip->setString(u8"ç™½æ–¹è·èƒœ!");
 
-        victoryAnimation->setVisible(true);     //ÏÔÊ¾»ñÊ¤¶¯»­
-        gameOverBtn->setVisible(true);          //ÏÔÊ¾½áÊøÓÎÏ·°´Å¥
+        victoryAnimation->setVisible(true);     //æ˜¾ç¤ºè·èƒœåŠ¨ç”»
+        gameOverBtn->setVisible(true);          //æ˜¾ç¤ºç»“æŸæ¸¸æˆæŒ‰é’®
 
         if (isEffectOn)
-            SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");  //²¥·Å»ñÊ¤ÒôĞ§
+            SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");  //æ’­æ”¾è·èƒœéŸ³æ•ˆ
     }
 
-    isGamePlaying = false;                      //ÓÎÏ·½áÊø
-    timer->setVisible(false);                   //¼ÆÊ±Æ÷Òş²Ø
-    blackRoundArrow->setVisible(false);         //ºÚ·½¼ıÍ·Òş²Ø
-    whiteRoundArrow->setVisible(false);         //°×·½¼ıÍ·Òş²Ø
-    selectedHighlight->setVisible(false);       //Òş²ØÑ¡ÖĞ¸ßÁÁ
-    selectedChessName = "";                     //Ñ¡ÖĞÆå×ÓÃû×ÖÖØÖÃ
-    selectedPlacePoint = nullptr;               //Ñ¡ÖĞ·ÅÖÃµãÖØÖÃ
-    gameOverTip->setVisible(true);              //½áËãÌáÊ¾Òş²Ø
+    isGamePlaying = false;                      //æ¸¸æˆç»“æŸ
+    timer->setVisible(false);                   //è®¡æ—¶å™¨éšè—
+    blackRoundArrow->setVisible(false);         //é»‘æ–¹ç®­å¤´éšè—
+    whiteRoundArrow->setVisible(false);         //ç™½æ–¹ç®­å¤´éšè—
+    selectedHighlight->setVisible(false);       //éšè—é€‰ä¸­é«˜äº®
+    selectedChessName = "";                     //é€‰ä¸­æ£‹å­åå­—é‡ç½®
+    selectedPlacePoint = nullptr;               //é€‰ä¸­æ”¾ç½®ç‚¹é‡ç½®
+    gameOverTip->setVisible(true);              //ç»“ç®—æç¤ºéšè—
+
+    isBlackRole = !isBlackRole;
 }
 
 void OnlineMode::cleanBoard(Ref* pSender) {
-    lastChessSum = 0; curChessSum = 0;                          //ÆåÅÌÉÏÆå×Ó×ÜÊıÇåÁã
+    lastChessSum = 0; curChessSum = 0;                          //æ£‹ç›˜ä¸Šæ£‹å­æ€»æ•°æ¸…é›¶
     for (int row = 0; row < 19; row++)
         for (int col = 0; col < 19; col++)
             if (boardChesses[row][col]) {
-                boardChesses[row][col]->removeFromParent();     //É¾³ıËùÓĞ±£´æµÄÆå×Ó
+                boardChesses[row][col]->removeFromParent();     //åˆ é™¤æ‰€æœ‰ä¿å­˜çš„æ£‹å­
                 boardChesses[row][col] = nullptr;
             }
 
-    //Òş²ØÓÎÏ·½áËãÏà¹Øui
+    //éšè—æ¸¸æˆç»“ç®—ç›¸å…³ui
     gameOverTip->setVisible(false);
-    victoryAnimation->setVisible(false);                        //Òş²Ø»ñÊ¤¶¯»­
+    victoryAnimation->setVisible(false);                        //éšè—è·èƒœåŠ¨ç”»
     drawAnimation->setVisible(false);
-    gameOverBtn->setVisible(false);                             //Òş²Ø½áÊøÓÎÏ·°´Å¥
+    gameOverBtn->setVisible(false);                             //éšè—ç»“æŸæ¸¸æˆæŒ‰é’®
     gameOverDrawBtn->setVisible(false);
 
-    startGameBtn->setVisible(true);                             //ÏÔÊ¾¿ªÊ¼ÓÎÏ·°´Å¥£¬ÎªÏÂÒ»´ÎÓÎÏ·×ö×¼±¸
+    startGameBtn->setVisible(true);                             //æ˜¾ç¤ºå¼€å§‹æ¸¸æˆæŒ‰é’®ï¼Œä¸ºä¸‹ä¸€æ¬¡æ¸¸æˆåšå‡†å¤‡
 }

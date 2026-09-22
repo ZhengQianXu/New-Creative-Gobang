@@ -1,4 +1,4 @@
-#ifndef __LOCALMODE_SCENE_H__
+ï»¿#ifndef __LOCALMODE_SCENE_H__
 #define __LOCALMODE_SCENE_H__
 
 #include "cocos2d.h"
@@ -7,57 +7,58 @@
 
 class LocalMode : public cocos2d::Scene{
 public:
-    //´´½¨³¡¾°
+    //åˆ›å»ºåœºæ™¯
     static cocos2d::Scene* createScene();
 
-    //³õÊ¼»¯º¯Êı
+    //åˆå§‹åŒ–å‡½æ•°
     virtual bool init();
     
-    //´´½¨¾²Ì¬·½·¨ create()
+    //åˆ›å»ºé™æ€æ–¹æ³• create()
     CREATE_FUNC(LocalMode);
 
 private:    
-    //¿ªÊ¼ÓÎÏ·´¦Àí
+    //å¼€å§‹æ¸¸æˆå¤„ç†
     void onStartGame(cocos2d::Ref* pSender);
 
-    //Ã¿Ö¡¸üĞÂº¯Êı£¨ÓÉ scheduleUpdate() ´¥·¢£©£¬dt Á½Ö¡Ö®¼äµÄÊ±¼ä¼ä¸ô£¬Í¨³£Ô¼Îª 1/60 Ãë
+    //æ¯å¸§æ›´æ–°å‡½æ•°ï¼ˆç”± scheduleUpdate() è§¦å‘ï¼‰ï¼Œdt ä¸¤å¸§ä¹‹é—´çš„æ—¶é—´é—´éš”ï¼Œé€šå¸¸çº¦ä¸º 1/60 ç§’
     void update(float dt);   
 
-    //ÓÎÏ·½áÊø´¦Àí£¬·ÖÆ½¾ÖºÍ·ÇÆ½¾Ö£¬isDraw = true±íÊ¾Æ½¾Ö
+    //æ¸¸æˆç»“æŸå¤„ç†ï¼Œåˆ†å¹³å±€å’Œéå¹³å±€ï¼ŒisDraw = trueè¡¨ç¤ºå¹³å±€
     void gameOver(bool isDraw);
 
-    //Çå¿ÕÆåÅÌ
+    //æ¸…ç©ºæ£‹ç›˜
     void cleanBoard(cocos2d::Ref* pSender);    
 
     ~LocalMode() { if(gl) delete gl; };
 private:
-    GameLogic* gl = nullptr;                                    //ÓÎÏ·Âß¼­Ö¸Õë£¬ÓÃÓÚµ÷ÓÃÂß¼­´¦Àíº¯Êı
+    GameLogic* gl = nullptr;                                    //æ¸¸æˆé€»è¾‘æŒ‡é’ˆï¼Œç”¨äºè°ƒç”¨é€»è¾‘å¤„ç†å‡½æ•°
 
-    bool isEffectOn = true;                                     //ÒôĞ§¿ª¹Ø×´Ì¬
+    bool isEffectOn = true;                                     //éŸ³æ•ˆå¼€å…³çŠ¶æ€
 
-    std::vector<cocos2d::Sprite*> chessSprites;                 //Æå×ÓÊı×é
-    std::string selectedChessName = "";                         //Ñ¡ÖĞÆå×ÓÃû×Ö
-    cocos2d::Sprite* selectedHighlight = nullptr;               //Ñ¡ÖĞ¸ßÁÁĞ§¹û    
-    cocos2d::Sprite* selectedPlacePoint = nullptr;              //Ñ¡ÖĞ·ÅÖÃµã
+    std::vector<cocos2d::Sprite*> chessSprites;                 //æ£‹å­æ•°ç»„
+    std::string selectedChessName = "";                         //é€‰ä¸­æ£‹å­åå­—
+    cocos2d::Sprite* selectedHighlight = nullptr;               //é€‰ä¸­é«˜äº®æ•ˆæœ    
+    cocos2d::Sprite* selectedPlacePoint = nullptr;              //é€‰ä¸­æ”¾ç½®ç‚¹
+    std::vector<int> selectedRowCol = { 0,0 };                  //é€‰ä¸­è¡Œåˆ—
 
-    std::vector<std::vector<cocos2d::Sprite*>> placePoints;     //ÆåÅÌËùÓĞ¿É·ÅÖÃµãÊı×é
-    std::vector<std::vector<cocos2d::Sprite*>> boardChesses;    //´æ·ÅÆåÅÌÉÏÆå×ÓÊı×é
+    std::vector<std::vector<cocos2d::Sprite*>> placePoints;     //æ£‹ç›˜æ‰€æœ‰å¯æ”¾ç½®ç‚¹æ•°ç»„
+    std::vector<std::vector<cocos2d::Sprite*>> boardChesses;    //å­˜æ”¾æ£‹ç›˜ä¸Šæ£‹å­æ•°ç»„
 
-    cocos2d::MenuItemImage* startGameBtn = nullptr;             //¿ªÊ¼ÓÎÏ·°´Å¥
-    bool isGamePlaying = false;                                 //ÊÇ·ñÕıÔÚÓÎÏ·ÖĞ
-    float roundSurplusTime = 20.9f;                             //»ØºÏÊ£ÓàÊ±¼ä£¬ÕâÀï»®¶¨Ò»¸ö»ØºÏÊ±¼äÎª20Ãë×óÓÒ
-    bool isBlackRound = true;                                   //ÊÇ·ñÊÇºÚ·½»ØºÏ
-    cocos2d::Label* timer = nullptr;                            //¼ÆÊ±Æ÷ÏÔÊ¾±êÇ©
-    cocos2d::Sprite* blackRoundArrow = nullptr;                 //Ö¸ÏòºÚ·½µÄ¼ıÍ·
-    cocos2d::Sprite* whiteRoundArrow = nullptr;                 //Ö¸Ïò°×·½µÄ¼ıÍ·
-    int lastChessSum = 0;                                       //ÉÏÒ»»ØºÏÆåÅÌÉÏÆå×Ó×ÜÊı
-    int curChessSum = 0;                                        //µ±Ç°»ØºÏÆåÅÌÉÏÆå×Ó×ÜÊı
+    cocos2d::MenuItemImage* startGameBtn = nullptr;             //å¼€å§‹æ¸¸æˆæŒ‰é’®
+    bool isGamePlaying = false;                                 //æ˜¯å¦æ­£åœ¨æ¸¸æˆä¸­
+    float roundSurplusTime = 20.9f;                             //å›åˆå‰©ä½™æ—¶é—´ï¼Œè¿™é‡Œåˆ’å®šä¸€ä¸ªå›åˆæ—¶é—´ä¸º20ç§’å·¦å³
+    bool isBlackRound = true;                                   //æ˜¯å¦æ˜¯é»‘æ–¹å›åˆ
+    cocos2d::Label* timer = nullptr;                            //è®¡æ—¶å™¨æ˜¾ç¤ºæ ‡ç­¾
+    cocos2d::Sprite* blackRoundArrow = nullptr;                 //æŒ‡å‘é»‘æ–¹çš„ç®­å¤´
+    cocos2d::Sprite* whiteRoundArrow = nullptr;                 //æŒ‡å‘ç™½æ–¹çš„ç®­å¤´
+    int lastChessSum = 0;                                       //ä¸Šä¸€å›åˆæ£‹ç›˜ä¸Šæ£‹å­æ€»æ•°
+    int curChessSum = 0;                                        //å½“å‰å›åˆæ£‹ç›˜ä¸Šæ£‹å­æ€»æ•°
    
-    cocos2d::Label* gameOverTip = nullptr;                      //ÓÎÏ·½áËãÌáÊ¾
-    cocos2d::Sprite* victoryAnimation = nullptr;                //»ñÊ¤¶¯»­Õ¹Ê¾
-    cocos2d::Sprite* drawAnimation = nullptr;                   //Æ½¾Ö½áËã¶¯»­
-    cocos2d::MenuItemImage* gameOverBtn = nullptr;              //ÓÎÏ·½áÊø°´Å¥
-    cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;          //Æ½¾Ö½áÊø°´Å¥
+    cocos2d::Label* gameOverTip = nullptr;                      //æ¸¸æˆç»“ç®—æç¤º
+    cocos2d::Sprite* victoryAnimation = nullptr;                //è·èƒœåŠ¨ç”»å±•ç¤º
+    cocos2d::Sprite* drawAnimation = nullptr;                   //å¹³å±€ç»“ç®—åŠ¨ç”»
+    cocos2d::MenuItemImage* gameOverBtn = nullptr;              //æ¸¸æˆç»“æŸæŒ‰é’®
+    cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;          //å¹³å±€ç»“æŸæŒ‰é’®
 };
 
 #endif // __LOCALMODE_SCENE_H__

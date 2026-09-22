@@ -1,35 +1,35 @@
-#ifndef __MusicControl_H__
+ï»¿#ifndef __MusicControl_H__
 #define __MusicControl_H__
 
 #include "cocos2d.h"
 
 class MusicControl : public cocos2d::Node {
 public:
-    //³õÊ¼»¯º¯Êı
+    //åˆå§‹åŒ–å‡½æ•°
     virtual bool init() override;
 
-    //¹¤³§·½·¨£¬´´½¨ÊµÀı
+    //å·¥å‚æ–¹æ³•ï¼Œåˆ›å»ºå®ä¾‹
     static MusicControl* create();
 
-    //¸Ä±ä±³¾°ÒôÀÖ²¥·Å×´Ì¬
+    //æ”¹å˜èƒŒæ™¯éŸ³ä¹æ’­æ”¾çŠ¶æ€
     void toggleBGM(cocos2d::Ref* pSender);
 
-    //»ñÈ¡±³¾°ÒôÀÖ²¥·Å×´Ì¬
+    //è·å–èƒŒæ™¯éŸ³ä¹æ’­æ”¾çŠ¶æ€
     static bool isBgmPlay() { return isBgmOn; }
 
-    //¿ªÊ¼Ğı×ª°´Å¥
+    //å¼€å§‹æ—‹è½¬æŒ‰é’®
     void startRotate();
 
-    //Í£Ö¹Ğı×ª°´Å¥
+    //åœæ­¢æ—‹è½¬æŒ‰é’®
     void stopRotate();
 
-    //µ±¸Ã×é¼şÏÔÊ¾Ê±µ÷ÓÃ
+    //å½“è¯¥ç»„ä»¶æ˜¾ç¤ºæ—¶è°ƒç”¨
     virtual void onEnter() override;
 
 private:
-    cocos2d::MenuItemImage* bgmBtn = nullptr;       //±³¾°ÒôÀÖ¿ØÖÆ°´Å¥
-    cocos2d::Action* rotateAction = nullptr;        //Ğı×ª¶¯×÷
-    static bool isBgmOn;                            //±³¾°ÒôÀÖ²¥·Å×´Ì¬
+    cocos2d::MenuItemImage* bgmBtn = nullptr;       //èƒŒæ™¯éŸ³ä¹æ§åˆ¶æŒ‰é’®
+    cocos2d::Action* rotateAction = nullptr;        //æ—‹è½¬åŠ¨ä½œ
+    static bool isBgmOn;                            //èƒŒæ™¯éŸ³ä¹æ’­æ”¾çŠ¶æ€
 };
 
 #endif // __MusicControl_H__

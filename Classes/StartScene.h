@@ -1,4 +1,4 @@
-#ifndef __StartScene_H__
+ï»¿#ifndef __StartScene_H__
 #define __StartScene_H__
 
 #include "cocos2d.h"
@@ -6,7 +6,7 @@
 
 class StartScene : public cocos2d::Scene {
 public:
-	//´´½¨Ö÷½çÃæ
+	//åˆ›å»ºä¸»ç•Œé¢
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();
@@ -14,42 +14,42 @@ public:
 	CREATE_FUNC(StartScene);
 
 private:
-	//¹æÔòÄÚÈİÏÔÊ¾
+	//è§„åˆ™å†…å®¹æ˜¾ç¤º
 	void onRuleShow(cocos2d::Ref* pSender);
 
-	//·´À¡Í¾¾¶ÏÔÊ¾
+	//åé¦ˆé€”å¾„æ˜¾ç¤º
 	void onSuggestShow(cocos2d::Ref* pSender);
 
-	//¹Ø±Õµ¯´°
+	//å…³é—­å¼¹çª—
 	void closePopup(cocos2d::Ref* pSender);
 
-	//´´½¨µ¯´°
+	//åˆ›å»ºå¼¹çª—
 	void createPopup(const std::string& title, const std::string& content, bool isOnline = false);
 
-	//´´½¨±¾µØ¶ÔÕ½Ä£Ê½³¡¾°
+	//åˆ›å»ºæœ¬åœ°å¯¹æˆ˜æ¨¡å¼åœºæ™¯
 	void createLocalMode(cocos2d::Ref* pSender);
 
-	//´´½¨Ë«ÈËÁª»úÄ£Ê½³¡¾°
+	//åˆ›å»ºåŒäººè”æœºæ¨¡å¼åœºæ™¯
 	void createOnlineMode(cocos2d::Ref* pSender);
 
-	//ÍË³öÓÎÏ·°´Å¥
+	//é€€å‡ºæ¸¸æˆæŒ‰é’®
 	void closeStartScene(cocos2d::Ref* pSender);
 
-	//´´½¨·¿¼ä
+	//åˆ›å»ºæˆ¿é—´
 	void createRoom(cocos2d::Ref* pSender);
 
-	//¼ÓÈë·¿¼ä
+	//åŠ å…¥æˆ¿é—´
 	void joinRoom(cocos2d::Ref* pSender);	
 
 private:
-	cocos2d::Size visibleSize;                              //´°¿Ú´óĞ¡
-	cocos2d::Vec2 origin;                                   //×ø±êÔ­µã
+	cocos2d::Size visibleSize;                              //çª—å£å¤§å°
+	cocos2d::Vec2 origin;                                   //åæ ‡åŸç‚¹
 
-	cocos2d::LayerColor* popupMask = nullptr;               //ÕÚÕÖ²ã
-	cocos2d::ui::Layout* popup = nullptr;                   //µ¯´°
-	cocos2d::Label* popupContent = nullptr;					//µ¯´°ÄÚÈİ
-	cocos2d::Label* curRoomId = nullptr;					//µ±Ç°·¿¼äºÅ
-	cocos2d::ui::TextField* roomIdInput = nullptr;			//·¿¼äºÅÊäÈë¿ò
+	cocos2d::LayerColor* popupMask = nullptr;               //é®ç½©å±‚
+	cocos2d::ui::Layout* popup = nullptr;                   //å¼¹çª—
+	cocos2d::Label* popupContent = nullptr;					//å¼¹çª—å†…å®¹
+	cocos2d::Label* curRoomId = nullptr;					//å½“å‰æˆ¿é—´å·
+	cocos2d::ui::TextField* roomIdInput = nullptr;			//æˆ¿é—´å·è¾“å…¥æ¡†
 };
 
 #endif // !__StartScene_H__

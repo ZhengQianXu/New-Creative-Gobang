@@ -1,4 +1,4 @@
-#include "StartScene.h"
+ï»¿#include "StartScene.h"
 #include "MusicControl.h"
 #include "SimpleAudioEngine.h"
 #include "LocalModeScene.h"
@@ -19,22 +19,22 @@ bool StartScene::init() {
     visibleSize = Director::getInstance()->getVisibleSize();
     origin = Director::getInstance()->getVisibleOrigin();
 
-	//Ìí¼ÓÄ¾ÎÆÉ«±³¾°
+	//æ·»åŠ æœ¨çº¹è‰²èƒŒæ™¯
 	auto bgLayer = LayerColor::create(Color4B(181, 136, 99, 255));
-	this->addChild(bgLayer, -1);    //·ÅÔÚ×îµ×²ã
+	this->addChild(bgLayer, -1);    //æ”¾åœ¨æœ€åº•å±‚
 
-    //Ìí¼Ó±³¾°ÒôÀÖ¿ØÖÆÄ£¿é£¨°üº¬°´Å¥ºÍÌáÊ¾£©
+    //æ·»åŠ èƒŒæ™¯éŸ³ä¹æŽ§åˆ¶æ¨¡å—ï¼ˆåŒ…å«æŒ‰é’®å’Œæç¤ºï¼‰
 	MusicControl* mc = MusicControl::create();
 	this->addChild(mc, 0);
 
-    //´´½¨¹æÔò°´Å¥
+    //åˆ›å»ºè§„åˆ™æŒ‰é’®
     auto ruleBtn = MenuItemImage::create("rule.png", "rule.png", CC_CALLBACK_1(StartScene::onRuleShow, this));
     if (ruleBtn)
         ruleBtn->setPosition(Vec2::ZERO);
     else
         cocos2d::log("'rule.png'");
     
-    //´´½¨´æ·Å¹æÔò°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚÆÁÄ»×óÉÏ·½
+    //åˆ›å»ºå­˜æ”¾è§„åˆ™æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å±å¹•å·¦ä¸Šæ–¹
     auto ruleMenu = Menu::create(ruleBtn, nullptr);
     if (ruleMenu) {
         ruleMenu->setPosition(origin.x + 25.0f, origin.y + visibleSize.height - 140.0f);
@@ -43,7 +43,7 @@ bool StartScene::init() {
     else
         cocos2d::log("'ruleBtn'");
 
-    //´´½¨·´À¡°´Å¥
+    //åˆ›å»ºåé¦ˆæŒ‰é’®
     auto suggestBtn = MenuItemImage::create("suggest.png", "suggest.png", CC_CALLBACK_1(StartScene::onSuggestShow, this));
     if (suggestBtn) {
         suggestBtn->setScale(96.5f / suggestBtn->getContentSize().width, 33.0f / suggestBtn->getContentSize().height);
@@ -52,17 +52,17 @@ bool StartScene::init() {
     else
         cocos2d::log("'suggest.png'");
     
-    //´´½¨´æ·Å·´À¡°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚÆÁÄ»ÓÒÉÏ·½
+    //åˆ›å»ºå­˜æ”¾åé¦ˆæŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å±å¹•å³ä¸Šæ–¹
     auto suggestMenu = Menu::create(suggestBtn, nullptr);
     if (suggestMenu) {
-        suggestMenu->setPosition(origin.x + visibleSize.width - 48.25f, origin.y + visibleSize.height - 140.0f);  // ÆåÅÌÉÏ·½ÓÒ²à
+        suggestMenu->setPosition(origin.x + visibleSize.width - 48.25f, origin.y + visibleSize.height - 140.0f);  // æ£‹ç›˜ä¸Šæ–¹å³ä¾§
         this->addChild(suggestMenu, 0);
     }
     else
         cocos2d::log("'suggestBtn'");
 
-    //´´½¨±êÌâ£¬×÷ÎªÓÎÏ·»¶Ó­
-    auto Title = Label::create(u8"»¶Ó­À´µ½¡°ÕâË­±ÁµÃ×¡¡±", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 60);
+    //åˆ›å»ºæ ‡é¢˜ï¼Œä½œä¸ºæ¸¸æˆæ¬¢è¿Ž
+    auto Title = Label::create(u8"æ¬¢è¿Žæ¥åˆ°â€œè¿™è°ç»·å¾—ä½â€", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 60);
     if (Title) {
         Title->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 80.0f);
         Title->setTextColor(Color4B::BLACK);
@@ -71,7 +71,7 @@ bool StartScene::init() {
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //Ö÷½çÃæ¶¯»­
+    //ä¸»ç•Œé¢åŠ¨ç”»
     auto Animation = Sprite::create("victory.jpg");
     if (Animation) {
         Animation->setScale(316.0f / Animation->getContentSize().width, 360.5f / Animation->getContentSize().height);
@@ -81,101 +81,101 @@ bool StartScene::init() {
     else
         cocos2d::log("'victory.jpg'");
 
-    auto listener = EventListenerTouchOneByOne::create();                       //´´½¨µã»÷¼àÌý
-    listener->setSwallowTouches(false);                                         //²»ÍÌµôµã»÷ÊÂ¼þ
+    auto listener = EventListenerTouchOneByOne::create();                       //åˆ›å»ºç‚¹å‡»ç›‘å¬
+    listener->setSwallowTouches(false);                                         //ä¸åžæŽ‰ç‚¹å‡»äº‹ä»¶
     listener->onTouchBegan = [=](Touch* touch, Event* event) -> bool {
         auto touchPos = touch->getLocation();
         if (Animation->getBoundingBox().containsPoint(touchPos)) {
-            SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");  //Èç¹ûµã»÷µ½¶¯»­£¬Ôò´¥·¢¶ÔÓ¦ÒôÐ§
+            SimpleAudioEngine::getInstance()->playEffect("music/victory.mp3");  //å¦‚æžœç‚¹å‡»åˆ°åŠ¨ç”»ï¼Œåˆ™è§¦å‘å¯¹åº”éŸ³æ•ˆ
             return true;
         }
         return false;
     };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //½«¼àÌýÆ÷Ìí¼Óµ½ÊÂ¼þ·Ö·¢Æ÷
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);   //å°†ç›‘å¬å™¨æ·»åŠ åˆ°äº‹ä»¶åˆ†å‘å™¨
 
-    //Ìí¼Ó±¾µØ¶ÔÕ½Ä£Ê½Èë¿Ú
+    //æ·»åŠ æœ¬åœ°å¯¹æˆ˜æ¨¡å¼å…¥å£
     auto localModeBtn = MenuItemImage::create("localMode.png", "localMode_pressed.png", CC_CALLBACK_1(StartScene::createLocalMode, this));
     if (localModeBtn)
         localModeBtn->setPosition(Vec2::ZERO);        
     else
-        cocos2d::log("¡°localMode.png or localMode_pressed.png¡±");
+        cocos2d::log("â€œlocalMode.png or localMode_pressed.pngâ€");
     
-    //´´½¨´æ·Å±¾µØ¶ÔÕ½Ä£Ê½°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚ¶¯»­ÏÂ·½
+    //åˆ›å»ºå­˜æ”¾æœ¬åœ°å¯¹æˆ˜æ¨¡å¼æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨åŠ¨ç”»ä¸‹æ–¹
     auto localModeMenu = Menu::create(localModeBtn, nullptr);
     if (localModeMenu) {
         localModeMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 100.0f);
         this->addChild(localModeMenu, 0);
     }
     else
-        cocos2d::log("¡°localModeBtn¡±");
+        cocos2d::log("â€œlocalModeBtnâ€");
 
-    //Ìí¼ÓË«ÈËÁª»úÄ£Ê½Èë¿Ú
+    //æ·»åŠ åŒäººè”æœºæ¨¡å¼å…¥å£
     auto onlineModeBtn = MenuItemImage::create("onlineMode.png", "onlineMode_pressed.png", CC_CALLBACK_1(StartScene::createOnlineMode, this));
     if (onlineModeBtn)
         onlineModeBtn->setPosition(Vec2::ZERO);        
     else
-        cocos2d::log("¡°onlineMode.png or onlineMode_pressed.png¡±");
+        cocos2d::log("â€œonlineMode.png or onlineMode_pressed.pngâ€");
     
-    //´´½¨´æ·ÅË«ÈËÁª»úÄ£Ê½°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚ±¾µØ¶ÔÕ½Ä£Ê½°´Å¥ÏÂ·½
+    //åˆ›å»ºå­˜æ”¾åŒäººè”æœºæ¨¡å¼æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨æœ¬åœ°å¯¹æˆ˜æ¨¡å¼æŒ‰é’®ä¸‹æ–¹
     auto onlineModeMenu = Menu::create(onlineModeBtn, nullptr);
     if (onlineModeMenu) {
         onlineModeMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 250.0f);
         this->addChild(onlineModeMenu, 0);
     }
     else
-        cocos2d::log("¡°onlineModeBtn¡±");
+        cocos2d::log("â€œonlineModeBtnâ€");
 
-    //Ìí¼Ó¹Ø±ÕÓÎÏ·°´Å¥
+    //æ·»åŠ å…³é—­æ¸¸æˆæŒ‰é’®
     auto closeGameBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closeStartScene, this));
     if (closeGameBtn) {
         closeGameBtn->setPosition(Vec2::ZERO);
         closeGameBtn->setScale(44.0f / closeGameBtn->getContentSize().width, 44.0f / closeGameBtn->getContentSize().height);
     }
     else
-        cocos2d::log("¡°CloseNormal.png or CloseSelected.png¡±");
+        cocos2d::log("â€œCloseNormal.png or CloseSelected.pngâ€");
     
-    //´´½¨´æ·Å¹Ø±ÕÓÎÏ·°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚÆÁÄ»ÓÒÏÂ½Ç
+    //åˆ›å»ºå­˜æ”¾å…³é—­æ¸¸æˆæŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å±å¹•å³ä¸‹è§’
     auto closeGameMenu = Menu::create(closeGameBtn, nullptr);
     if (closeGameMenu) {
         closeGameMenu->setPosition(origin.x + visibleSize.width - 22.0f, origin.y + 22.0f);
         this->addChild(closeGameMenu, 1);
     }
     else
-        cocos2d::log("¡°closeItem¡±");
+        cocos2d::log("â€œcloseItemâ€");
     
-    //´´½¨¹Ø±ÕÓÎÏ·ÌáÊ¾£¬Î»ÖÃÔÚ°´Å¥×ó±ß
-    auto closeTip = Label::create(u8"µã»÷¼´¿ÉÍË³öÓÎÏ·->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+    //åˆ›å»ºå…³é—­æ¸¸æˆæç¤ºï¼Œä½ç½®åœ¨æŒ‰é’®å·¦è¾¹
+    auto closeTip = Label::create(u8"ç‚¹å‡»å³å¯é€€å‡ºæ¸¸æˆ->", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (closeTip) {
         closeTip->setPosition(origin.x + visibleSize.width - 160.0f, origin.y + 22.0f);
         closeTip->setTextColor(Color4B::BLACK);
         this->addChild(closeTip, 0);
     }
     else
-        cocos2d::log("¡°fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf¡±");
+        cocos2d::log("â€œfonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttfâ€");
 
 	return true;
 }
 
 void StartScene::onRuleShow(Ref* pSender) {
-    std::string title = u8"ÓÎÏ·¹æÔò";
+    std::string title = u8"æ¸¸æˆè§„åˆ™";
     std::string content =
-        u8"ºÚ·½ºÍ°×·½¸÷ÓÐ5¸öÆå×Ó£¬·Ö±ðÐ´×Å£º\n"
-        "Õâ¡¢Ë­¡¢±Á¡¢µÃ¡¢×¡\n"
-        "Ë«·½ÂÖÁ÷Âä×Ó£¬Ã¿´ÎÖ»ÄÜÂäÒ»¸öÆå×Ó¡£\n"
-        "Á¬³É \"ÕâË­±ÁµÃ×¡\" 5¸ö²»Í¬×ÖµÄÒ»·½»ñÊ¤£¡\n"
-        "¿ÉÒÔ²»°´Ë³Ðò£¬»ØºÏÏÞÊ±20Ãë£¬³¬Ê±×Ô¶¯Âä×Ó¡£";
+        u8"é»‘æ–¹å’Œç™½æ–¹å„æœ‰5ä¸ªæ£‹å­ï¼Œåˆ†åˆ«å†™ç€ï¼š\n"
+        "è¿™ã€è°ã€ç»·ã€å¾—ã€ä½\n"
+        "åŒæ–¹è½®æµè½å­ï¼Œæ¯æ¬¡åªèƒ½è½ä¸€ä¸ªæ£‹å­ã€‚\n"
+        "è¿žæˆ \"è¿™è°ç»·å¾—ä½\" 5ä¸ªä¸åŒå­—çš„ä¸€æ–¹èŽ·èƒœï¼\n"
+        "å¯ä»¥ä¸æŒ‰é¡ºåºï¼Œå›žåˆé™æ—¶20ç§’ï¼Œè¶…æ—¶è‡ªåŠ¨è½å­ã€‚";
 
     createPopup(title, content);
 }
 
 void StartScene::onSuggestShow(Ref* pSender) {
-    std::string title = u8"½¨Òé·´À¡";
+    std::string title = u8"å»ºè®®åé¦ˆ";
     std::string content =
-        u8"×÷Õß£ºZhengQianXu\n"
-        "ÓÊÏä£º2059984809@qq.com\n"
-        "Github£ºhttps://github.com/ZhengQianXu\n"
-        "ÈçÓÐÈÎºÎ½¨Òé»òÎÊÌâ£¬»¶Ó­ÁªÏµ×÷Õß£¡\n"
-        "¸ÐÐ»ÄúµÄÖ§³Ö£¡";
+        u8"ä½œè€…ï¼šZhengQianXu\n"
+        "é‚®ç®±ï¼š2059984809@qq.com\n"
+        "Githubï¼šhttps://github.com/ZhengQianXu\n"
+        "å¦‚æœ‰ä»»ä½•å»ºè®®æˆ–é—®é¢˜ï¼Œæ¬¢è¿Žè”ç³»ä½œè€…ï¼\n"
+        "æ„Ÿè°¢æ‚¨çš„æ”¯æŒï¼";
 
     createPopup(title, content);
 }
@@ -194,35 +194,35 @@ void StartScene::closePopup(Ref* pSender) {
 }
 
 void StartScene::createPopup(const std::string& title, const std::string& content, bool isOnline) {
-    //´´½¨°ëÍ¸Ã÷ÕÚÕÖ²ã£¬ÕÚÕÖ²ã»á¸²¸ÇÕû¸öÆÁÄ»£¬ÈÃÖ÷³¡¾°±ä°µ
+    //åˆ›å»ºåŠé€æ˜Žé®ç½©å±‚ï¼Œé®ç½©å±‚ä¼šè¦†ç›–æ•´ä¸ªå±å¹•ï¼Œè®©ä¸»åœºæ™¯å˜æš—
     popupMask = LayerColor::create(Color4B(0, 0, 0, 150));
-    popupMask->setContentSize(visibleSize);                                 //ÆÌÂúÆÁÄ»
-    popupMask->setPosition(origin);                                         //´ÓÆÁÄ»×óÏÂ½Ç¿ªÊ¼
+    popupMask->setContentSize(visibleSize);                                 //é“ºæ»¡å±å¹•
+    popupMask->setPosition(origin);                                         //ä»Žå±å¹•å·¦ä¸‹è§’å¼€å§‹
     this->addChild(popupMask, 10);
     
-    //ÕÚÕÖ²ãÀ¹½ØËùÓÐ´¥ÃþÊÂ¼þ£¬·ÀÖ¹Íæ¼ÒÔÚµ¯´°´ò¿ªÊ±µã»÷µ½Ö÷³¡¾°µÄ°´Å¥»òÆå×Ó
+    //é®ç½©å±‚æ‹¦æˆªæ‰€æœ‰è§¦æ‘¸äº‹ä»¶ï¼Œé˜²æ­¢çŽ©å®¶åœ¨å¼¹çª—æ‰“å¼€æ—¶ç‚¹å‡»åˆ°ä¸»åœºæ™¯çš„æŒ‰é’®æˆ–æ£‹å­
     auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);                                      //À¹½ØËùÓÐ´¥Ãþ£¬ÍÌµôÊÂ¼þ£¬²»´«µÝµ½Ö÷³¡¾°
+    listener->setSwallowTouches(true);                                      //æ‹¦æˆªæ‰€æœ‰è§¦æ‘¸ï¼ŒåžæŽ‰äº‹ä»¶ï¼Œä¸ä¼ é€’åˆ°ä¸»åœºæ™¯
     listener->onTouchBegan = [=](Touch* touch, Event* event) -> bool {
-        return true;                                                        //Ïû·ÑµôÊÂ¼þ
+        return true;                                                        //æ¶ˆè´¹æŽ‰äº‹ä»¶
     };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, popupMask);
 
-    //´´½¨µ¯´°Ö÷Ìå£¨°×É«±³¾°£©
+    //åˆ›å»ºå¼¹çª—ä¸»ä½“ï¼ˆç™½è‰²èƒŒæ™¯ï¼‰
     popup = ui::Layout::create();
-    popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //´¿É«±³¾°
-    popup->setBackGroundColor(Color3B::WHITE);                              //°×É«±³¾°
-    popup->setBackGroundColorOpacity(255);                                  //²»Í¸Ã÷
-    popup->setContentSize(Size(600, 300));                                  //µ¯´°¿í600£¬¸ß300    
+    popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //çº¯è‰²èƒŒæ™¯
+    popup->setBackGroundColor(Color3B::WHITE);                              //ç™½è‰²èƒŒæ™¯
+    popup->setBackGroundColorOpacity(255);                                  //ä¸é€æ˜Ž
+    popup->setContentSize(Size(600, 300));                                  //å¼¹çª—å®½600ï¼Œé«˜300    
 
-    //Î»ÖÃ£ºÆÁÄ»ÖÐÐÄÆ«ÒÆ°ë¸öµ¯´°´óÐ¡£¨ÒòÎªÃªµãÔÚ×óÏÂ½Ç£©
+    //ä½ç½®ï¼šå±å¹•ä¸­å¿ƒåç§»åŠä¸ªå¼¹çª—å¤§å°ï¼ˆå› ä¸ºé”šç‚¹åœ¨å·¦ä¸‹è§’ï¼‰
     popup->setPosition(Vec2(origin.x + visibleSize.width / 2 - 300.0f, origin.y + visibleSize.height / 2 - 200.0f));
-    popup->setAnchorPoint(Vec2::ZERO);                                      //ÃªµãÔÚ×óÏÂ½Ç
-    popup->setTouchEnabled(true);                                           //ÔÊÐíµ¯´°½ÓÊÕ´¥Ãþ£¬·ÀÖ¹µã»÷´©Í¸
-    popup->setCascadeOpacityEnabled(true);                                  //×Ó½Úµã¼Ì³Ð¸¸½ÚµãÍ¸Ã÷¶È
-    popupMask->addChild(popup, 1);                                          //Ìí¼Óµ½ÕÚÕÖ²ãÖ®ÉÏ
+    popup->setAnchorPoint(Vec2::ZERO);                                      //é”šç‚¹åœ¨å·¦ä¸‹è§’
+    popup->setTouchEnabled(true);                                           //å…è®¸å¼¹çª—æŽ¥æ”¶è§¦æ‘¸ï¼Œé˜²æ­¢ç‚¹å‡»ç©¿é€
+    popup->setCascadeOpacityEnabled(true);                                  //å­èŠ‚ç‚¹ç»§æ‰¿çˆ¶èŠ‚ç‚¹é€æ˜Žåº¦
+    popupMask->addChild(popup, 1);                                          //æ·»åŠ åˆ°é®ç½©å±‚ä¹‹ä¸Š
 
-    //´´½¨±êÌâÎÄ×Ö£¬Î»ÖÃÔÚµ¯´°¶¥²¿¾ÓÖÐ
+    //åˆ›å»ºæ ‡é¢˜æ–‡å­—ï¼Œä½ç½®åœ¨å¼¹çª—é¡¶éƒ¨å±…ä¸­
     auto titleLabel = Label::create(title, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 32);
     if (titleLabel) {
         titleLabel->setTextColor(Color4B::BLACK);
@@ -232,29 +232,29 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //´´½¨ÄÚÈÝÎÄ×Ö   
+    //åˆ›å»ºå†…å®¹æ–‡å­—   
     popupContent = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
     if (popupContent) {
         popupContent->setTextColor(Color4B::BLACK);
-        //Èç¹ûÊÇÁª»úÄ£Ê½µ¯´°£¬ÄÚÈÝÎÄ×ÖÎ»ÖÃÔÚµ¯´°¶¥²¿Æ«ÏÂ£»Èç¹ûÊÇ¹æÔò»ò·´À¡µ¯´°£¬ÄÚÈÝÎÄ×ÖÎ»ÖÃÔÚµ¯´°ÕýÖÐ¼äÆ«ÏÂ
+        //å¦‚æžœæ˜¯è”æœºæ¨¡å¼å¼¹çª—ï¼Œå†…å®¹æ–‡å­—ä½ç½®åœ¨å¼¹çª—é¡¶éƒ¨åä¸‹ï¼›å¦‚æžœæ˜¯è§„åˆ™æˆ–åé¦ˆå¼¹çª—ï¼Œå†…å®¹æ–‡å­—ä½ç½®åœ¨å¼¹çª—æ­£ä¸­é—´åä¸‹
         if (isOnline)
             popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
         else
             popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);
-        popupContent->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //ÎÄ×ÖÔÚÇøÓòÄÚË®Æ½´¹Ö±¾ÓÖÐ
+        popupContent->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //æ–‡å­—åœ¨åŒºåŸŸå†…æ°´å¹³åž‚ç›´å±…ä¸­
         popup->addChild(popupContent);
     }
     else
         cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");    
     
-    //´´½¨¹Ø±Õµ¯´°°´Å¥
+    //åˆ›å»ºå…³é—­å¼¹çª—æŒ‰é’®
     auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closePopup, this));
     if (closeBtn)
         closeBtn->setPosition(Vec2::ZERO);
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
     
-    //´´½¨´æ·Å¹Ø±Õ°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚµ¯´°ÓÒÉÏ½Ç
+    //åˆ›å»ºå­˜æ”¾å…³é—­æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å¼¹çª—å³ä¸Šè§’
     auto closeMenu = Menu::create(closeBtn, nullptr);
     if (closeMenu) {
         closeMenu->setPosition(origin.x + popup->getContentSize().width - 30, origin.y + popup->getContentSize().height - 30);
@@ -264,26 +264,26 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
         cocos2d::log("closeBtn");
 
     if (!isOnline)
-		return;         //Èç¹û²»ÊÇÁª»úÄ£Ê½µ¯´°£¬Ôò²»ÐèÒªÌí¼Ó´´½¨·¿¼ä°´Å¥¡¢ÊäÈë¿òºÍ¼ÓÈë·¿¼ä°´Å¥
+		return;         //å¦‚æžœä¸æ˜¯è”æœºæ¨¡å¼å¼¹çª—ï¼Œåˆ™ä¸éœ€è¦æ·»åŠ åˆ›å»ºæˆ¿é—´æŒ‰é’®ã€è¾“å…¥æ¡†å’ŒåŠ å…¥æˆ¿é—´æŒ‰é’®
 
-	//´´½¨µ±Ç°·¿¼äºÅÏÔÊ¾ÎÄ×Ö£¬Î»ÖÃÔÚµ¯´°ÕýÖÐ¼ä×ó±ß
-	curRoomId = Label::create(u8"µ±Ç°·¿¼äºÅ£º------", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+	//åˆ›å»ºå½“å‰æˆ¿é—´å·æ˜¾ç¤ºæ–‡å­—ï¼Œä½ç½®åœ¨å¼¹çª—æ­£ä¸­é—´å·¦è¾¹
+	curRoomId = Label::create(u8"å½“å‰æˆ¿é—´å·ï¼š------", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (curRoomId) {
-        curRoomId->setPosition(origin.x + 180.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);  //Î»ÖÃÔÚµ¯´°×óÏÂ½Ç
+        curRoomId->setPosition(origin.x + 180.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);  //ä½ç½®åœ¨å¼¹çª—å·¦ä¸‹è§’
         curRoomId->setTextColor(Color4B::BLACK);
         popup->addChild(curRoomId, 1);
     }
 	else
 		CCLOG("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-    //Ìí¼Ó´´½¨·¿¼ä°´Å¥
+    //æ·»åŠ åˆ›å»ºæˆ¿é—´æŒ‰é’®
     auto createRoomBtn = MenuItemImage::create("createRoom.png", "createRoom_pressed.png", CC_CALLBACK_1(StartScene::createRoom, this));
     if (createRoomBtn)
         createRoomBtn->setPosition(Vec2::ZERO);       
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
 
-	//Ìí¼Ó´æ·Å´´½¨·¿¼ä°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚµ¯´°ÕýÖÐ¼äÓÒ±ß£¬µ±Ç°·¿¼äºÅÏÔÊ¾µÄÕýÓÒ²à
+	//æ·»åŠ å­˜æ”¾åˆ›å»ºæˆ¿é—´æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å¼¹çª—æ­£ä¸­é—´å³è¾¹ï¼Œå½“å‰æˆ¿é—´å·æ˜¾ç¤ºçš„æ­£å³ä¾§
     auto createRoomMenu = Menu::create(createRoomBtn, nullptr);
     if (createRoomMenu) {
         createRoomMenu->setPosition(origin.x + 420.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);
@@ -292,20 +292,20 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
         cocos2d::log("createRoomBtn");
 
-	//Ìí¼Ó·¿¼äºÅÊäÈë¿ò£¬Î»ÖÃÔÚµ¯´°×óÏÂ½Ç£¬µ±Ç°·¿¼äºÅÏÔÊ¾µÄÕýÏÂ·½
-    roomIdInput = ui::TextField::create(u8"ÕâÀïÊäÈë·¿¼äºÅ", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
+	//æ·»åŠ æˆ¿é—´å·è¾“å…¥æ¡†ï¼Œä½ç½®åœ¨å¼¹çª—å·¦ä¸‹è§’ï¼Œå½“å‰æˆ¿é—´å·æ˜¾ç¤ºçš„æ­£ä¸‹æ–¹
+    roomIdInput = ui::TextField::create(u8"è¿™é‡Œè¾“å…¥æˆ¿é—´å·", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if(roomIdInput) {
         roomIdInput->setContentSize(Size(200.0f, 50.0f));
         roomIdInput->setPosition(Vec2(origin.x + 180.0f, origin.y + 55.0f));
         roomIdInput->setMaxLengthEnabled(true);
-        roomIdInput->setMaxLength(6);                                         //·¿¼äºÅ³¤¶ÈÏÞÖÆÎª6Î»
+        roomIdInput->setMaxLength(6);                                         //æˆ¿é—´å·é•¿åº¦é™åˆ¶ä¸º6ä½
         roomIdInput->setTextColor(Color4B::BLACK);
         popup->addChild(roomIdInput, 2);
     }
     else
 		cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
 
-	//ÉèÖÃÊäÈë¿òµÄÕ¼Î»·ûÑÕÉ«Îª»ÒÉ«£¬µã»÷Ê±±äÎªÍ¸Ã÷
+	//è®¾ç½®è¾“å…¥æ¡†çš„å ä½ç¬¦é¢œè‰²ä¸ºç°è‰²ï¼Œç‚¹å‡»æ—¶å˜ä¸ºé€æ˜Ž
     roomIdInput->addEventListener([=](Ref*, ui::TextField::EventType type) {
         if (type == ui::TextField::EventType::ATTACH_WITH_IME)
             roomIdInput->setPlaceHolderColor(Color4B(0, 0, 0, 0));
@@ -313,7 +313,7 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
             roomIdInput->setPlaceHolderColor(Color4B::GRAY);
     });        
 
-	//´´½¨ÊäÈë¿òµÄ±ß¿òÍ¼Æ¬£¬Î»ÖÃÔÚÊäÈë¿òÏÂ·½£¬²ã¼¶±ÈÊäÈë¿òµÍÒ»²ã£¬×÷ÎªÊäÈë¿òµÄ±³¾°
+	//åˆ›å»ºè¾“å…¥æ¡†çš„è¾¹æ¡†å›¾ç‰‡ï¼Œä½ç½®åœ¨è¾“å…¥æ¡†ä¸‹æ–¹ï¼Œå±‚çº§æ¯”è¾“å…¥æ¡†ä½Žä¸€å±‚ï¼Œä½œä¸ºè¾“å…¥æ¡†çš„èƒŒæ™¯
 	auto roomIdInputFrame = ui::Scale9Sprite::create("roomCodeInputFrame.png");
     if (roomIdInputFrame) {
         roomIdInputFrame->setScale(200.0f / roomIdInputFrame->getContentSize().width, 50.0f / roomIdInputFrame->getContentSize().height);
@@ -323,14 +323,14 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
     else
 		CCLOG("'roomCodeInputFrame.png'");
 
-    //´´½¨¼ÓÈë·¿¼ä°´Å¥
+    //åˆ›å»ºåŠ å…¥æˆ¿é—´æŒ‰é’®
     auto joinRoomBtn = MenuItemImage::create("joinRoom.png", "joinRoom_pressed.png", CC_CALLBACK_1(StartScene::joinRoom, this));
     if (joinRoomBtn)
         joinRoomBtn->setPosition(Vec2::ZERO);       
     else
         cocos2d::log("'CloseNormal.png or CloseSelected.png'");
 
-	//´´½¨´æ·Å¼ÓÈë·¿¼ä°´Å¥µÄ²Ëµ¥£¬Î»ÖÃÔÚµ¯´°ÓÒÏÂ·½£¬ÊäÈë¿òµÄÕýÓÒ²à£¬´´½¨·¿¼ä°´Å¥µÄÕýÏÂ·½
+	//åˆ›å»ºå­˜æ”¾åŠ å…¥æˆ¿é—´æŒ‰é’®çš„èœå•ï¼Œä½ç½®åœ¨å¼¹çª—å³ä¸‹æ–¹ï¼Œè¾“å…¥æ¡†çš„æ­£å³ä¾§ï¼Œåˆ›å»ºæˆ¿é—´æŒ‰é’®çš„æ­£ä¸‹æ–¹
     auto joinRoomMenu = Menu::create(joinRoomBtn, nullptr);
     if (joinRoomMenu) {
         joinRoomMenu->setPosition(origin.x + 420.0f, origin.y + 55.0f);
@@ -341,25 +341,25 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
 }
 
 void StartScene::createLocalMode(Ref* pSender) {
-    Director::getInstance()->pushScene(LocalMode::createScene());  //½«±¾µØ¶ÔÕ½³¡¾°Ñ¹Õ»
+    Director::getInstance()->pushScene(LocalMode::createScene());  //å°†æœ¬åœ°å¯¹æˆ˜åœºæ™¯åŽ‹æ ˆ
 }
 
 void StartScene::createOnlineMode(Ref* pSender) {
-    std::string title = u8"Áª»ú×¼±¸";
-    std::string content = u8"ÇëÑ¡Ôñ´´½¨»ò¼ÓÈë·¿¼ä";
+    std::string title = u8"è”æœºå‡†å¤‡";
+    std::string content = u8"è¯·é€‰æ‹©åˆ›å»ºæˆ–åŠ å…¥æˆ¿é—´";
 
-	//ÉèÖÃNetworkManagerµÄ»Øµ÷º¯Êý£¬µ±Áª»ú³É¹¦Ê±£¬µ¯´°ÄÚÈÝÏÔÊ¾¡°·¿¼äÒÑ×¼±¸ºÃ£¬¼´½«½øÈë·¿¼ä£¡¡±£¬²¢ÇÐ»»µ½OnlineMode³¡¾°
-    NetworkManager::getInstance()->setOnStartCallBack([=]() {
-		popupContent->setString(u8"·¿¼äÒÑ×¼±¸ºÃ£¬¼´½«½øÈë·¿¼ä£¡");
+	//è®¾ç½®NetworkManagerçš„å›žè°ƒå‡½æ•°ï¼Œå½“è”æœºæˆåŠŸæ—¶ï¼Œå¼¹çª—å†…å®¹æ˜¾ç¤ºâ€œæˆ¿é—´å·²å‡†å¤‡å¥½ï¼Œå³å°†è¿›å…¥æˆ¿é—´ï¼â€ï¼Œå¹¶åˆ‡æ¢åˆ°OnlineModeåœºæ™¯
+    NetworkManager::getInstance()->setOnEnterSceneCallBack([=]() {
+		popupContent->setString(u8"æˆ¿é—´å·²å‡†å¤‡å¥½ï¼Œå³å°†è¿›å…¥æˆ¿é—´ï¼");
         Director::getInstance()->pushScene(OnlineMode::createScene());
     });
     
-	//ÉèÖÃNetworkManagerµÄ»Øµ÷º¯Êý£¬µ±Áª»úÊ§°ÜÊ±£¬µ¯´°ÄÚÈÝÏÔÊ¾´íÎóÐÅÏ¢
+	//è®¾ç½®NetworkManagerçš„å›žè°ƒå‡½æ•°ï¼Œå½“è”æœºå¤±è´¥æ—¶ï¼Œå¼¹çª—å†…å®¹æ˜¾ç¤ºé”™è¯¯ä¿¡æ¯
     NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
         popupContent->setString(msg);
     });
 
-    //´´½¨Áª»ú×¼±¸µÄµ¯´°£¬ÎªÁª»úÄ£Ê½·þÎñ
+    //åˆ›å»ºè”æœºå‡†å¤‡çš„å¼¹çª—ï¼Œä¸ºè”æœºæ¨¡å¼æœåŠ¡
     createPopup(title, content, true);
 }
 
@@ -371,19 +371,19 @@ void StartScene::closeStartScene(Ref* pSender)
 }
 
 void StartScene::createRoom(Ref* pSender) {
-	//µ÷ÓÃNetworkManagerµÄcreateRoomº¯Êý£¬´´½¨·¿¼ä£¬²¢´«Èë»Øµ÷º¯Êý
+	//è°ƒç”¨NetworkManagerçš„createRoomå‡½æ•°ï¼Œåˆ›å»ºæˆ¿é—´ï¼Œå¹¶ä¼ å…¥å›žè°ƒå‡½æ•°
     NetworkManager::getInstance()->createRoom([=](bool success, const std::string& roomId) {       
         if (success) {
-			curRoomId->setString(u8"µ±Ç°·¿¼äºÅ£º" + roomId);
-            popupContent->setString(u8"·¿¼ä´´½¨³É¹¦£¡µÈ´ýÍæ¼Ò¼ÓÈë...");
+			curRoomId->setString(u8"å½“å‰æˆ¿é—´å·ï¼š" + roomId);
+            popupContent->setString(u8"æˆ¿é—´åˆ›å»ºæˆåŠŸï¼ç­‰å¾…çŽ©å®¶åŠ å…¥...");
         }
         else
-            popupContent->setString(u8"·¿¼ä´´½¨Ê§°Ü£¡ÇëÉÔºóÔÙÊÔ");
+            popupContent->setString(u8"æˆ¿é—´åˆ›å»ºå¤±è´¥ï¼è¯·ç¨åŽå†è¯•");
     });   
 }
 
 void StartScene::joinRoom(Ref* pSender) {
-	//»ñÈ¡ÊäÈë¿òÖÐµÄ·¿¼äºÅ£¬²¢µ÷ÓÃNetworkManagerµÄjoinRoomº¯Êý£¬¼ÓÈë·¿¼ä£¬²¢´«Èë»Øµ÷º¯Êý
+	//èŽ·å–è¾“å…¥æ¡†ä¸­çš„æˆ¿é—´å·ï¼Œå¹¶è°ƒç”¨NetworkManagerçš„joinRoomå‡½æ•°ï¼ŒåŠ å…¥æˆ¿é—´ï¼Œå¹¶ä¼ å…¥å›žè°ƒå‡½æ•°
     std::string room_id = roomIdInput->getString();
     NetworkManager::getInstance()->joinRoom(room_id, [=](const std::string& msg) {       
         popupContent->setString(msg);        
