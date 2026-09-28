@@ -46,8 +46,8 @@ async def join_room(request):
         return web.json_response({'status': 'error', 'msg': '房间已满，请重新输入房间号'}, dumps=lambda x: json.dumps(x, ensure_ascii=False))
     ip = request.remote
     # 不允许同IP加入同一个房间
-    #if ip == rooms[room_id]['host_ip']:
-    #    return web.json_response({'status': 'error', 'msg': '不能自娱自乐，请重新输入房间号'}, dumps=lambda x: json.dumps(x, ensure_ascii=False))
+    if ip == rooms[room_id]['host_ip']:
+        return web.json_response({'status': 'error', 'msg': '不能自娱自乐，请重新输入房间号'}, dumps=lambda x: json.dumps(x, ensure_ascii=False))
     rooms[room_id]['guest_ip'] = ip
     rooms[room_id]['status'] = 'success'
     return web.json_response({'roomId': room_id, 'status': 'success'})
