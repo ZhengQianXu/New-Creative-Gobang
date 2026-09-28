@@ -1,4 +1,9 @@
-﻿#ifndef __LOCALMODE_SCENE_H__
+﻿/*
+	LocalMode类是一个继承自cocos2d::Scene的类，主要用于实现本地对战模式下的游戏场景。它包含了游戏逻辑、用户交互、棋盘管理以及游戏状态
+	控制等功能。在主界面点击“本地对战模式”按钮后，会创建并切换到该场景，玩家在该场景中进行本地对战游戏。
+*/
+
+#ifndef __LOCALMODE_SCENE_H__
 #define __LOCALMODE_SCENE_H__
 
 #include "cocos2d.h"
@@ -16,9 +21,23 @@ public:
     //创建静态方法 create()
     CREATE_FUNC(LocalMode);
 
-private:    
+    ~LocalMode() { if (gl) delete gl; }
+
+private:
+    //触摸事件回调
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+
     //开始游戏处理
     void onStartGame(cocos2d::Ref* pSender);
+
+    //棋子放置处理，rowCol包含两个元素,[0]=row,[1]=col
+    bool onPlaceChess(std::vector<int> rowCol);
+
+    //切换回合处理
+    void switchRound();
+
+    //系统自动落子处理
+    void autoPlaceChess();
 
     //每帧更新函数（由 scheduleUpdate() 触发），dt 两帧之间的时间间隔，通常约为 1/60 秒
     void update(float dt);   
@@ -29,7 +48,6 @@ private:
     //清空棋盘
     void cleanBoard(cocos2d::Ref* pSender);    
 
-    ~LocalMode() { if(gl) delete gl; };
 private:
     GameLogic* gl = nullptr;                                    //游戏逻辑指针，用于调用逻辑处理函数
 
@@ -56,9 +74,11 @@ private:
    
     cocos2d::Label* gameOverTip = nullptr;                      //游戏结算提示
     cocos2d::Sprite* victoryAnimation = nullptr;                //获胜动画展示
-    cocos2d::Sprite* drawAnimation = nullptr;                   //平局结算动画
-    cocos2d::MenuItemImage* gameOverBtn = nullptr;              //游戏结束按钮
-    cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;          //平局结束按钮
+    cocos2d::Sprite* defeatAnimation = nullptr;				    //失败动画展示
+    cocos2d::Sprite* drawAnimation = nullptr;				    //平局结算动画
+    cocos2d::MenuItemImage* gameOverVictoryBtn = nullptr;       //获胜结束按钮
+    cocos2d::MenuItemImage* gameOverDefeatBtn = nullptr;	    //失败结束按钮
+    cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;		    //平局结束按钮
 };
 
 #endif // __LOCALMODE_SCENE_H__

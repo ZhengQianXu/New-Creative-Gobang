@@ -1,4 +1,11 @@
-﻿#ifndef __BOARD_UI_H__
+﻿/*
+	BoardUI类是一个ui节点，存储了棋盘界面的ui控件，并提供了设置回调函数（按钮需要设置回调、触摸事件需要设置回调）的接口，允许外部注入
+	逻辑处理。它包含了棋子数组、选中高亮效果、开始游戏按钮、计时器显示标签、指向黑白方的箭头、游戏结算提示、获胜/失败/平局动画展示以及
+	结算界面ui控件的集合。每个游戏场景的界面都是这个ui类，而这个ui类的一些组件是需要被操作的，所以提供外部获取的接口，而外部场景通过对
+	组件的不同操作以及传入的不同回调逻辑实现不同场景的功能。通过这些成员变量和方法，BoardUI类实现了棋盘界面的ui管理和交互功能。
+*/
+
+#ifndef __BOARD_UI_H__
 #define __BOARD_UI_H__
 
 #include "cocos2d.h"
@@ -26,8 +33,8 @@ public:
 
 	//获取部分ui控件指针，用于逻辑处理
 	void getBoardUImember(std::vector<cocos2d::Sprite*>& cs, cocos2d::Sprite*& sH, cocos2d::MenuItemImage*& sGB, cocos2d::Label*& t, 
-		cocos2d::Sprite*& bRA, cocos2d::Sprite*& wRA, cocos2d::Label*& gOT, cocos2d::Sprite*& vA, cocos2d::Sprite*& dA, 
-		cocos2d::MenuItemImage*& gOB, cocos2d::MenuItemImage*& gODB) const;
+		cocos2d::Sprite*& bRA, cocos2d::Sprite*& wRA, cocos2d::Label*& gOT, cocos2d::Sprite*& vA, cocos2d::Sprite*& deA, cocos2d::Sprite*& dA, 
+		cocos2d::MenuItemImage*& gOVB, cocos2d::MenuItemImage*& gODeB, cocos2d::MenuItemImage*& gODB) const;
 
 	//获取结算界面ui控件的集合，外部场景直接将其addChild，方便设置在上层，避免其他ui遮挡
 	cocos2d::Node* getGameOverUI() const;
@@ -65,8 +72,10 @@ private:
 
 	cocos2d::Label* gameOverTip = nullptr;                  //游戏结算提示
 	cocos2d::Sprite* victoryAnimation = nullptr;            //获胜动画展示
+	cocos2d::Sprite* defeatAnimation = nullptr;				//失败动画展示
 	cocos2d::Sprite* drawAnimation = nullptr;				//平局结算动画
-	cocos2d::MenuItemImage* gameOverBtn = nullptr;          //游戏结束按钮
+	cocos2d::MenuItemImage* gameOverVictoryBtn = nullptr;   //获胜结束按钮
+	cocos2d::MenuItemImage* gameOverDefeatBtn = nullptr;	//失败结束按钮
 	cocos2d::MenuItemImage* gameOverDrawBtn = nullptr;		//平局结束按钮
 
 	cocos2d::Node* gameOverUI = nullptr;					//用来存储结算界面ui控件的节点

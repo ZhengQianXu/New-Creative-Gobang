@@ -4,46 +4,10 @@
 USING_NS_CC;
 using namespace CocosDenshion;
 
-GameLogic::GameLogic(Scene* s, bool& iEO, bool& iGP, bool& iBR, float& rST, std::string& sCN, Sprite*& sH, Sprite*& sPP, 
-    std::vector<int>& sRC, std::vector<Sprite*>& cS, std::vector<std::vector<Sprite*>>& pP, std::vector<std::vector<Sprite*>>& bC,
-    int& cCS) 
-    : scene(s), isEffectOn(iEO), isGamePlaying(iGP), isBlackRound(iBR), roundSurplusTime(rST), selectedChessName(sCN)
-    , selectedHighlight(sH), selectedPlacePoint(sPP), selectedRowCol(sRC), chessSprites(cS), placePoints(pP), boardChesses(bC), 
-    curChessSum(cCS) {}
-//{
-//    scene = s;
-//    isEffectOn = iEO;
-//    isGamePlaying = iGP;
-//    isBlackRound = iBR;
-//    roundSurplusTime = rST;
-//    selectedChessName = sCN;
-//    selectedHighlight = sH;
-//    selectedPlacePoint = sPP;
-//    chessSprites = cS;
-//    placePoints = pP;
-//    boardChesses = bC;
-//    curChessSum = cCS;
-//}
-
-bool GameLogic::onTouchBegan(Touch* touch, Event* event) {
-    if (!isGamePlaying)
-        return false;                                           //没在游戏中就不响应点击
-
-    Vec2 touchPos = touch->getLocation();                       //获取点击的位置
-    for (auto& chess : chessSprites)
-        if (chess->getBoundingBox().containsPoint(touchPos)) {  //判断是否有棋子被点击了
-            onSelectChess(chess, chess->getName());             //调用选中棋子函数
-            return true;                                        //消费掉这个点击事件
-        }
-
-    if (!selectedChessName.empty()) {                           //如果有棋子被选中，而点击的位置不是棋子，可能在棋盘上
-        if (selectedPlacePoint && selectedPlacePoint->getBoundingBox().containsPoint(touchPos))
-            return onPlaceChess(selectedRowCol);                //如果已选中放置点，且再次点击该放置点，那么放置棋子
-        else
-            return onSelectPlacePoint(touchPos);                //点击位置不是已选中的放置点，进行放置点选中处理
-    }
-    return false;
-}
+GameLogic::GameLogic(Scene* s, bool& iBR, std::string& sCN, Sprite*& sH, Sprite*& sPP, std::vector<int>& sRC, 
+    std::vector<std::vector<Sprite*>>& pP, std::vector<std::vector<Sprite*>>& bC) 
+    : scene(s), isBlackRound(iBR), selectedChessName(sCN), selectedHighlight(sH), selectedPlacePoint(sPP), selectedRowCol(sRC), 
+    placePoints(pP), boardChesses(bC) {}
 
 void GameLogic::onSelectChess(Sprite* chessSprite, const std::string& chessName) {
     //黑方回合时不可选择白方棋子，白方回合时不可选择黑方棋子
@@ -52,21 +16,21 @@ void GameLogic::onSelectChess(Sprite* chessSprite, const std::string& chessName)
 
     selectedChessName = chessName;                                  //保存当前被选中棋子的名字
     selectedHighlight->setPosition(chessSprite->getPosition());     //高光和棋子相同位置
+	selectedHighlight->setVisible(true);                            //高光显示
 }
 
 void GameLogic::onInitBoardPlacePoint() {
-    //先初始化各数组
+    //先初始化各数组，分配数组大小
     placePoints.assign(19, std::vector<Sprite*>(19, nullptr));
     boardChesses.assign(19, std::vector<Sprite*>(19, nullptr));
     for (size_t row = 0; row < 19; row++)
         for (size_t col = 0; col < 19; col++) {
             auto pp = Sprite::create("placePoint.png");
-            if (pp) {
-                //从左下角到右上角计算可放置点位置
+            if (pp) {                
                 auto origin = Director::getInstance()->getVisibleOrigin();
-                pp->setPosition(origin.x + 75.0f + col * 50.0f, origin.y + 75.0f + row * 50.0f);
+                pp->setPosition(origin.x + 75.0f + col * 50.0f, origin.y + 75.0f + row * 50.0f);    //从左下角到右上角计算可放置点位置
                 pp->setScale(35.0f / pp->getContentSize().width, 35.0f / pp->getContentSize().height);
-                pp->setOpacity(200);
+                pp->setOpacity(200);            //微透明
                 pp->setVisible(false);          //全部放置点隐藏
                 scene->addChild(pp, 1);
                 placePoints[row][col] = pp;     //保存在数组里
@@ -74,15 +38,6 @@ void GameLogic::onInitBoardPlacePoint() {
             else
                 cocos2d::log("placePoint.png");
         }
-}
-
-void GameLogic::setGameOverFunction(std::function<void(bool)> func) {
-    _gameOver = func;
-}
-
-void GameLogic::gameOver(bool isDraw) {
-    if (_gameOver)
-        _gameOver(isDraw);
 }
 
 bool GameLogic::onSelectPlacePoint(Vec2 touchPos)
@@ -99,33 +54,6 @@ bool GameLogic::onSelectPlacePoint(Vec2 touchPos)
                 return true;
             }        
     return false;                                               //代表点击不在棋盘上，让点击事件给下一个监听器处理
-}
-
-bool GameLogic::onPlaceChess(std::vector<int> rowCol) {   
-    int row = rowCol[0], col = rowCol[1];
-    auto chess = Sprite::create("chess/" + selectedChessName + ".png"); //由选中棋子名字生成对应棋子
-    if (chess) {
-        chess->setPosition(placePoints[row][col]->getPosition());       //棋子位置与放置点一致
-        chess->setScale(50.0f / chess->getContentSize().width, 50.0f / chess->getContentSize().height);
-        chess->setName(selectedChessName);
-        scene->addChild(chess, 1);
-        boardChesses[row][col] = chess;                                 //存放在棋盘棋子数组里
-        if (selectedPlacePoint) {
-            selectedPlacePoint->setVisible(false);                      //放置点隐藏
-            selectedPlacePoint = nullptr;                               //置空，防止野指针     
-        }
-        //当音效开启时，根据棋子类型输出对应落子音效        
-        if (isEffectOn)
-            SimpleAudioEngine::getInstance()->playEffect(("music/" + selectedChessName.substr(6) + ".mp3").c_str());
-        curChessSum++;                                                  //当前棋盘上棋子总数加1
-        if (isVictory(row, col))
-            gameOver(false);                                            //如果获胜，调用游戏结束函数
-        roundSurplusTime = 0;                                           //回合时间清零，即切换回合
-        return true;
-    }
-    else
-        cocos2d::log("chess.png");
-    return false;
 }
 
 bool GameLogic::isVictory(int row, int col) {

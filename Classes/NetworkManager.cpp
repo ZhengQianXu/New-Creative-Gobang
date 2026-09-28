@@ -3,12 +3,18 @@
 #include "json/document.h"
 #include "json/stringbuffer.h"
 #include "json/writer.h"
+#include <fstream>
 
 USING_NS_CC;
 using namespace cocos2d::network;
 
 NetworkManager* NetworkManager::getInstance() {
 	static NetworkManager instance;		//静态局部变量，保证只创建一次
+	static bool isLoadIP = false;		//标志是否加载IP地址
+	if (!isLoadIP) {
+		instance.loadIPConfig();		//初始化时加载
+		isLoadIP = true;
+	}
 	return &instance;					//返回唯一实例
 }
 
@@ -124,7 +130,7 @@ void NetworkManager::onJoinRoomResponse(HttpClient* client, HttpResponse* respon
 		if (!doc.HasParseError() && doc.HasMember("status")) {
 			if (std::string(doc["status"].GetString()) == "error" && doc.HasMember("msg"))
 				msg = doc["msg"].GetString();					//如果加入房间失败，获取错误消息
-			else if (std::string(doc["status"].GetString()) == "preparing" && doc.HasMember("roomId")) {
+			else if (std::string(doc["status"].GetString()) == "success" && doc.HasMember("roomId")) {
 				success = true;
 				connectWebSocket(doc["roomId"].GetString());	//如果加入房间成功，连接WebSocket服务器
 			}
@@ -163,7 +169,7 @@ void NetworkManager::connectWebSocket(const std::string& roomId)
 }
 
 void NetworkManager::disconnect() {	
-	if(_ws)
+	if (_ws)
 		_ws->close();		//关闭WebSocket连接
 	
 	//重置房间号
@@ -182,8 +188,8 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 	std::string msg(data.bytes, data.len);
 	CCLOG(u8"[NetworkManager] 收到消息: %s", msg.c_str());
 
-	//收到服务器success，即匹配成功的消息，调用_onEnter回调函数
-	if (msg == "success") {
+	//收到服务器preparing，即匹配成功、等待游戏开始的消息，调用_onEnter回调函数
+	if (msg == "preparing") {
 		auto cb = _onEnterScene;
 		runOnMainThread([cb]() {
 			if (cb)
@@ -204,7 +210,7 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 		});
 	}
 	//双方都已准备好，开始游戏
-	else if (msg == "status:playing") {		
+	else if (msg == "playing") {		
 		auto cb = _onStartGame;
 		runOnMainThread([cb]() {
 			if (cb)
@@ -239,7 +245,7 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 				cb(row, col, chessName);
 		});
 	}
-	//有一方离开房间，另一方也应该离开房间
+	//有一方离开房间时通知另一方，另一方根据不同情况做不同处理
 	else if (msg == "notice:opponentQuit") {
 		auto cb = _onQuitRoom;
 		auto tip = _onError;
@@ -254,8 +260,10 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 
 void NetworkManager::onClose(WebSocket* ws)
 {
-	if (_ws == ws)			
-		_ws = nullptr;	
+	if (_ws == ws) {
+		delete _ws;
+		_ws = nullptr;
+	}
 	
 	//重置房间号
 	_currentRoomId = "";
@@ -270,5 +278,42 @@ void NetworkManager::onError(WebSocket* ws, const WebSocket::ErrorCode& error)
 
 void NetworkManager::sendMsg(const std::string& msg)
 {
-	_ws->send(msg);
+	if(_ws)
+		_ws->send(msg);
+}
+
+void NetworkManager::loadIPConfig()
+{	
+	char exePath[MAX_PATH];
+	GetModuleFileNameA(NULL, exePath, MAX_PATH);		//调用WindowsAPI，获取当前exe绝对路径
+	std::string dir = exePath;
+	dir = dir.substr(0, dir.find_last_of("\\/") + 1);	//截取exe同级目录
+	std::string iniPath = dir + "server.ini";			//得到配置文件绝对路径，这样需要将配置文件放在exe同级目录才能读取
+	CCLOG(iniPath.c_str());
+	
+	std::ifstream file(iniPath);
+	if (!file.is_open()) {
+		CCLOG(u8"[NetworkManager] 未找到server.ini，使用默认IP");
+		return;
+	}
+
+	std::string line;
+	while (std::getline(file, line)) {
+		if (line.empty() || line[0] == '#' || line[0] == '[')	//过滤空行或注释
+			continue;
+		
+		size_t pos = line.find('=');							//获取=位置
+		if (pos == std::string::npos)							//如果后面没有值就不用继续
+			continue;
+
+		std::string key = line.substr(0, pos);					//=前面字符串
+		std::string value = line.substr(pos + 1);				//=后面字符串
+
+		if (key == "host")
+			_serverHost = value;								//得到服务器IP地址
+		else if (key == "port")
+			_serverPort = value;								//得到端口号
+	}
+	file.close();
+	CCLOG("host = %s, port = %s", _serverHost.c_str(), _serverPort.c_str());
 }

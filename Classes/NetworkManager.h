@@ -1,4 +1,9 @@
-﻿#ifndef __NETWORK_MANAGER_H__
+﻿/*
+	NetWorkManager类是一个网络管理类，用于处理游戏中的网络通信，包括创建房间、加入房间、WebSocket连接管理以及各种回调处理。它采用单例
+	模式，确保全局只有一个实例。该类主要用于主界面的连接准备弹窗和联机游戏场景的交互处理。
+*/
+
+#ifndef __NETWORK_MANAGER_H__
 #define __NETWORK_MANAGER_H__
 
 #include "cocos2d.h"
@@ -29,10 +34,10 @@ public:
 	//断开连接
 	void disconnect();
 	
-	//设置onEnter回调函数
+	//设置进入场景回调函数
 	void setOnEnterSceneCallBack(std::function<void()> cb) { _onEnterScene = cb; }
 
-	//设置当前角色回调
+	//设置玩家当前角色回调
 	void setOnCurRoleCallBack(std::function<void(bool)> cb) { _onCurRole = cb; }
 
 	//设置开始游戏处理回调
@@ -41,13 +46,13 @@ public:
 	//设置回合时间更新回调
 	void setOnUpdateTimeCallBack(std::function<void(float)> cb) { _onUpdateTime = cb; }
 
-	//设置_onOpponentMove回调函数
+	//设置对手落子回调函数
 	void setOnOpponentMoveCallBack(std::function<void(int, int, const std::string&)> cb) { _onOpponentMove = cb; }
 
-	//设置退出房间回调
+	//设置对手退出房间回调
 	void setOnQuitRoomCallBack(std::function<void()> cb) { _onQuitRoom = cb; }
 
-	//设置_onError回调函数
+	//设置错误处理回调，为fireError服务
 	void setOnErrorCallBack(std::function<void(const std::string&)> cb) { _onError = cb; }
 
 private:
@@ -58,7 +63,7 @@ private:
 	//在主线程运行func函数
 	void runOnMainThread(std::function<void()> func);
 
-	//报错msg
+	//报错信息提示，此函数有时也用于显示其他信息
 	void fireError(const std::string& msg);
 
 	//创建房间响应处理
@@ -78,6 +83,9 @@ private:
 
 	//socket出错处理
 	virtual void onError(cocos2d::network::WebSocket* ws, const cocos2d::network::WebSocket::ErrorCode& error) override;
+
+	//加载配置文件，获取服务器IP和端口号
+	void loadIPConfig();
 
 private:	
 	std::function<void(bool, const std::string&)> _createRoomCallBack = nullptr;	//创建房间响应回调

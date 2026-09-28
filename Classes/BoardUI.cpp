@@ -351,6 +351,16 @@ bool BoardUI::init() {
     else
         cocos2d::log("'victory.jpg'");
 
+    //创建失败动画，位置在屏幕正中间
+    defeatAnimation = Sprite::create("defeat.jpg");
+    if (defeatAnimation) {
+        defeatAnimation->setScale(316.0f / defeatAnimation->getContentSize().width, 360.5f / defeatAnimation->getContentSize().height);
+        defeatAnimation->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+        defeatAnimation->setVisible(false);
+    }
+    else
+        cocos2d::log("'victory.jpg'");
+
     //创建平局动画，位置在屏幕正中间
     drawAnimation = Sprite::create("defeat.jpg");
     if (drawAnimation) {
@@ -361,35 +371,45 @@ bool BoardUI::init() {
     else
         cocos2d::log("'defeat.jpg'");
     
-    //创建游戏结束按钮
-    gameOverBtn = MenuItemImage::create("gameOver.png", "gameOver_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
-    if (gameOverBtn) {
-        gameOverBtn->setPosition(Vec2::ZERO);
-        gameOverBtn->setVisible(false);
+    //创建游戏获胜结束按钮
+    gameOverVictoryBtn = MenuItemImage::create("gameOverVictory.png", "gameOverVictory_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
+    if (gameOverVictoryBtn) {
+        gameOverVictoryBtn->setPosition(Vec2::ZERO);
+        gameOverVictoryBtn->setVisible(false);
     }
     else
-        cocos2d::log("'gameOver.png or gameOver_pressed.png'");
+        cocos2d::log("'gameOverVictory.png or gameOverVictory_pressed.png'");
+
+	//创建游戏失败结束按钮
+	gameOverDefeatBtn = MenuItemImage::create("gameOverDefeat.png", "gameOverDefeat_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));  
+    if (gameOverDefeatBtn) {
+        gameOverDefeatBtn->setPosition(Vec2::ZERO);
+        gameOverDefeatBtn->setVisible(false);
+    }
+    else
+		cocos2d::log("'gameOverDefeat.png or gameOverDefeat_pressed.png'");
 
     //创建平局结束按钮
-    gameOverDrawBtn = MenuItemImage::create("gameOverDraw.png", "gameOverDraw_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
+    gameOverDrawBtn = MenuItemImage::create("gameOverDefeat.png", "gameOverDefeat_pressed.png", CC_CALLBACK_1(BoardUI::onCleanBoard, this));
     if (gameOverDrawBtn) {        
         gameOverDrawBtn->setPosition(Vec2::ZERO);
         gameOverDrawBtn->setVisible(false);
     }
     else
-        cocos2d::log("'gameOverDraw.png or gameOverDraw_pressed.png'");
+        cocos2d::log("'gameOverDefeat.png or gameOverDefeat_pressed.png'");
     
     //创建存放游戏结束按钮的菜单，位置在结算动画下方
-    auto gameOverMenu = Menu::create(gameOverBtn, gameOverDrawBtn, nullptr);
+    auto gameOverMenu = Menu::create(gameOverVictoryBtn, gameOverDefeatBtn, gameOverDrawBtn, nullptr);
     if (gameOverMenu)
         gameOverMenu->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 280.0f);        
     else
-        cocos2d::log("'gameOverBtn' or 'gameOverDrawBtn'");
-
+        cocos2d::log("'gameOverVictoryBtn' or 'gameOverDefeatBtn' or 'gameOverDrawBtn'");
+    
     //创建节点存放游戏结算界面的ui控件
     gameOverUI = Node::create();
     gameOverUI->addChild(gameOverTip, 0);
     gameOverUI->addChild(victoryAnimation, 0);
+	gameOverUI->addChild(defeatAnimation, 0);
     gameOverUI->addChild(drawAnimation, 0);
     gameOverUI->addChild(gameOverMenu, 0);
 
@@ -443,7 +463,7 @@ void BoardUI::onCleanBoard(Ref* pSender){
 }
 
 void BoardUI::getBoardUImember(std::vector<Sprite*>& cs, Sprite*& sH, MenuItemImage*& sGB, Label*& t, Sprite*& bRA, Sprite*& wRA, 
-    Label*& gOT, Sprite*& vA, Sprite*& dA, MenuItemImage*& gOB, MenuItemImage*& gODB) const{
+    Label*& gOT, Sprite*& vA, Sprite*& deA, Sprite*& dA, MenuItemImage*& gOVB, MenuItemImage*& gODeB, MenuItemImage*& gODB) const{
     cs = chessSprites;
     sH = selectedHighlight;
     sGB = startGameBtn;
@@ -452,9 +472,11 @@ void BoardUI::getBoardUImember(std::vector<Sprite*>& cs, Sprite*& sH, MenuItemIm
     wRA = whiteRoundArrow;
     gOT = gameOverTip;
     vA = victoryAnimation;
+	deA = defeatAnimation;
     dA = drawAnimation;
-    gOB = gameOverBtn;
-    gODB = gameOverDrawBtn;
+    gOVB = gameOverVictoryBtn;
+    gODeB = gameOverDefeatBtn;
+	gODB = gameOverDrawBtn;
 }
 
 Node* BoardUI::getGameOverUI() const{        

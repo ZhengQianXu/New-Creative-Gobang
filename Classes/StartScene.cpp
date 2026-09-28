@@ -4,6 +4,7 @@
 #include "LocalModeScene.h"
 #include "OnlineModeScene.h"
 #include "NetworkManager.h"
+#include "PopupUI.h"
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -165,7 +166,8 @@ void StartScene::onRuleShow(Ref* pSender) {
         "连成 \"这谁绷得住\" 5个不同字的一方获胜！\n"
         "可以不按顺序，回合限时20秒，超时自动落子。";
 
-    createPopup(title, content);
+    auto popupUI = PopupUI::create(title, content);
+    this->addChild(popupUI, 10);
 }
 
 void StartScene::onSuggestShow(Ref* pSender) {
@@ -177,99 +179,42 @@ void StartScene::onSuggestShow(Ref* pSender) {
         "如有任何建议或问题，欢迎联系作者！\n"
         "感谢您的支持！";
 
-    createPopup(title, content);
+    auto popupUI = PopupUI::create(title, content);
+    this->addChild(popupUI, 10);
 }
 
-void StartScene::closePopup(Ref* pSender) {
-    if (popup) {
-        popup->removeFromParent();
-        popup = nullptr;
-    }
-    if (popupMask) {
-        popupMask->removeFromParent();
-        popupMask = nullptr;
-    }   
-    popupContent = nullptr;    
-    roomIdInput = nullptr;
+void StartScene::createLocalMode(Ref* pSender) {
+    Director::getInstance()->pushScene(LocalMode::createScene());  //将本地对战场景压栈
 }
 
-void StartScene::createPopup(const std::string& title, const std::string& content, bool isOnline) {
-    //创建半透明遮罩层，遮罩层会覆盖整个屏幕，让主场景变暗
-    popupMask = LayerColor::create(Color4B(0, 0, 0, 150));
-    popupMask->setContentSize(visibleSize);                                 //铺满屏幕
-    popupMask->setPosition(origin);                                         //从屏幕左下角开始
-    this->addChild(popupMask, 10);
+void StartScene::createOnlineMode(Ref* pSender) {
+    std::string title = u8"联机准备";
+    std::string content = u8"请选择创建或加入房间";
+
+    //创建联机准备的弹窗，为联机模式服务
+    auto popupUI = PopupUI::create(title, content);
+    this->addChild(popupUI, 10);
+	popupContent = popupUI->getPopupContent();      //获取弹窗内容组件，用成员存储，后续用于显示联机状态信息
+
+	//设置NetworkManager的回调函数，当联机成功时，弹窗内容显示“房间已准备好，即将进入房间！”，并切换到OnlineMode场景
+    NetworkManager::getInstance()->setOnEnterSceneCallBack([=]() {
+		popupContent->setString(u8"房间已准备好，即将进入房间！");
+        Director::getInstance()->pushScene(OnlineMode::createScene());
+    });
     
-    //遮罩层拦截所有触摸事件，防止玩家在弹窗打开时点击到主场景的按钮或棋子
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);                                      //拦截所有触摸，吞掉事件，不传递到主场景
-    listener->onTouchBegan = [=](Touch* touch, Event* event) -> bool {
-        return true;                                                        //消费掉事件
-    };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, popupMask);
+	//设置NetworkManager的回调函数，当联机失败时，弹窗内容显示错误信息
+    NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
+        popupContent->setString(msg);
+    });
 
-    //创建弹窗主体（白色背景）
-    popup = ui::Layout::create();
-    popup->setBackGroundColorType(ui::Layout::BackGroundColorType::SOLID);  //纯色背景
-    popup->setBackGroundColor(Color3B::WHITE);                              //白色背景
-    popup->setBackGroundColorOpacity(255);                                  //不透明
-    popup->setContentSize(Size(600, 300));                                  //弹窗宽600，高300    
+    auto popup = popupUI->getPopup();       //获取弹窗组件，用于后续代码给弹窗加上联机准备需要的组件
+    //内容文字位置在弹窗顶部偏下
+    popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
 
-    //位置：屏幕中心偏移半个弹窗大小（因为锚点在左下角）
-    popup->setPosition(Vec2(origin.x + visibleSize.width / 2 - 300.0f, origin.y + visibleSize.height / 2 - 200.0f));
-    popup->setAnchorPoint(Vec2::ZERO);                                      //锚点在左下角
-    popup->setTouchEnabled(true);                                           //允许弹窗接收触摸，防止点击穿透
-    popup->setCascadeOpacityEnabled(true);                                  //子节点继承父节点透明度
-    popupMask->addChild(popup, 1);                                          //添加到遮罩层之上
-
-    //创建标题文字，位置在弹窗顶部居中
-    auto titleLabel = Label::create(title, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 32);
-    if (titleLabel) {
-        titleLabel->setTextColor(Color4B::BLACK);
-        titleLabel->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 40.0f);
-        popup->addChild(titleLabel);
-    }
-    else
-        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");
-
-    //创建内容文字   
-    popupContent = Label::create(content, "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 22);
-    if (popupContent) {
-        popupContent->setTextColor(Color4B::BLACK);
-        //如果是联机模式弹窗，内容文字位置在弹窗顶部偏下；如果是规则或反馈弹窗，内容文字位置在弹窗正中间偏下
-        if (isOnline)
-            popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height - 100.0f);
-        else
-            popupContent->setPosition(origin.x + popup->getContentSize().width / 2, origin.y + popup->getContentSize().height / 2 - 20.0f);
-        popupContent->setAlignment(TextHAlignment::CENTER, TextVAlignment::CENTER);        //文字在区域内水平垂直居中
-        popup->addChild(popupContent);
-    }
-    else
-        cocos2d::log("'fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf'");    
-    
-    //创建关闭弹窗按钮
-    auto closeBtn = MenuItemImage::create("CloseNormal.png", "CloseSelected.png", CC_CALLBACK_1(StartScene::closePopup, this));
-    if (closeBtn)
-        closeBtn->setPosition(Vec2::ZERO);
-    else
-        cocos2d::log("'CloseNormal.png or CloseSelected.png'");
-    
-    //创建存放关闭按钮的菜单，位置在弹窗右上角
-    auto closeMenu = Menu::create(closeBtn, nullptr);
-    if (closeMenu) {
-        closeMenu->setPosition(origin.x + popup->getContentSize().width - 30, origin.y + popup->getContentSize().height - 30);
-        popup->addChild(closeMenu, 1);
-    }
-    else
-        cocos2d::log("closeBtn");
-
-    if (!isOnline)
-		return;         //如果不是联机模式弹窗，则不需要添加创建房间按钮、输入框和加入房间按钮
-
-	//创建当前房间号显示文字，位置在弹窗正中间左边
+    //创建当前房间号显示文字，位置在弹窗正中间左边
 	curRoomId = Label::create(u8"当前房间号：------", "fonts/SourceHanSerifCN/SourceHanSerifCN-Regular.ttf", 24);
     if (curRoomId) {
-        curRoomId->setPosition(origin.x + 180.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);  //位置在弹窗左下角
+        curRoomId->setPosition(origin.x + 180.0f, origin.y + popup->getContentSize().height / 2 - 20.0f);
         curRoomId->setTextColor(Color4B::BLACK);
         popup->addChild(curRoomId, 1);
     }
@@ -340,29 +285,6 @@ void StartScene::createPopup(const std::string& title, const std::string& conten
         cocos2d::log("joinRoomBtn");
 }
 
-void StartScene::createLocalMode(Ref* pSender) {
-    Director::getInstance()->pushScene(LocalMode::createScene());  //将本地对战场景压栈
-}
-
-void StartScene::createOnlineMode(Ref* pSender) {
-    std::string title = u8"联机准备";
-    std::string content = u8"请选择创建或加入房间";
-
-	//设置NetworkManager的回调函数，当联机成功时，弹窗内容显示“房间已准备好，即将进入房间！”，并切换到OnlineMode场景
-    NetworkManager::getInstance()->setOnEnterSceneCallBack([=]() {
-		popupContent->setString(u8"房间已准备好，即将进入房间！");
-        Director::getInstance()->pushScene(OnlineMode::createScene());
-    });
-    
-	//设置NetworkManager的回调函数，当联机失败时，弹窗内容显示错误信息
-    NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
-        popupContent->setString(msg);
-    });
-
-    //创建联机准备的弹窗，为联机模式服务
-    createPopup(title, content, true);
-}
-
 void StartScene::closeStartScene(Ref* pSender)
 {
     NetworkManager::getInstance()->disconnect();
@@ -378,12 +300,12 @@ void StartScene::createRoom(Ref* pSender) {
             popupContent->setString(u8"房间创建成功！等待玩家加入...");
         }
         else
-            popupContent->setString(u8"房间创建失败！请稍后再试");
+            popupContent->setString(u8"房间创建失败！请检查网络连接");
     });   
 }
 
 void StartScene::joinRoom(Ref* pSender) {
-	//获取输入框中的房间号，并调用NetworkManager的joinRoom函数，加入房间，并传入回调函数
+	//获取输入框中的房间号，并调用NetworkManager的加入房间函数，并传入回调函数
     std::string room_id = roomIdInput->getString();
     NetworkManager::getInstance()->joinRoom(room_id, [=](const std::string& msg) {       
         popupContent->setString(msg);        
