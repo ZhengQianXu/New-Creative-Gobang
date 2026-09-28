@@ -11,14 +11,14 @@
 
 class PopupUI : public cocos2d::Node {
 public:
-	//根据标题和内容初始化弹窗
-	bool init(const std::string& title, const std::string& content);
-
 	//创建弹窗实例
 	static PopupUI* create(const std::string& title, const std::string& content);
 
+	//根据标题和内容初始化弹窗
+	bool init(const std::string& title, const std::string& content);
+
 	//关闭弹窗
-	void closePopup(cocos2d::Ref* pSender) { this->removeFromParent(); }
+	void closePopup(cocos2d::Ref* pSender);
 
 	//获取弹窗组件
 	cocos2d::ui::Layout* getPopup() { return popup; }
@@ -26,10 +26,15 @@ public:
 	//获取弹窗内容组件
 	cocos2d::Label* getPopupContent() { return popupContent; }
 
+	//弹窗关闭回调
+	void setOnCloseCallBack(std::function<void()> cb) { _onClose = cb; }
+
 private:
 	cocos2d::LayerColor* popupMask = nullptr;               //遮罩层
 	cocos2d::ui::Layout* popup = nullptr;                   //弹窗
 	cocos2d::Label* popupContent = nullptr;					//弹窗内容
+	
+	std::function<void()> _onClose = nullptr;				//弹窗关闭处理
 };
 
 #endif // !__POPUP_UI_H__

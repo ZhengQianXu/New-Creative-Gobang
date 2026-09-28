@@ -188,23 +188,34 @@ void StartScene::createLocalMode(Ref* pSender) {
 }
 
 void StartScene::createOnlineMode(Ref* pSender) {
+	//设置NetworkManager的回调函数，当联机成功时，弹窗内容显示“房间已准备好，即将进入房间！”，并切换到OnlineMode场景
+    NetworkManager::getInstance()->setOnEnterSceneCallBack([=]() {
+        if(popupContent)
+		    popupContent->setString(u8"房间已准备好，即将进入房间！");
+        Director::getInstance()->pushScene(OnlineMode::createScene());
+    });
+    
+	//设置NetworkManager的回调函数，当联机失败时，弹窗内容显示错误信息
+    NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
+        if (popupContent)
+            popupContent->setString(msg);
+    });
+
     std::string title = u8"联机准备";
     std::string content = u8"请选择创建或加入房间";
 
     //创建联机准备的弹窗，为联机模式服务
     auto popupUI = PopupUI::create(title, content);
     this->addChild(popupUI, 10);
-	popupContent = popupUI->getPopupContent();      //获取弹窗内容组件，用成员存储，后续用于显示联机状态信息
+    popupContent = popupUI->getPopupContent();          //获取弹窗内容组件，用成员存储，后续用于显示联机状态信息
 
-	//设置NetworkManager的回调函数，当联机成功时，弹窗内容显示“房间已准备好，即将进入房间！”，并切换到OnlineMode场景
-    NetworkManager::getInstance()->setOnEnterSceneCallBack([=]() {
-		popupContent->setString(u8"房间已准备好，即将进入房间！");
-        Director::getInstance()->pushScene(OnlineMode::createScene());
-    });
-    
-	//设置NetworkManager的回调函数，当联机失败时，弹窗内容显示错误信息
-    NetworkManager::getInstance()->setOnErrorCallBack([=](const std::string& msg) {
-        popupContent->setString(msg);
+    //设置弹窗关闭回调
+    popupUI->setOnCloseCallBack([=]() {
+        popupContent = nullptr;
+        curRoomId = nullptr;
+        roomIdInput = nullptr;
+        NetworkManager::getInstance()->setOnEnterSceneCallBack(nullptr);
+        NetworkManager::getInstance()->setOnErrorCallBack(nullptr);
     });
 
     auto popup = popupUI->getPopup();       //获取弹窗组件，用于后续代码给弹窗加上联机准备需要的组件
@@ -296,18 +307,22 @@ void StartScene::createRoom(Ref* pSender) {
 	//调用NetworkManager的createRoom函数，创建房间，并传入回调函数
     NetworkManager::getInstance()->createRoom([=](bool success, const std::string& roomId) {       
         if (success) {
-			curRoomId->setString(u8"当前房间号：" + roomId);
-            popupContent->setString(u8"房间创建成功！等待玩家加入...");
+            if(curRoomId)
+			    curRoomId->setString(u8"当前房间号：" + roomId);
+            if (popupContent)
+                popupContent->setString(u8"房间创建成功！等待玩家加入...");
         }
         else
-            popupContent->setString(u8"房间创建失败！请检查网络连接");
+            if (popupContent)
+                popupContent->setString(u8"房间创建失败！请检查网络连接");
     });   
 }
 
 void StartScene::joinRoom(Ref* pSender) {
 	//获取输入框中的房间号，并调用NetworkManager的加入房间函数，并传入回调函数
     std::string room_id = roomIdInput->getString();
-    NetworkManager::getInstance()->joinRoom(room_id, [=](const std::string& msg) {       
-        popupContent->setString(msg);        
+    NetworkManager::getInstance()->joinRoom(room_id, [=](const std::string& msg) {
+        if (popupContent)
+            popupContent->setString(msg);        
     });
 }

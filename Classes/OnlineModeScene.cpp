@@ -148,6 +148,10 @@ void OnlineMode::onStartGame(Ref* pSender) {
 bool OnlineMode::onPlaceChess(std::vector<int> rowCol, bool isSendMsg)
 {
     int row = rowCol[0], col = rowCol[1];
+    if (row < 0 || row >= 19 || col < 0 || col >= 19)
+        return false;                                                   //防止下标越界访问
+    if (!isGamePlaying || boardChesses[row][col])
+        return false;                                                   //不在游戏中或该位置已有棋子，不可落子
     auto chess = Sprite::create("chess/" + selectedChessName + ".png"); //由选中棋子名字生成对应棋子
     auto nm = NetworkManager::getInstance();
     if (chess) {
@@ -209,7 +213,9 @@ void OnlineMode::switchRound()
     lastChessSum = curChessSum;                         //更新棋盘旧棋子总数
 }
 
-void OnlineMode::autoPlaceChess() {      
+void OnlineMode::autoPlaceChess() {
+    if (!isGamePlaying)
+        return;
     //当处于自己回合，却没有落子时，lastChessSum == curChessSum 代表没有落子，系统帮忙落子
     bool myTurn = ((isBlackRole && isBlackRound) || (!isBlackRole && !isBlackRound));
     if (myTurn && lastChessSum == curChessSum) {       

@@ -165,12 +165,17 @@ void NetworkManager::connectWebSocket(const std::string& roomId)
 	}
 
 	//设置WebSocket的回调函数为当前对象，并连接到服务器的WebSocket地址，当WebSocket有事件发生时，会调用当前对象的回调函数
-	_ws->init(*this, "ws://" + _serverHost + ":" + _serverPort + "/ws");
+	if (!_ws->init(*this, "ws://" + _serverHost + ":" + _serverPort + "/ws")) {
+		fireError(u8"访问服务器失败！请稍后再试或联系作者");
+		return;
+	}
 }
 
 void NetworkManager::disconnect() {	
-	if (_ws)
+	if (_ws) {
 		_ws->close();		//关闭WebSocket连接
+		_ws = nullptr;
+	}
 	
 	//重置房间号
 	_currentRoomId = "";
@@ -198,11 +203,7 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 	}
 	//服务器指派角色，黑方或白方，然后每回合轮换
 	else if (msg.substr(0, 5) == "role:") {
-		bool curRole;
-		if (msg.substr(5) == "black")
-			curRole = true;					//true代表黑方
-		else if (msg.substr(5) == "white")
-			curRole = false;
+		bool curRole = (msg.substr(5) == "black") ? true : false;	//true代表黑方，false代表白方		
 		auto cb = _onCurRole;
 		runOnMainThread([cb, curRole]() {
 			if (cb)
@@ -219,7 +220,9 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 	}
 	//回合时间在服务器更新，再分发给两个客户端
 	else if (msg.substr(0, 7) == "update:") {
-		float surplusTime = std::stof(msg.substr(7));
+		float surplusTime = 0.0f;
+		try { surplusTime = std::stof(msg.substr(7)); }
+		catch (...) { return; }
 		auto cb = _onUpdateTime;
 		runOnMainThread([cb, surplusTime]() {
 			if (cb)
@@ -236,8 +239,9 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 			return;
 		}
 		//由两个逗号分隔3部分，分别进行处理，获取对应信息
-		int row = std::stoi(body.substr(0, p1));
-		int col = std::stoi(body.substr(p1 + 1, p2 - p1 - 1));
+		int row = 0, col = 0;
+		try { row = std::stoi(body.substr(0, p1)); col = std::stoi(body.substr(p1 + 1, p2 - p1 - 1)); }
+		catch (...) { return; }
 		auto chessName = body.substr(p2 + 1);
 		auto cb = _onOpponentMove;
 		runOnMainThread([cb, row, col, chessName]() {
@@ -260,10 +264,10 @@ void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data)
 
 void NetworkManager::onClose(WebSocket* ws)
 {
-	if (_ws == ws) {
-		delete _ws;
+	if(_ws == ws)
 		_ws = nullptr;
-	}
+	if (ws)
+		delete ws;
 	
 	//重置房间号
 	_currentRoomId = "";

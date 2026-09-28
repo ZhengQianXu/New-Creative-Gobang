@@ -22,6 +22,7 @@ rooms = {}      # 存储所有房间信息
     'guest_ip': 玩家IP,
     'guest_ready': 玩家准备状态, 
     'status': 房间状态
+    'isAssignRole': 是否已分配角色，只在第一回合生效
 }
 '''
 timer_task = {} # 存储所有计时，每个房间有各自独立的计时
@@ -30,7 +31,8 @@ timer_task = {} # 存储所有计时，每个房间有各自独立的计时
 async def create_room(request):
     room_id = str(uuid.uuid4())[:6]     # 生成6位随机房间号
     ip = request.remote
-    rooms[room_id] = {'host_ws': None, 'host_ip': ip, 'host_ready': False, 'guest_ws': None, 'guest_ip': None, 'guest_ready': False, 'status': 'waiting'}
+    rooms[room_id] = {'host_ws': None, 'host_ip': ip, 'host_ready': False, 'guest_ws': None, 'guest_ip': None, 
+                      'guest_ready': False, 'status': 'waiting', 'isAssignRole': False}
     return web.json_response({'roomId': room_id, 'status': 'waiting'})
 
 # 加入房间处理
@@ -92,7 +94,9 @@ async def webSocket_handler(request):
                 room['status'] = 'preparing'    # 双方已成功加入房间，可以开始游戏
                 # 发送成功消息给双方，代表可以进入联机场景
                 await room['host_ws'].send_str('preparing')
-                await room['guest_ws'].send_str('preparing')                   
+                await room['guest_ws'].send_str('preparing')
+            else:
+                return ws                       # 房间已满，不允许加入
 
         # 该分支处理双方准备，当双方都准备好才能开始游戏
         elif msg.data == 'ready:ok' and room_id:
@@ -107,8 +111,10 @@ async def webSocket_handler(request):
                 room['host_ready'] = False                      # 重置玩家准备状态，用于下一次游戏
                 room['guest_ready'] = False
                 room['status'] = 'playing'
-                await room['host_ws'].send_str('role:black')    # 分配游戏角色
-                await room['guest_ws'].send_str('role:white')
+                if not room['isAssignRole']:                    # 给双方分配游戏角色，后续双方角色由客户端自行轮流切换
+                    await room['host_ws'].send_str('role:black')
+                    await room['guest_ws'].send_str('role:white')
+                    room['isAssignRole'] = True
                 await room['host_ws'].send_str('playing')       # 通知开始游戏
                 await room['guest_ws'].send_str('playing')
                 reset_timer(room_id)                            # 开始计时

@@ -86,3 +86,9 @@ bool PopupUI::init(const std::string& title, const std::string& content) {
 
     return true;
 }
+
+void PopupUI::closePopup(cocos2d::Ref* pSender) {
+    if (_onClose)
+        _onClose();
+    this->removeFromParent();
+}
