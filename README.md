@@ -138,7 +138,7 @@ port=8080
 
 ### 3. 编译运行
 
-用 VS 打开 `proj.win32/MyGame.sln`，编译运行。
+用 VS 打开 `proj.win32/MyGame.sln`，编译运行。（记得在解决方案目录下`src/`处添加现有项）
 
 ---
 
@@ -164,6 +164,21 @@ port=8080
 
 - `WebSocket` 对象的释放由 `onClose` 回调负责，`disconnect()` 只发起关闭
 - 服务端与客户端的json交流信息是一一对应的，如果修改了其中一处，相对应的另一处也应该被修改，服务端`create_room`对应客户端`onCreateRoomResponse`，服务端`join_room`对应客户端`onJoinRoomResponse`，服务端`start_timer`和`webSocket_handle`对应客户端`onMessage`
+
+---
+
+## 游戏截图
+
+<p align="center">
+  <img src="./Resources/screenshots/startScene.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/onlinePopup_error.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/onlinePopup_createRoom.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/onlinePopup_joinRoom.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/online_preparing.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/online_victory.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/online_defeat.png" width="420" height="568"/>
+  <img src="./Resources/screenshots/onlinePopup_quitRoom.png" width="420" height="568"/>
+</p>
 
 ---
 
